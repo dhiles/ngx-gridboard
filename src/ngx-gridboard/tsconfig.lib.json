@@ -17,6 +17,11 @@
       "es2015"
     ]
   },
+  "paths": {
+    "ngx-gridboard": [
+      "dist/ngx-gridboard"
+    ]
+  },
   "angularCompilerOptions": {
     "annotateForClosureCompiler": true,
     "skipTemplateCodegen": true,

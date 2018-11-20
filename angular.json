@@ -144,7 +144,48 @@
           }
         }
       }
-    }
+    },
+    "ngx-gridboard": {
+      "root": "src/",
+      "sourceRoot": "src/ngx-gridboard/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "src/ngx-gridboard/tsconfig.lib.json",
+            "project": "src/ngx-gridboard/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "src/ngx-gridboard/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/ngx-gridboard/src/test.ts",
+            "tsConfig": "src/ngx-gridboard/tsconfig.spec.json",
+            "karmaConfig": "src/ngx-gridboard/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "src/core/tsconfig.lib.json",
+              "src/core/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+
   },
   "defaultProject": "ngx-gridboard-demo"
 }
