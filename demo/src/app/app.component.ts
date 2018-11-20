@@ -12,7 +12,7 @@ import { Observable, Subject, fromEvent, of } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'the ngx-gridboard 1.1.1 demo app';
+  title = 'the ngx-gridboard 1.1.2 demo app';
   activeItem: any;
   laneChanges: Subject<LaneChange> = new Subject();
 

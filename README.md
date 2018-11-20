@@ -50,10 +50,20 @@ npm install ngx-gridboard --save
 ## Online Demo
 http://www.seatoskysoft.com/ngx-gridboard-demo/
 
-## Demo code
-https://github.com/dhiles/ngx-gridboard-demo
+## Source code
+https://github.com/dhiles/ngx-gridboard
 
-## Authors
+## run demo
+git clone https://github.com/dhiles/ngx-gridboard
+cd ngx-gridboard
+npm install
+npm run demo
+
+## release info
+### 1.1.2
+- added gestures for mobile sensitive devices. Touch gesture triggers a pan which allows for repositioning of grid items. Press followed by a pan gesture allows resizing of grid items.   
+
+## Author
 
 * **Douglas Hiles** 
 
