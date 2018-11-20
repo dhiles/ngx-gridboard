@@ -1,0 +1,24 @@
+<div [style.margin.px]="ngxGridboardService.options.marginPx">
+    <div gbResize [resizeType]="'n-resize-handle'" class="n-resize-handle" (mouseDownEmitter)="itemResizeMouseDown($event)" [item]="item"></div>
+    <div gbResize [resizeType]="'ne-resize-handle'" class="ne-resize-handle" (mouseDownEmitter)="itemResizeMouseDown($event)"
+        [item]="item"></div>
+    <div gbResize [resizeType]="'se-resize-handle'" class="se-resize-handle" (mouseDownEmitter)="itemResizeMouseDown($event)"
+        [item]="item"></div>
+    <div gbResize [resizeType]="'e-resize-handle'" class="e-resize-handle" (mouseDownEmitter)="itemResizeMouseDown($event)" [item]="item"></div>
+    <div gbResize [resizeType]="'nw-resize-handle'" class="nw-resize-handle" (mouseDownEmitter)="itemResizeMouseDown($event)"
+        [item]="item"></div>
+    <div gbResize [resizeType]="'sw-resize-handle'" class="sw-resize-handle" (mouseDownEmitter)="itemResizeMouseDown($event)"
+        [item]="item"></div>
+    <div gbResize [resizeType]="'w-resize-handle'" class="w-resize-handle" (mouseDownEmitter)="itemResizeMouseDown($event)" [item]="item"></div>
+    <div gbResize [resizeType]="'s-resize-handle'" class="s-resize-handle" (mouseDownEmitter)="itemResizeMouseDown($event)" [item]="item"></div>
+</div>
+
+<div [style.margin.px]="ngxGridboardService.options.marginPx" class="outer" #outer>
+    <div class="header" (panstart)="onPanStart($event)" #header>
+        <div class="title" #title >{{ item.title }}</div>
+        <div class="close" (click)="deleteItem()"></div>
+    </div>
+    <div class="inner" [style.top.px]="ngxGridboardService.options.headerPx" #inner>
+        <ng-template gbPanelHost></ng-template>
+    </div>
+</div>
