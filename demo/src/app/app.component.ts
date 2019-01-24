@@ -54,17 +54,49 @@ export class AppComponent {
 
   items = [
     {
-      id: 0, title: 'Pizza Chart', w: 1, h: 1, x: 4, y: 0, panelItem: new PanelItem(ChartComponent, {
+      id: 0,
+      title: 'Pizza Chart',
+      toolbarItems: [
+        {
+          title: 'close',
+          ariaLabel: 'close',
+          clickFunction: 'deleteItem',
+          ifFunction: 'isAuthenticated',
+          iconClass: 'close'
+        }
+      ],
+      w: 1, h: 1, x: 4, y: 0,
+      panelItem: new PanelItem(ChartComponent, {
         headline: 'Hiring for several positions',
         body: 'Submit your resume today!'
       })
     },
     {
-      id: 1, title: 'Hero Profile', w: 3, h: 1, x: 0, y: 0,
+      id: 1, title: 'Hero Profile',
+      toolbarItems: [
+        {
+          title: 'close',
+          ariaLabel: 'close',
+          clickFunction: 'deleteItem',
+          ifFunction: 'isAuthenticated',
+          iconClass: 'close'
+        }
+      ],
+      w: 3, h: 1, x: 0, y: 0,
       panelItem: new PanelItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })
     },
     {
-      id: 2, title: 'Job Ad', w: 1, h: 2, x: 0, y: 1, panelItem: new PanelItem(HeroJobAdComponent, {
+      id: 2, title: 'Job Ad',
+      toolbarItems: [
+        {
+          title: 'close',
+          ariaLabel: 'close',
+          clickFunction: 'deleteItem',
+          ifFunction: 'isAuthenticated',
+          iconClass: 'close'
+        }
+      ],
+      w: 1, h: 2, x: 0, y: 1, panelItem: new PanelItem(HeroJobAdComponent, {
         headline: 'Openings in all departments',
         body: 'Apply today'
       })
@@ -93,7 +125,16 @@ export class AppComponent {
 
   addItem() {
     const item = {
-      id: 0, title: 'Job Ad', w: 1, h: 1, x: 1, y: 0, panelItem: new PanelItem(HeroJobAdComponent, {
+      id: 0, title: 'Job Ad', toolbarItems: [
+        {
+          title: 'close',
+          ariaLabel: 'close',
+          clickFunction: 'deleteItem',
+          ifFunction: 'isAuthenticated',
+          iconClass: 'close'
+        }
+      ],
+      w: 1, h: 1, x: 1, y: 0, panelItem: new PanelItem(HeroJobAdComponent, {
         headline: 'adding',
         body: 'New Item!'
       })

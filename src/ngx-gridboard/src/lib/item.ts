@@ -33,6 +33,7 @@ export interface Item {
     w: number;
     h: number;
     title?: string;
+    toolbarItems?: any;
     element: ElementRef;
     elementRef: ElementRef;
     panelItem: PanelItem;

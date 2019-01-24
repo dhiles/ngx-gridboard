@@ -53,7 +53,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   height: number;
   resizeEmitter: EventEmitter<Size> = new EventEmitter<Size>();
   absPos: any;
-
+  
   @HostListener('mouseenter') onMouseEnter() {
     this.highlight(true);
     this.enteredByMouse = true;
@@ -356,6 +356,41 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.ngxGridboardService.deleteItem(this.item);
     this.ngxGridboardService.activeItem = null;
   }
+
+  handleIf(toolbarItem: any) {
+    var result = true;
+ //   if (toolbarItem.ifFunction && this[toolbarItem.ifFunction]) {
+ //     result = this[toolbarItem.ifFunction]();
+  //  }
+    return result;
+  }
+
+  handleClick(toolbarItem: any) {
+    var funcAccess: any = this;
+    if (funcAccess[toolbarItem.clickFunction]) {
+      funcAccess[toolbarItem.clickFunction]();
+    } else {
+      if (toolbarItem.route) {
+        //  this.handleRoute(toolbarItem);
+      }
+    }
+  }
+
+  getIconClass(toolbarItem: any) {
+    var funcAccess: any = this;
+    var iconClass = '';
+    if (funcAccess[toolbarItem.iconClassFunction]) {
+      iconClass += funcAccess[toolbarItem.iconClassFunction]();
+    }
+    if (toolbarItem.iconClass) {
+      iconClass += toolbarItem.iconClass;
+    }
+    //console.log('getIconClass: iconClass='+iconClass);
+    return iconClass;
+  }
+
+
+
 
 
 }
