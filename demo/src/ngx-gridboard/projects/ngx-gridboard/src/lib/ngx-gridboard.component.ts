@@ -185,9 +185,11 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     let lanes = this.options.fixedLanes;
     if (this.options.mediaQueryLanes && this.options.mediaQueryLanes.hasOwnProperty(mq)) {
       lanes = this.options.mediaQueryLanes[mq];
+      this.options.fixedLanes = lanes;
     }
     if (this.gridList) {
       this.resizeGrid(lanes);
+      this.calculateCellSize();
     }
     this.laneChange.emit({ mq: mq, lanes: lanes });
   }

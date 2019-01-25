@@ -185,9 +185,11 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     let lanes = this.options.fixedLanes;
     if (this.options.mediaQueryLanes && this.options.mediaQueryLanes.hasOwnProperty(mq)) {
       lanes = this.options.mediaQueryLanes[mq];
+      this.options.fixedLanes = lanes;
     }
     if (this.gridList) {
       this.resizeGrid(lanes);
+      this.calculateCellSize();
     }
     this.laneChange.emit({ mq: mq, lanes: lanes });
   }
@@ -257,10 +259,10 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
 
   calculateCellSize() {
     if (this.options.direction === 'horizontal') {
-      this.ngxGridboardService.options.cellHeight = Math.floor(this.gridContainer.nativeElement.offsetHeight / this.options.fixedLanes);
+      this.ngxGridboardService.options.cellHeight = Math.floor((this.gridContainer.nativeElement.clientHeight) / this.options.fixedLanes);
       this.ngxGridboardService.options.cellWidth = this.ngxGridboardService.options.cellHeight * this.ngxGridboardService.widthHeightRatio;
     } else {
-      this.ngxGridboardService.options.cellWidth = Math.floor(this.gridContainer.nativeElement.offsetWidth / this.options.fixedLanes);
+      this.ngxGridboardService.options.cellWidth = Math.floor((this.gridContainer.nativeElement.clientWidth) / this.options.fixedLanes);
       this.ngxGridboardService.options.cellHeight = this.ngxGridboardService.options.cellWidth / this.ngxGridboardService.widthHeightRatio;
     }
     if (this.options.heightToFontSizeRatio) {
