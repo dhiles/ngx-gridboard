@@ -259,10 +259,10 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
 
   calculateCellSize() {
     if (this.options.direction === 'horizontal') {
-      this.ngxGridboardService.options.cellHeight = Math.floor((this.gridContainer.nativeElement.clientHeight) / this.options.fixedLanes);
+      this.ngxGridboardService.options.cellHeight = Math.floor(this.gridContainer.nativeElement.offsetHeight / this.options.fixedLanes);
       this.ngxGridboardService.options.cellWidth = this.ngxGridboardService.options.cellHeight * this.ngxGridboardService.widthHeightRatio;
     } else {
-      this.ngxGridboardService.options.cellWidth = Math.floor((this.gridContainer.nativeElement.clientWidth) / this.options.fixedLanes);
+      this.ngxGridboardService.options.cellWidth = Math.floor(this.gridContainer.nativeElement.offsetWidth / this.options.fixedLanes);
       this.ngxGridboardService.options.cellHeight = this.ngxGridboardService.options.cellWidth / this.ngxGridboardService.widthHeightRatio;
     }
     if (this.options.heightToFontSizeRatio) {
@@ -382,4 +382,3 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
 }
-
