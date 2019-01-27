@@ -20,10 +20,10 @@ export class AppComponent {
     fixedLanes: 5,
     mediaQueryLanes: {
       xl: 5,
-      lg: 5,
-      md: 4,
-      sm: 3,
-      xs: 2
+      lg: 4,
+      md: 3,
+      sm: 2,
+      xs: 1
     },
     direction: 'vertical',
     highlightColor: 'black',
@@ -60,11 +60,11 @@ export class AppComponent {
       })
     },
     {
-      id: 1, title: 'Hero Profile', w: 3, h: 1, x: 0, y: 0,
+      id: 1, title: 'Hero Profile', w: 1, h: 1, x: 0, y: 0,
       panelItem: new PanelItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })
     },
     {
-      id: 2, title: 'Job Ad', w: 1, h: 2, x: 0, y: 1, panelItem: new PanelItem(HeroJobAdComponent, {
+      id: 2, title: 'Job Ad', w: 1, h: 1, x: 0, y: 1, panelItem: new PanelItem(HeroJobAdComponent, {
         headline: 'Openings in all departments',
         body: 'Apply today'
       })
