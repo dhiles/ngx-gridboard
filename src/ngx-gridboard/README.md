@@ -69,6 +69,10 @@ npm run demo
 ### 1.1.5
 - fix README.md
 
+### 1.1.6
+- resize on media query breakpoint changes
+
+
 
 ## Author
 

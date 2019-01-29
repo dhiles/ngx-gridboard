@@ -1,7 +1,7 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-//import { FlexLayoutModule } from '@angular/flex-layout';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxGridboardComponent } from './ngx-gridboard.component';
 import { NgxGridboardRoutingModule } from './ngx-gridboard-routing.module';
 import { ResizeDirective } from './resize.directive';
@@ -24,7 +24,7 @@ export class MyHammerConfig extends HammerGestureConfig  {
   imports: [NgxGridboardRoutingModule,
     CommonModule,
     PanelModule,
-  //  FlexLayoutModule
+    FlexLayoutModule
   ],
   declarations: [
     NgxGridboardComponent,

@@ -7,7 +7,7 @@ import {
   ComponentFactoryResolver, OnInit, OnDestroy, KeyValueDiffers, IterableDiffers, KeyValueChangeRecord, DoCheck
 } from '@angular/core';
 
-//import { MediaChange, ObservableMedia } from '@angular/flex-layout';
+import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Observable, Subject, fromEvent, of } from 'rxjs';
 import { map, filter, catchError, mergeMap, debounceTime } from 'rxjs/operators';
 import { containsTree } from '@angular/router/src/url_tree';
@@ -99,7 +99,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   constructor(
     public elementRef: ElementRef,
     public renderer: Renderer2,
-   // public media: ObservableMedia,
+    public media: MediaObserver,
     public ngxGridboardService: NgxGridboardService,
     private keyValueDiffers: KeyValueDiffers,
     private iterableDiffers: IterableDiffers
@@ -155,12 +155,12 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     this.ngxGridboardService.options = this.options;
     this.ngxGridboardService.gridboard = this;
     of(this.items).subscribe(e => console.log(e));
- /*   if (this.options.mediaQueryLanes) {
-      this.media.asObservable()
+    if (this.options.mediaQueryLanes) {
+      this.media.media$
         .pipe(
           map((change: MediaChange) => change.mqAlias)
         ).subscribe((mq) => this.loadResponsiveContent(mq));
-    } */
+    } 
     this.gridList = new GridList(this.items, {
       lanes: this.options.fixedLanes,
       direction: this.options.direction
@@ -185,9 +185,11 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     let lanes = this.options.fixedLanes;
     if (this.options.mediaQueryLanes && this.options.mediaQueryLanes.hasOwnProperty(mq)) {
       lanes = this.options.mediaQueryLanes[mq];
+      this.options.fixedLanes = lanes;
     }
     if (this.gridList) {
       this.resizeGrid(lanes);
+      this.calculateCellSize();
     }
     this.laneChange.emit({ mq: mq, lanes: lanes });
   }
@@ -257,10 +259,10 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
 
   calculateCellSize() {
     if (this.options.direction === 'horizontal') {
-      this.ngxGridboardService.options.cellHeight = Math.floor(this.gridContainer.nativeElement.offsetHeight / this.options.fixedLanes);
+      this.ngxGridboardService.options.cellHeight = Math.floor(this.gridContainer.nativeElement.clientHeight / this.options.fixedLanes);
       this.ngxGridboardService.options.cellWidth = this.ngxGridboardService.options.cellHeight * this.ngxGridboardService.widthHeightRatio;
     } else {
-      this.ngxGridboardService.options.cellWidth = Math.floor(this.gridContainer.nativeElement.offsetWidth / this.options.fixedLanes);
+      this.ngxGridboardService.options.cellWidth = Math.floor(this.gridContainer.nativeElement.clientWidth / this.options.fixedLanes);
       this.ngxGridboardService.options.cellHeight = this.ngxGridboardService.options.cellWidth / this.ngxGridboardService.widthHeightRatio;
     }
     if (this.options.heightToFontSizeRatio) {
@@ -380,4 +382,3 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
 }
-
