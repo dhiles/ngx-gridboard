@@ -93,23 +93,17 @@
             transition: background 3s;
   }
 
-  .header {
-    position: absolute;
-    background: #fff;
-    border-bottom: 1px solid #bbb;
-    top: 0px;
-    left: 0px;
-    right: 0px; 
-    height: 40px; 
-    z-index: 1;
-    cursor: move;
+  .title {
+    color: blue; 
   }
 
-  .title {
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-    color: blue; 
+  .right-icons {
+    margin-left: auto;
+  }
+
+  .my-icon {
+    margin-top: 26px;
+    margin-right: 5px;
   }
 
   .close {

@@ -89,11 +89,11 @@ export class AppComponent {
       id: 2, title: 'Job Ad',
       toolbarItems: [
         {
-          title: 'close',
+          title: 'fullscreen',
           ariaLabel: 'close',
           clickFunction: 'deleteItem',
           ifFunction: 'isAuthenticated',
-          iconClass: 'close'
+          iconClass: 'fullscreen'
         }
       ],
       w: 1, h: 2, x: 0, y: 1, panelItem: new PanelItem(HeroJobAdComponent, {
