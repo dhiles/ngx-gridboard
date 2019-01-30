@@ -47,7 +47,9 @@ export class AppComponent {
           color: 'green',
           float: 'left'
         }
-      }
+      },
+      items: {'display': 'flex', 'justify-content': 'center', 'align-items': 'center'},
+      iconClass: 'material-icons'
     }
   };
 
@@ -56,6 +58,7 @@ export class AppComponent {
     {
       id: 0,
       title: 'Pizza Chart',
+      itemStyle: {'background-color':'green'},
       toolbarItems: [
         {
           title: 'close',
@@ -65,7 +68,7 @@ export class AppComponent {
           iconClass: 'close'
         }
       ],
-      w: 1, h: 1, x: 4, y: 0,
+      w: 1, h: 1, x: 1, y: 0,
       panelItem: new PanelItem(ChartComponent, {
         headline: 'Hiring for several positions',
         body: 'Submit your resume today!'
@@ -80,20 +83,40 @@ export class AppComponent {
           clickFunction: 'deleteItem',
           ifFunction: 'isAuthenticated',
           iconClass: 'close'
-        }
-      ],
-      w: 3, h: 1, x: 0, y: 0,
-      panelItem: new PanelItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })
-    },
-    {
-      id: 2, title: 'Job Ad',
-      toolbarItems: [
+        },
         {
           title: 'fullscreen',
           ariaLabel: 'close',
+          clickFunction: 'handleClick',
+          ifFunction: 'isAuthenticated',
+          iconClass: 'fullscreen',
+          iconStyle: {'color':'red'},
+        }
+      ],
+      w: 1, h: 1, x: 0, y: 0,
+      panelItem: new PanelItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })
+    },
+    {
+      id: 2, 
+      title: 'Job Ad',
+      titleStyle: {'color':'blue'},
+      itemStyle: {'color':'yellow','background-color':'purple','justify-content': 'left'},
+      iconsStyle: {'color':'red', 'margin-left': 'auto', 'align-self': 'center'},
+      toolbarItems: [
+        {
+          title: 'close',
+          ariaLabel: 'close',
           clickFunction: 'deleteItem',
           ifFunction: 'isAuthenticated',
-          iconClass: 'fullscreen'
+          iconClass: 'close'
+        },
+        {
+          title: 'fullscreen',
+          ariaLabel: 'close',
+          clickFunction: 'handleClick',
+          ifFunction: 'isAuthenticated',
+          iconClass: 'fullscreen',
+          iconStyle: {'color':'red'},
         }
       ],
       w: 1, h: 2, x: 0, y: 1, panelItem: new PanelItem(HeroJobAdComponent, {

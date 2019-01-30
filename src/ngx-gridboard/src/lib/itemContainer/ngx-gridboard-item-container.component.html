@@ -18,15 +18,17 @@
 </div>
 
 <div [style.margin.px]="ngxGridboardService.options.marginPx" class="outer" #outer>
-    <div fxLayout="row" fxLayoutAlign="center center" (panstart)="onPanStart($event)" #header>
-        <div class="title" #title>{{ item.title }}</div>
-        <div class= "right-icons">
-            <div *ngFor="let toolbarItem of item.toolbarItems">
-                <div *ngIf="handleIf(item)">
-                    <i class="material-icons my-icon" (click)="handleClick(item)">{{item.iconClass}}</i>
-                </div>
-            </div>
-        </div>
+    <div [ngStyle]="getItemStyle()" (panstart)="onPanStart($event)" #header>
+        <span [ngStyle]="item.titleStyle" #title>{{ item.title }}</span>
+        <span [ngStyle]="item.iconsStyle">
+            <span *ngFor="let toolbarItem of item.toolbarItems">
+                <span *ngIf="handleIf(item)">
+                    <span class="icon-span">
+                        <i [ngClass]="ngxGridboardService.options.styles.iconClass" [ngStyle]="toolbarItem.iconStyle" (click)="handleClick(toolbarItem)">{{toolbarItem.iconClass}}</i>
+                    </span>
+                </span>
+            </span>
+        </span>
     </div>
     <div class="inner" [style.top.px]="ngxGridboardService.options.headerPx" #inner>
         <ng-template gbPanelHost></ng-template>
