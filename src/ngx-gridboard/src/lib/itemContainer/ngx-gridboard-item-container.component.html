@@ -24,7 +24,7 @@
             <span *ngFor="let toolbarItem of item.toolbarItems">
                 <span *ngIf="handleIf(item)">
                     <span class="icon-span">
-                        <i [ngClass]="ngxGridboardService.options.styles.iconClass" [ngStyle]="toolbarItem.iconStyle" (click)="handleClick(toolbarItem)">{{toolbarItem.iconClass}}</i>
+                        <i [ngClass]="ngxGridboardService.options.styles.iconClass" [ngStyle]="getIconStyle(toolbarItem)" (click)="handleClick(toolbarItem)" [title]="toolbarItem.title" [attr.aria-label]="toolbarItem.ariaLabel">{{toolbarItem.iconClass}}</i>
                     </span>
                 </span>
             </span>

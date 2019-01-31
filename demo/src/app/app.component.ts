@@ -12,7 +12,7 @@ import { Observable, Subject, fromEvent, of } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'the ngx-gridboard 1.1.6 demo app';
+  title = 'the ngx-gridboard 1.1.7 demo app';
   activeItem: any;
   laneChanges: Subject<LaneChange> = new Subject();
 
@@ -49,7 +49,8 @@ export class AppComponent {
         }
       },
       items: {'display': 'flex', 'justify-content': 'center', 'align-items': 'center'},
-      iconClass: 'material-icons'
+      iconClass: 'material-icons',
+      icons: {'cursor':'pointer', 'color': 'black'}
     }
   };
 
@@ -58,6 +59,7 @@ export class AppComponent {
     {
       id: 0,
       title: 'Pizza Chart',
+      titleStyle: { 'flex': '1', 'text-align': 'center'},
       itemStyle: {'background-color':'green'},
       toolbarItems: [
         {
@@ -75,22 +77,26 @@ export class AppComponent {
       })
     },
     {
-      id: 1, title: 'Hero Profile',
+      id: 1, 
+      title: 'Hero Profile',
+      titleStyle: {'color':'orange',  'flex': '1', 'text-align': 'center'},
+      iconsStyle: {'color':'black', 'margin-left': 'auto', 'align-self': 'center'},
       toolbarItems: [
+        {
+          title: 'publish',
+          ariaLabel: 'publish',
+          clickFunction: 'publishClicked',
+          ifFunction: 'isAuthenticated',
+          iconClass: 'publish',
+          iconStyle: {'color':'pink'},
+        },
         {
           title: 'close',
           ariaLabel: 'close',
           clickFunction: 'deleteItem',
           ifFunction: 'isAuthenticated',
-          iconClass: 'close'
-        },
-        {
-          title: 'fullscreen',
-          ariaLabel: 'close',
-          clickFunction: 'handleClick',
-          ifFunction: 'isAuthenticated',
-          iconClass: 'fullscreen',
-          iconStyle: {'color':'red'},
+          iconClass: 'close',
+          iconStyle: {'color':'blue'},
         }
       ],
       w: 1, h: 1, x: 0, y: 0,
@@ -99,24 +105,23 @@ export class AppComponent {
     {
       id: 2, 
       title: 'Job Ad',
-      titleStyle: {'color':'blue'},
+      titleStyle: {'color':'LightGray', 'margin-left': '10px'},
       itemStyle: {'color':'yellow','background-color':'purple','justify-content': 'left'},
-      iconsStyle: {'color':'red', 'margin-left': 'auto', 'align-self': 'center'},
+      iconsStyle: {'color':'black', 'margin-left': 'auto', 'align-self': 'center'},
       toolbarItems: [
+        {
+          title: 'fullscreen',
+          ariaLabel: 'close',
+          clickFunction: 'folderClicked',
+          ifFunction: 'isAuthenticated',
+          iconClass: 'folder',
+        },
         {
           title: 'close',
           ariaLabel: 'close',
           clickFunction: 'deleteItem',
           ifFunction: 'isAuthenticated',
           iconClass: 'close'
-        },
-        {
-          title: 'fullscreen',
-          ariaLabel: 'close',
-          clickFunction: 'handleClick',
-          ifFunction: 'isAuthenticated',
-          iconClass: 'fullscreen',
-          iconStyle: {'color':'red'},
         }
       ],
       w: 1, h: 2, x: 0, y: 1, panelItem: new PanelItem(HeroJobAdComponent, {

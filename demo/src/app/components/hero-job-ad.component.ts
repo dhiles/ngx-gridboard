@@ -15,8 +15,13 @@ import { PanelComponent } from 'ngx-gridboard';
 export class HeroJobAdComponent implements PanelComponent {
   @Input() data: any;
   @Input() resizeEmitter: EventEmitter<any>;
+  
   handleClick() {
     alert('clicked');
+  }
+
+  folderClicked() {
+    alert('folder clicked');
   }
 
 }

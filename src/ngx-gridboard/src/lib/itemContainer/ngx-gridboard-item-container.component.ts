@@ -395,11 +395,14 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   }
 
   getItemStyle() {
-    return Object.assign(this.ngxGridboardService.options.styles.items,this.item.itemStyle)
+    var mixStyle = {};
+    Object.assign(mixStyle, this.ngxGridboardService.options.styles.items, this.item.itemStyle)
+    return mixStyle;
   }
 
-
-
-
-
+  getIconStyle(toolbarItem: any) {
+    var mixStyle = {};
+    Object.assign(mixStyle, this.ngxGridboardService.options.styles.icons, toolbarItem.iconStyle);
+    return mixStyle;
+  }
 }

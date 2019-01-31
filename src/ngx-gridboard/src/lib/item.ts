@@ -33,7 +33,9 @@ export interface Item {
     w: number;
     h: number;
     title?: string;
+    titleStyle?: string;
     itemStyle?: string;
+    iconStyle?: string;
     toolbarItems?: any;
     element: ElementRef;
     elementRef: ElementRef;
