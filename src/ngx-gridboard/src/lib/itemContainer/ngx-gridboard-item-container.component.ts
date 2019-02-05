@@ -31,7 +31,6 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   @ViewChild('header') header: ElementRef;
   @ViewChild(PanelDirective) panelHost: PanelDirective;
 
-
   mouseDown: any;
   enteredByMouse = false;
   inPress = false;
@@ -52,6 +51,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   width: number;
   height: number;
   resizeEmitter: EventEmitter<Size> = new EventEmitter<Size>();
+  clickEmitter: EventEmitter<Size> = new EventEmitter<Size>();  
   absPos: any;
 
   @HostListener('mouseenter') onMouseEnter() {
@@ -151,6 +151,9 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     private keyValueDiffers: KeyValueDiffers
   ) {
     this.keyValueDiffer = keyValueDiffers.find({}).create();
+    this.clickEmitter.subscribe( () => {
+      this.deleteItem();
+    });
   }
 
   setAbsPosition() {
@@ -207,8 +210,6 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
       this.setRect()
     });
 
-    this.header.nativeElement.style.height = this.ngxGridboardService.options.headerPx + 'px';
-    this.inner.nativeElement.style.top = this.ngxGridboardService.options.headerPx + 'px';
     this.highlight(null);
     this.setRect();
   }
@@ -241,6 +242,8 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.panelComponent = <PanelComponent>componentRef.instance;
     (<PanelComponent>componentRef.instance).data = this.item.panelItem.data;
     (<PanelComponent>componentRef.instance).resizeEmitter = this.resizeEmitter;
+    (<PanelComponent>componentRef.instance).clickEmitter = this.clickEmitter;
+
     this.item.containerComponent = this;
   }
 

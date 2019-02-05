@@ -3,7 +3,12 @@ import { PanelComponent } from 'ngx-gridboard';
 
 @Component({
   styles: ['.hero-profile { background-color: yellow; height: 100%; overflow: auto;}'],
-  template: `
+  template: 
+   `
+    <gb-header>
+      <div class="title" #title >title1</div>
+      <div class="close" (click)="deleteItem()"></div>
+    </gb-header>
     <div class="hero-profile">
       <h3>Featured Hero Profile</h3>
       <h4>{{data.name}}</h4>
@@ -14,9 +19,7 @@ import { PanelComponent } from 'ngx-gridboard';
     </div>
   `
 })
-export class HeroProfileComponent implements PanelComponent {
-  @Input() data: any;
-  @Input() resizeEmitter: EventEmitter<any>;
+export class HeroProfileComponent extends PanelComponent {
 }
 
 

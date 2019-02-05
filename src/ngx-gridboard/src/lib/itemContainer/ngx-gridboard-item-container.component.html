@@ -14,10 +14,10 @@
 </div>
 
 <div [style.margin.px]="ngxGridboardService.options.marginPx" class="outer" #outer>
-    <div class="header" (panstart)="onPanStart($event)" #header>
+<!--   <div class="header" (panstart)="onPanStart($event)" #header>
         <div class="title" #title >{{ item.title }}</div>
         <div class="close" (click)="deleteItem()"></div>
-    </div>
+    </div> -->
     <div class="inner" [style.top.px]="ngxGridboardService.options.headerPx" #inner>
         <ng-template gbPanelHost></ng-template>
     </div>

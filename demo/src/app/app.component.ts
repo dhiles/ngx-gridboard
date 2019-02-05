@@ -29,7 +29,7 @@ export class AppComponent {
     highlightColor: 'black',
     marginPx: 10,
     borderPx: 2,
-    headerPx: 40,
+    headerPx: 0,
     styles: {
       gridContainer: {
         'grid-container': {

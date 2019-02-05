@@ -1,9 +1,23 @@
-import { EventEmitter } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { Size } from '../item';
+import { NgxGridboardService } from '../ngx-gridboard.service';
 
-export interface PanelComponent {
+declare type deleteHandler = () => void;
+
+@Component({
+  selector: 'gb-panel',
+  template: ''
+})
+export class PanelComponent {
   data: any;
   resizeEmitter: EventEmitter<Size>;
-  handleResize? (width: number, height: number): void; 
+  clickEmitter: EventEmitter<any>; 
+  
+  constructor() {   
+  }
+
+  deleteItem() {
+    this.clickEmitter.next();
+  }
 }
 
