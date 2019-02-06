@@ -152,8 +152,20 @@ export class AppComponent {
   }
 
   addItem() {
-    const item = {
-      id: 0, title: 'Job Ad', toolbarItems: [
+    const item =     {
+      id: 2, 
+      title: 'Job Ad',
+      titleStyle: {'color':'LightGray', 'margin-left': '10px'},
+      itemStyle: {'color':'yellow','background-color':'purple','justify-content': 'left'},
+      iconsStyle: {'color':'black', 'margin-left': 'auto', 'align-self': 'center'},
+      toolbarItems: [
+        {
+          title: 'fullscreen',
+          ariaLabel: 'close',
+          clickFunction: 'folderClicked',
+          ifFunction: 'isAuthenticated',
+          iconClass: 'folder',
+        },
         {
           title: 'close',
           ariaLabel: 'close',
@@ -162,9 +174,9 @@ export class AppComponent {
           iconClass: 'close'
         }
       ],
-      w: 1, h: 1, x: 1, y: 0, panelItem: new PanelItem(HeroJobAdComponent, {
-        headline: 'adding',
-        body: 'New Item!'
+      w: 1, h: 2, x: 0, y: 1, panelItem: new PanelItem(HeroJobAdComponent, {
+        headline: 'Openings in all departments',
+        body: 'Apply today'
       })
     };
     this.items.push(item);

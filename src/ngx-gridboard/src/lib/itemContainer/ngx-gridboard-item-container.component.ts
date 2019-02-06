@@ -381,28 +381,10 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     }
   }
 
-  getIconClass(toolbarItem: any) {
-    var funcAccess: any = this;
-    var iconClass = '';
-    if (funcAccess[toolbarItem.iconClassFunction]) {
-      iconClass += funcAccess[toolbarItem.iconClassFunction]();
-    }
-    if (toolbarItem.iconClass) {
-      iconClass += toolbarItem.iconClass;
-    }
-    //console.log('getIconClass: iconClass='+iconClass);
-    return iconClass;
-  }
-
   getItemStyle() {
     var mixStyle = {};
     Object.assign(mixStyle, this.ngxGridboardService.options.styles.items, this.item.itemStyle)
     return mixStyle;
   }
 
-  getIconStyle(toolbarItem: any) {
-    var mixStyle = {};
-    Object.assign(mixStyle, this.ngxGridboardService.options.styles.icons, toolbarItem.iconStyle);
-    return mixStyle;
-  }
 }
