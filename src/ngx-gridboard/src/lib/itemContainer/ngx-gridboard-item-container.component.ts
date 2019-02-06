@@ -9,7 +9,7 @@ import { NgxGridboardService } from '../ngx-gridboard.service';
 import { PanelItem } from '../panel/panel-item';
 import { PanelDirective } from '../panel/panel.directive';
 import { PanelComponent } from '../panel/panel.component';
-import { Item, ItemState, ItemMouseEvent, Coords, Size, Dimensions } from '../item';
+import { Item, ItemState, ItemSelection, ItemMouseEvent, Coords, Size, Dimensions } from '../item';
 import { Class } from '../class.directive';
 
 @Component({
@@ -151,9 +151,6 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     private keyValueDiffers: KeyValueDiffers
   ) {
     this.keyValueDiffer = keyValueDiffers.find({}).create();
-    this.clickEmitter.subscribe( () => {
-      this.deleteItem();
-    });
   }
 
   setAbsPosition() {
@@ -212,6 +209,11 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
 
     this.highlight(null);
     this.setRect();
+    this.clickEmitter.subscribe( (selection: ItemSelection) => {
+      if (selection === ItemSelection.Close) {
+        this.deleteItem();
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -243,6 +245,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     (<PanelComponent>componentRef.instance).data = this.item.panelItem.data;
     (<PanelComponent>componentRef.instance).resizeEmitter = this.resizeEmitter;
     (<PanelComponent>componentRef.instance).clickEmitter = this.clickEmitter;
+    (<PanelComponent>componentRef.instance).item = this.item;
 
     this.item.containerComponent = this;
   }

@@ -5,10 +5,7 @@ import { PanelComponent } from 'ngx-gridboard';
   styles: ['.hero-profile { background-color: yellow; height: 100%; overflow: auto;}'],
   template: 
    `
-    <gb-header>
-      <div class="title" #title >title1</div>
-      <div class="close" (click)="deleteItem()"></div>
-    </gb-header>
+    <gb-header [parent]="this"></gb-header>
     <div class="hero-profile">
       <h3>Featured Hero Profile</h3>
       <h4>{{data.name}}</h4>
@@ -20,6 +17,9 @@ import { PanelComponent } from 'ngx-gridboard';
   `
 })
 export class HeroProfileComponent extends PanelComponent {
+  publishClicked() {
+    alert('publish clicked');
+  }
 }
 
 
