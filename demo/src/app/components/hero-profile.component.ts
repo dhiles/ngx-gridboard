@@ -5,9 +5,9 @@ import { PanelComponent } from 'ngx-gridboard';
   styles: ['.hero-profile { background-color: yellow; height: 100%; overflow: auto;}'],
   template: 
    `
-    <gb-header [parent]="this" [template]="hello">
-      <ng-template #hello let-toolbarItem='toolbarItem'>
-        <i class="material-icons header-icon" (click)="handleClick(toolbarItem)">{{ toolbarItem.iconClass }}</i>
+    <gb-header [panel]="this" [template]="iconTemplate">
+      <ng-template #iconTemplate let-toolbarItem='toolbarItem'>
+        <i class="material-icons header-icon" [ngStyle]="toolbarItem.iconStyle" (click)="handleClick(toolbarItem)">{{ toolbarItem.iconClass }}</i>
       </ng-template>
     </gb-header>
     <div class="hero-profile">

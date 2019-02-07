@@ -5,10 +5,10 @@ import { PanelComponent, ItemSelection } from 'ngx-gridboard';
   selector: 'gb-header',  
    template: `
     <div class="header" #header>
-        <div class="title" #title >{{ parent.item.title }}</div>
+        <div class="title" #title >{{ panel.item.title }}</div>
         <div class="header-icons">
-            <ng-container *ngFor="let toolbarItem of parent.item.toolbarItems">
-                <ng-container *ngIf="parent.handleIf(parent.item)">
+            <ng-container *ngFor="let toolbarItem of panel.item.toolbarItems">
+                <ng-container *ngIf="panel.handleIf(panel.item)">
                     <ng-container *ngIf="template">
                         <ng-container [ngTemplateOutlet]="template" [ngTemplateOutletContext]="{toolbarItem:toolbarItem}"></ng-container>
                     </ng-container>
@@ -19,7 +19,7 @@ import { PanelComponent, ItemSelection } from 'ngx-gridboard';
 `
 })
 export class HeaderComponent {
-    @Input() parent: PanelComponent;
+    @Input() panel: PanelComponent;
     @Input() template;
     ItemSelection: typeof ItemSelection = ItemSelection; // access enum from template
 
