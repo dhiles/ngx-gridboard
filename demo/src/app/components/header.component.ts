@@ -9,7 +9,9 @@ import { PanelComponent, ItemSelection } from 'ngx-gridboard';
         <div class="header-icons">
             <ng-container *ngFor="let toolbarItem of parent.item.toolbarItems">
                 <ng-container *ngIf="parent.handleIf(parent.item)">
-                    <i class="material-icons header-icon" (click)="parent.handleClick(toolbarItem)">{{ parent.getIconClass(toolbarItem) }}</i>
+                    <ng-container *ngIf="template">
+                        <ng-container [ngTemplateOutlet]="template" [ngTemplateOutletContext]="{toolbarItem:toolbarItem}"></ng-container>
+                    </ng-container>
                 </ng-container>
             </ng-container>
         </div>
@@ -18,6 +20,7 @@ import { PanelComponent, ItemSelection } from 'ngx-gridboard';
 })
 export class HeaderComponent {
     @Input() parent: PanelComponent;
+    @Input() template;
     ItemSelection: typeof ItemSelection = ItemSelection; // access enum from template
 
 }

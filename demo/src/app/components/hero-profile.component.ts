@@ -1,11 +1,15 @@
-import { Component, Input, EventEmitter } from '@angular/core';
+import { Component, Input, EventEmitter, AfterViewInit } from '@angular/core';
 import { PanelComponent } from 'ngx-gridboard';
 
 @Component({
   styles: ['.hero-profile { background-color: yellow; height: 100%; overflow: auto;}'],
   template: 
    `
-    <gb-header [parent]="this"></gb-header>
+    <gb-header [parent]="this" [template]="hello">
+      <ng-template #hello let-toolbarItem='toolbarItem'>
+        <i class="material-icons header-icon" (click)="handleClick(toolbarItem)">{{ toolbarItem.iconClass }}</i>
+      </ng-template>
+    </gb-header>
     <div class="hero-profile">
       <h3>Featured Hero Profile</h3>
       <h4>{{data.name}}</h4>
@@ -20,6 +24,8 @@ export class HeroProfileComponent extends PanelComponent {
   publishClicked() {
     alert('publish clicked');
   }
+
+
 }
 
 

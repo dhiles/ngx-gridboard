@@ -1,4 +1,4 @@
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
 import { Size, ItemSelection, Item } from '../item';
 
 declare type deleteHandler = () => void;
@@ -7,13 +7,22 @@ declare type deleteHandler = () => void;
   selector: 'gb-panel',
   template: ''
 })
-export class PanelComponent {
+export class PanelComponent implements AfterViewInit{
+  @ViewChild('hello') helloTemplate; 
   data: any;
   resizeEmitter: EventEmitter<Size>;
   clickEmitter: EventEmitter<any>;
   item: Item;
+  iconName = 'close';
+  toolbarItem: any;
    
   constructor() {   
+  }
+
+  ngAfterViewInit() {
+    if (this.helloTemplate) {
+      console.log(this.helloTemplate);
+    }
   }
 
   handleItemSelection(selection: ItemSelection) {
