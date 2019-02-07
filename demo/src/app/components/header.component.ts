@@ -5,13 +5,13 @@ import { PanelComponent, ItemSelection } from 'ngx-gridboard';
   selector: 'gb-header',  
    template: `
     <div class="header" #header>
-        <div class="title" #title >title1</div>
+        <div class="title" #title >{{ parent.item.title }}</div>
         <div class="header-icons">
-            <div *ngFor="let toolbarItem of parent.item.toolbarItems">
-                <span *ngIf="parent.handleIf(parent.item)">
-                    <i class="material-icons" (click)="parent.handleClick(toolbarItem)">{{ parent.getIconClass(toolbarItem) }}</i>
-                </span>
-            </div>
+            <ng-container *ngFor="let toolbarItem of parent.item.toolbarItems">
+                <ng-container *ngIf="parent.handleIf(parent.item)">
+                    <i class="material-icons header-icon" (click)="parent.handleClick(toolbarItem)">{{ parent.getIconClass(toolbarItem) }}</i>
+                </ng-container>
+            </ng-container>
         </div>
     </div> 
 `

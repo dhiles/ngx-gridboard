@@ -22,8 +22,16 @@
 .header-icons {
   color:black;
   margin-left: auto; 
-  align-self: center;
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
 }
+
+.header-icon {
+  cursor: pointer;
+  margin-right: 5px;
+}
+
   .close {
     position: absolute;
     right: 26px;
