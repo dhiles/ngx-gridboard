@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { PanelComponent, ItemSelection } from 'ngx-gridboard';
+import { PanelComponent } from './panel.component';
+import { ItemSelection } from '../item';
 
 @Component({
   selector: 'gb-header',  
