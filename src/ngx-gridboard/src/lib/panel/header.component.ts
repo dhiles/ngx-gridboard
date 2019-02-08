@@ -1,11 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { PanelComponent } from './panel.component';
 import { ItemSelection } from '../item';
+import { NgxGridboardService } from '../ngx-gridboard.service';
 
 @Component({
   selector: 'gb-header',  
    template: `
-    <div class="header" #header>
+    <div class="header" [style.height.px]="ngxGridboardService.options.headerPx" #header>
         <div class="title" #title >{{ panel.item.title }}</div>
         <div class="header-icons">
             <ng-container *ngFor="let toolbarItem of panel.item.toolbarItems">
@@ -23,5 +24,9 @@ export class HeaderComponent {
     @Input() panel: PanelComponent;
     @Input() template;
     ItemSelection: typeof ItemSelection = ItemSelection; // access enum from template
+
+    constructor(public ngxGridboardService: NgxGridboardService) {
+
+    }
 
 }

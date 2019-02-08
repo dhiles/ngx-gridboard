@@ -8,7 +8,7 @@ declare type deleteHandler = () => void;
   template: ''
 })
 export class PanelComponent implements AfterViewInit{
-  @ViewChild('hello') helloTemplate; 
+  @ViewChild('iconTemplate') iconTemplate; 
   data: any;
   resizeEmitter: EventEmitter<Size>;
   clickEmitter: EventEmitter<any>;
@@ -20,8 +20,8 @@ export class PanelComponent implements AfterViewInit{
   }
 
   ngAfterViewInit() {
-    if (this.helloTemplate) {
-      console.log(this.helloTemplate);
+    if (this.iconTemplate) {
+      console.log(this.iconTemplate);
     }
   }
 

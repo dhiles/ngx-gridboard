@@ -5,11 +5,9 @@ import { PanelComponent } from 'ngx-gridboard';
   styles: ['.hero-profile { background-color: yellow; height: 100%; overflow: auto;}'],
   template: 
    `
-    <gb-header [panel]="this" [template]="iconTemplate">
       <ng-template #iconTemplate let-toolbarItem='toolbarItem'>
         <i class="material-icons header-icon" [ngStyle]="toolbarItem.iconStyle" (click)="handleClick(toolbarItem)">{{ toolbarItem.iconClass }}</i>
       </ng-template>
-    </gb-header>
     <div class="hero-profile">
       <h3>Featured Hero Profile</h3>
       <h4>{{data.name}}</h4>
@@ -21,6 +19,8 @@ import { PanelComponent } from 'ngx-gridboard';
   `
 })
 export class HeroProfileComponent extends PanelComponent {
+
+  
   publishClicked() {
     alert('publish clicked');
   }
