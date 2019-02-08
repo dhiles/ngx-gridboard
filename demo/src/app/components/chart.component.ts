@@ -16,9 +16,7 @@ import { PanelComponent } from 'ngx-gridboard';
 </google-chart>
   `
 })
-export class ChartComponent implements PanelComponent, OnInit {
-  @Input() data: any;
-  @Input() resizeEmitter: EventEmitter<any>;
+export class ChartComponent extends PanelComponent implements OnInit {
   chartData: Array<Array<any>>;
   columnNames: Array<string>;
   options: any;
@@ -29,6 +27,7 @@ export class ChartComponent implements PanelComponent, OnInit {
 
 
   constructor(private renderer: Renderer2, private elementRef: ElementRef) {
+    super(); 
   }
 
   ngOnInit() {

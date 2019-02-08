@@ -49,3 +49,11 @@ export interface Item {
     item: Item;
     pos?: Coords;
   }
+
+  export enum ItemSelection {
+    Close,
+    Minimize,
+    Maximize
+  }
+
+
