@@ -9,7 +9,7 @@ import { NgxGridboardService } from '../ngx-gridboard.service';
 import { PanelItem } from '../panel/panel-item';
 import { PanelDirective } from '../panel/panel.directive';
 import { PanelComponent } from '../panel/panel.component';
-import { Item, ItemState, ItemMouseEvent, Coords, Size, Dimensions } from '../item';
+import { Item, ItemState, ItemSelection, ItemMouseEvent, Coords, Size, Dimensions } from '../item';
 import { Class } from '../class.directive';
 
 @Component({
@@ -52,6 +52,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   width: number;
   height: number;
   resizeEmitter: EventEmitter<Size> = new EventEmitter<Size>();
+  clickEmitter: EventEmitter<Size> = new EventEmitter<Size>();  
   absPos: any;
 
   @HostListener('mouseenter') onMouseEnter() {
@@ -207,10 +208,15 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
       this.setRect()
     });
 
-    this.header.nativeElement.style.height = this.ngxGridboardService.options.headerPx + 'px';
+    // this.header.nativeElement.style.height = this.ngxGridboardService.options.headerPx + 'px';
     this.inner.nativeElement.style.top = this.ngxGridboardService.options.headerPx + 'px';
     this.highlight(null);
     this.setRect();
+    this.clickEmitter.subscribe( (selection: ItemSelection) => {
+      if (selection === ItemSelection.Close) {
+        this.deleteItem();
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -241,6 +247,9 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.panelComponent = <PanelComponent>componentRef.instance;
     (<PanelComponent>componentRef.instance).data = this.item.panelItem.data;
     (<PanelComponent>componentRef.instance).resizeEmitter = this.resizeEmitter;
+    (<PanelComponent>componentRef.instance).clickEmitter = this.clickEmitter;
+    (<PanelComponent>componentRef.instance).item = this.item;
+
     this.item.containerComponent = this;
   }
 

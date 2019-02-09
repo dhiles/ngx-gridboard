@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PanelItem, LaneChange, NgxGridboardService } from 'ngx-gridboard';
+import { PanelItem, LaneChange, NgxGridboardService, ItemSelection } from 'ngx-gridboard';
 import { HeroProfileComponent } from './components/hero-profile.component';
 import { HeroJobAdComponent } from './components/hero-job-ad.component';
 import { ChartComponent } from './components/chart.component';
@@ -60,11 +60,48 @@ export class AppComponent {
       })
     },
     {
-      id: 1, title: 'Hero Profile', w: 1, h: 1, x: 0, y: 0,
+      id: 1, title: 'Hero Profile', 
+      toolbarItems: [
+        {
+          title: 'publish',
+          ariaLabel: 'publish',
+          clickFunction: 'publishClicked',
+          ifFunction: 'isAuthenticated',
+          iconClass: 'publish',
+          iconStyle: { 'color': 'pink' },
+        },
+        {
+          title: 'close',
+          ariaLabel: 'close',
+          itemSelection: ItemSelection.Close,
+          ifFunction: 'isAuthenticated',
+          iconClass: 'close',
+          iconStyle: { 'color': 'blue' },
+        }
+      ],w: 1, h: 1, x: 0, y: 0,
       panelItem: new PanelItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })
     },
     {
-      id: 2, title: 'Job Ad', w: 1, h: 1, x: 0, y: 1, panelItem: new PanelItem(HeroJobAdComponent, {
+      id: 2, title: 'Job Ad',
+      toolbarItems: [
+        {
+          title: 'publish',
+          ariaLabel: 'publish',
+          clickFunction: 'publishClicked',
+          ifFunction: 'isAuthenticated',
+          iconClass: 'publish',
+          iconStyle: { 'color': 'pink' },
+        },
+        {
+          title: 'close',
+          ariaLabel: 'close',
+          itemSelection: ItemSelection.Close,
+          ifFunction: 'isAuthenticated',
+          iconClass: 'close',
+          iconStyle: { 'color': 'blue' },
+        }
+      ],
+      w: 1, h: 1, x: 0, y: 1, panelItem: new PanelItem(HeroJobAdComponent, {
         headline: 'Openings in all departments',
         body: 'Apply today'
       })

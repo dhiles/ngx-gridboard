@@ -19,8 +19,10 @@ import { PanelComponent } from 'ngx-gridboard';
   `
 })
 export class HeroProfileComponent extends PanelComponent {
-  @Input() data: any;
-  @Input() resizeEmitter: EventEmitter<any>;
+  publishClicked() {
+    alert('publish clicked');
+  }
+
 }
 
 

@@ -26,7 +26,7 @@ export class HeaderComponent {
     ItemSelection: typeof ItemSelection = ItemSelection; // access enum from template
 
     constructor(public ngxGridboardService: NgxGridboardService) {
-
+        console.log('header constructor');
     }
 
 }
