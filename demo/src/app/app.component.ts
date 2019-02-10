@@ -54,7 +54,16 @@ export class AppComponent {
 
   items = [
     {
-      id: 0, title: 'Pizza Chart', w: 1, h: 1, x: 4, y: 0, panelItem: new PanelItem(ChartComponent, {
+      id: 0, title: 'Pizza Chart', 
+      toolbarItems: [
+        {
+          title: 'close',
+          ariaLabel: 'close',
+          itemSelection: ItemSelection.Close,
+          iconClass: 'close'
+        }
+      ],
+      w: 1, h: 1, x: 4, y: 0, panelItem: new PanelItem(ChartComponent, {
         headline: 'Hiring for several positions',
         body: 'Submit your resume today!'
       })
@@ -74,7 +83,6 @@ export class AppComponent {
           title: 'close',
           ariaLabel: 'close',
           itemSelection: ItemSelection.Close,
-          ifFunction: 'isAuthenticated',
           iconClass: 'close',
           iconStyle: { 'color': 'blue' },
         }
@@ -85,18 +93,9 @@ export class AppComponent {
       id: 2, title: 'Job Ad',
       toolbarItems: [
         {
-          title: 'publish',
-          ariaLabel: 'publish',
-          clickFunction: 'publishClicked',
-          ifFunction: 'isAuthenticated',
-          iconClass: 'publish',
-          iconStyle: { 'color': 'pink' },
-        },
-        {
           title: 'close',
           ariaLabel: 'close',
           itemSelection: ItemSelection.Close,
-          ifFunction: 'isAuthenticated',
           iconClass: 'close',
           iconStyle: { 'color': 'blue' },
         }
@@ -130,7 +129,16 @@ export class AppComponent {
 
   addItem() {
     const item = {
-      id: 0, title: 'Job Ad', w: 1, h: 1, x: 1, y: 0, panelItem: new PanelItem(HeroJobAdComponent, {
+      id: 0, title: 'Job Ad',
+      toolbarItems: [
+        {
+          title: 'close',
+          ariaLabel: 'close',
+          itemSelection: ItemSelection.Close,
+          iconClass: 'close'
+        }
+      ], 
+      w: 1, h: 1, x: 1, y: 0, panelItem: new PanelItem(HeroJobAdComponent, {
         headline: 'adding',
         body: 'New Item!'
       })

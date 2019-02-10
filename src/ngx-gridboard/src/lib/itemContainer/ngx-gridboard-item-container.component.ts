@@ -70,7 +70,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.handleMouseDownEvent(event);
     this.setAbsPosition();
     this.pressStart = { x: event.pageX - (this.absPos.x), y: event.pageY - (this.absPos.y) };
-    if (this.pressStart.y <= 40) {
+    if (this.pressStart.y <= this.ngxGridboardService.options.headerPx) {
       this.handleMouseDown({ x: event.pageX, y: event.pageY });
     }
     return false;
@@ -97,7 +97,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.setAbsPosition();
     this.pressStart = { x: e.center.x - (this.absPos.x), y: e.center.y - (this.absPos.y) };
 
-    if (this.pressStart.y > 40 && !this.enteredByMouse) {
+    if (this.pressStart.y > this.ngxGridboardService.options.headerPx && !this.enteredByMouse) {
       this.inPress = true;
       this.pressNormalizedLeftOffset = (this.pressStart.x > left) ? (this.pressStart.x - left) / width : 0;
       this.pressNormalizedTopOffset = (this.pressStart.y > top) ? (this.pressStart.y - top) / height : 0;

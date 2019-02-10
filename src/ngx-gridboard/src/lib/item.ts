@@ -1,6 +1,7 @@
 import { ElementRef } from '@angular/core';
 import { PanelItem } from './panel/panel-item';
 import { NgxGridboardItemContainerComponent } from './itemContainer/ngx-gridboard-item-container.component';
+import { AppModule } from 'demo/src/app/app.module';
 
 
 export interface Coords {
@@ -33,6 +34,7 @@ export interface Item {
     w: number;
     h: number;
     title?: string;
+    toolbarItems?: any;
     element: ElementRef;
     elementRef: ElementRef;
     panelItem: PanelItem;
