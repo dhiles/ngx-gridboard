@@ -9,7 +9,7 @@ import { PanelComponent } from 'ngx-gridboard';
   </ng-template>
   <div class="job-ad">
       <h4>{{data.headline}}</h4>
-      <button (click)="handleClick()">Click me</button>
+      <button (click)="handleClick(toolbarItem)">Click me</button>
 
       {{data.body}}
     </div>
