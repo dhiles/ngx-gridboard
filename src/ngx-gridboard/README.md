@@ -34,18 +34,19 @@ npm install ngx-gridboard --save
 
 ### items: PanelItems are created with a component and a data parameter. PanelItem Components are added to the entryComponents section of the calling module (see the demo code for an example).
 
+#### header: each panel item has a header. A header contains a title and icons.  The height of headers is set in options.headerPx. Styling for headers are set in options.gridItemContainer.header,  options.gridItemContainer.title, and options.gridItemContainer.headerIcons.  The title displayed in each panel item comes from the item title defined in the items array,
+
 #### toolbarItems: an array of definitions of icons displayed in the header of a panel item. In each component html a ng-template with a #iconTemplate template reference variable can be included i.e.
 
   
 
 ```javascript
 
-<ng-template  #iconTemplate  let-toolbarItem='toolbarItem'>
+<ng-template #iconTemplate let-toolbarItem='toolbarItem'>
 
-<i  class="material-icons header-icon"  [ngStyle]="toolbarItem.iconStyle"  (click)="handleClick(toolbarItem)">{{  toolbarItem.iconClass  }}</i>
+<i class="material-icons" [ngStyle]="toolbarItem.iconStyle" (click)="handleClick(toolbarItem)" title="{{toolbarItem.title}}">{{ toolbarItem.iconClass }}</i>
 
 </ng-template>
-
 ```
 
   
@@ -66,13 +67,11 @@ rel="stylesheet"> which is included in index.html. You can customize this projec
 
 ###### itemSelection:  parameter of type ItemSelection. Currently the only enum constant supported is ItemSelection.Close. When itemSelection is defined, a click event on the toolbarItem icon will trigger a panel close. If a clickFunction is already defined for the icon, the itemSelection will not be triggered.   
 
-###### ifFunction: [myIfFunction(toolbarItem:any): boolean] name of a custom function defined in the component to be tested. When this function returns false, the icon is hidden.
+###### ifFunction: [myIfFunction(toolbarItem:any): boolean] name of a custom function defined in the component to be tested. When this function returns false, the icon is hidden. If a function is named but not defined for the component, the default result is true.
 
 ###### iconClass: icon class name string
 
-###### iconStyle: icon style definitions i.e. { 'color': 'pink' }
-
-  
+###### iconStyle: icon style definitions i.e. { 'color': 'pink' }. These styles are applied to the specific toolbarItem and override styles applied to all toolbar icons defined in options.gridItemContainer.headerIcons.  
   
   
   
@@ -81,7 +80,7 @@ rel="stylesheet"> which is included in index.html. You can customize this projec
 
 ```javascript
  
-options = {
+options  = {
 
 fixedLanes:  5,
 
@@ -131,7 +130,25 @@ gridItemContainer: {
 
 header: {
 
-margin:  '0 10px'
+display:  'flex',
+
+'justify-content':  'center',
+
+'align-items':  'center',
+
+'background':  '#fff',
+
+'border-bottom':  '1px solid #bbb',
+
+top:  '0px',
+
+left:  '0px',
+
+right:  '0px',
+
+'z-index':  1,
+
+cursor:  'move'
 
 },
 
@@ -139,7 +156,27 @@ title: {
 
 color:  'green',
 
-float:  'left'
+flex:  1,
+
+'text-align':  'center'
+
+},
+
+'headerIcons': {
+
+color:  'black',
+
+'margin-left':  'auto',
+
+cursor:  'pointer',
+
+'margin-right':  '5px',
+
+display:  'flex',
+
+'justify-content':  'center',
+
+'align-items':  'center'
 
 }
 
@@ -152,7 +189,7 @@ float:  'left'
   
   
 
-items = [
+items  = [
 
 {
 
@@ -214,9 +251,7 @@ ariaLabel:  'close',
 
 itemSelection:  ItemSelection.Close,
 
-iconClass:  'close',
-
-iconStyle: { 'color':  'blue' },
+iconClass:  'close'
 
 }
 
@@ -260,9 +295,8 @@ body:  'Apply today'
 
 ];
 
-...  
-
 ```
+
 
 ## Online Demo
 
