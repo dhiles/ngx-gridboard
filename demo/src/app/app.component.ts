@@ -59,7 +59,9 @@ export class AppComponent {
         },
         'headerIcons': {
           color: 'black',
-          'margin-left': 'auto', 
+          'margin-left': 'auto',
+          cursor: 'pointer',
+          'margin-right': '5px', 
           display: 'flex', 
           'justify-content': 'center', 
           'align-items': 'center'                
@@ -100,8 +102,7 @@ export class AppComponent {
           title: 'close',
           ariaLabel: 'close',
           itemSelection: ItemSelection.Close,
-          iconClass: 'close',
-          iconStyle: { 'color': 'blue' },
+          iconClass: 'close'
         }
       ],w: 1, h: 1, x: 0, y: 0,
       panelItem: new PanelItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })
