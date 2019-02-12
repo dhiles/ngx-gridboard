@@ -56,7 +56,7 @@ rel="stylesheet"> which is included in index.html. You can customize this projec
 
   
 
-##### toolbarItem:
+##### toolbarItem properties
 
 ###### title: tooltip title string
 
@@ -64,11 +64,13 @@ rel="stylesheet"> which is included in index.html. You can customize this projec
 
 ###### clickFunction: [myClickFunction(toolbarItem:any): void] name of a custom function defined in the component to be classed on click of the icon.
 
+###### itemSelection:  parameter of type ItemSelection. Currently the only enum constant supported is ItemSelection.Close. When itemSelection is defined, a click event on the toolbarItem icon will trigger a panel close. If a clickFunction is already defined for the icon, the itemSelection will not be triggered.   
+
 ###### ifFunction: [myIfFunction(toolbarItem:any): boolean] name of a custom function defined in the component to be tested. When this function returns false, the icon is hidden.
 
 ###### iconClass: icon class name string
 
-###### iconStyle: icon style defnitions i.e. { 'color': 'pink' }
+###### iconStyle: icon style definitions i.e. { 'color': 'pink' }
 
   
   

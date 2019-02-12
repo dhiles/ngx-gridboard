@@ -41,11 +41,28 @@ export class AppComponent {
       },
       gridItemContainer: {
         header: {
-          margin: '0 10px'
+          display: 'flex', 
+          'justify-content': 'center', 
+          'align-items': 'center',
+          'background': '#fff',
+          'border-bottom': '1px solid #bbb',
+          top: '0px',
+          left: '0px',
+          right: '0px', 
+          'z-index': 1,
+          cursor: 'move'
         },
         title: {
-          color: 'green',
-          float: 'left'
+          color: 'green',    
+          flex: 1,
+          'text-align': 'center'      
+        },
+        'headerIcons': {
+          color: 'black',
+          'margin-left': 'auto', 
+          display: 'flex', 
+          'justify-content': 'center', 
+          'align-items': 'center'                
         }
       }
     }

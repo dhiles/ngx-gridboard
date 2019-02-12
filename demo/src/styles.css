@@ -1,31 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-.header {
-    display: flex; 
-    justify-content: center; 
-    align-items: center;
-    background: #fff;
-    border-bottom: 1px solid #bbb;
-    top: 0px;
-    left: 0px;
-    right: 0px; 
-    z-index: 1;
-    cursor: move;
-  }
-  
-  .title {
-    color:orange;
-    flex: 1;
-    text-align: center;
-  }
-  
-  .header-icons {
-    color:black;
-    margin-left: auto; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center;
-  }
-  
   .header-icon {
     cursor: pointer;
     margin-right: 5px;

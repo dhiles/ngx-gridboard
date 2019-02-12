@@ -6,9 +6,9 @@ import { NgxGridboardService } from '../ngx-gridboard.service';
 @Component({
   selector: 'gb-header',  
    template: `
-    <div class="header" [style.height.px]="ngxGridboardService.options.headerPx" #header>
-        <div class="title" #title >{{ panel.item.title }}</div>
-        <div class="header-icons">
+    <div [ngStyle]="ngxGridboardService.options.styles.gridItemContainer.header" [style.height.px]="ngxGridboardService.options.headerPx" #header>
+        <div [ngStyle]="ngxGridboardService.options.styles.gridItemContainer.title" #title >{{ panel.item.title }}</div>
+        <div [ngStyle]="ngxGridboardService.options.styles.gridItemContainer.headerIcons">
             <ng-container *ngFor="let toolbarItem of panel.item.toolbarItems">
                 <ng-container *ngIf="panel.handleIf(panel.item)">
                     <ng-container *ngIf="template">
@@ -26,7 +26,6 @@ export class HeaderComponent {
     ItemSelection: typeof ItemSelection = ItemSelection; // access enum from template
 
     constructor(public ngxGridboardService: NgxGridboardService) {
-        console.log('header constructor');
     }
 
 }

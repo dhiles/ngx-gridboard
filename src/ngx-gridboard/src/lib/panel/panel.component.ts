@@ -30,9 +30,9 @@ export class PanelComponent implements AfterViewInit{
 
   handleIf(toolbarItem: any) {
     var result = true;
-  //  if (toolbarItem.ifFunction && this[toolbarItem.ifFunction]) {
-  //    result = this[toolbarItem.ifFunction]();
-  //  }
+    if (toolbarItem.ifFunction && this[toolbarItem.ifFunction]) {
+      result = this[toolbarItem.ifFunction]();
+    }
     return result;
   }
 
