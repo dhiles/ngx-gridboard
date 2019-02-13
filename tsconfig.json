@@ -21,5 +21,8 @@
         "src/ngx-gridboard/src/public_api"
       ]
     }
-  }
+  },
+  "angularCompilerOptions": {
+    "enableIvy": true
+  } 
 }
