@@ -1,6 +1,11 @@
 {
   "name": "ngx-gridboard-project",
   "version": "1.1.7",
+  "description": "angular dashboard component which contains movable resizable panels",
+  "license": "MIT",
+  "author": {
+    "name": "Douglas Hiles"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4100 --open",

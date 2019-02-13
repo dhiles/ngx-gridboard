@@ -2,7 +2,7 @@
 
   
 
-ngx-gridboard is an angular grid component which contains movable resizable panels each of which contains a custom component. The grid is built from a layout definition which specifies for each panel a component class and initial position and dimensions.
+ngx-gridboard is an angular dashboard component which contains movable resizable panels each of which contains a custom component. The grid is built from a layout definition which specifies for each panel a component class and initial position and dimensions.
 
   
 
