@@ -18,7 +18,6 @@
     "npm_pack": "cd dist/ngx-gridboard && npm pack",
     "package": "npm run build_lib && npm run npm_pack"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^7.2.4",
     "@angular/cdk": "^7.2.2",
