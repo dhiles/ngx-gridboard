@@ -300,7 +300,7 @@ body:  'Apply today'
 
 ## Online Demo
 
-http://www.seatoskysoft.com/ngx-gridboard-demo/
+http://seatoskysoft.com/ngx-gridboard-demo/
 
   
 
@@ -348,7 +348,7 @@ npm run demo
 
   
 
-### 1.1.8
+### 1.1.9
 
 - custom icons in panel header
 

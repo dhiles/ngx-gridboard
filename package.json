@@ -1,6 +1,6 @@
 {
   "name": "ngx-gridboard-project",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4100 --open",
