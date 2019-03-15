@@ -30,8 +30,8 @@ export class ChartComponent extends PanelComponent implements OnInit {
   resizeHeight = 50;
 
 
-  constructor(private renderer: Renderer2, private elementRef: ElementRef) {
-    super(); 
+  constructor(private renderer: Renderer2, public elementRef: ElementRef) {
+    super(elementRef); 
   }
 
   ngOnInit() {

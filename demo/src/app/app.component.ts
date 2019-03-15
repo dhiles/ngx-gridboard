@@ -25,7 +25,7 @@ export class AppComponent {
       sm: 2,
       xs: 1
     },
-    direction: 'vertical',
+    direction: 'horizontal',
     highlightColor: 'black',
     marginPx: 10,
     borderPx: 2,
@@ -103,6 +103,18 @@ export class AppComponent {
           ariaLabel: 'close',
           itemSelection: ItemSelection.Close,
           iconClass: 'close'
+        },
+        {
+          title: 'maximize',
+          ariaLabel: 'maximize',
+          itemSelection: ItemSelection.Maximize,
+          iconClass: 'maximize'
+        },
+        {
+          title: 'minimize',
+          ariaLabel: 'minimize',
+          itemSelection: ItemSelection.Minimize,
+          iconClass: 'minimize'
         }
       ],w: 1, h: 1, x: 0, y: 0,
       panelItem: new PanelItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })

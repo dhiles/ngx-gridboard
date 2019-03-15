@@ -215,8 +215,20 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.clickEmitter.subscribe( (selection: ItemSelection) => {
       if (selection === ItemSelection.Close) {
         this.deleteItem();
+      } else if (selection === ItemSelection.Maximize) {
+        this.maximizeItem();
+      } else if (selection === ItemSelection.Minimize) {
+        this.minimizeItem();
       }
     });
+  }
+
+  maximizeItem() {
+    this.renderer.addClass(this.panelComponent.elementRef.nativeElement, "maximize-panel");
+  }
+
+  minimizeItem() {
+
   }
 
   ngAfterViewInit() {

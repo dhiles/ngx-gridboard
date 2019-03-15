@@ -1,4 +1,4 @@
-import { Component, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, EventEmitter, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { Size, ItemSelection, Item } from '../item';
 
 declare type deleteHandler = () => void;
@@ -15,7 +15,7 @@ export class PanelComponent implements AfterViewInit{
   item: Item;
   toolbarItem: any;
    
-  constructor() {   
+  constructor(public elementRef: ElementRef) {   
   }
 
   ngAfterViewInit() {
