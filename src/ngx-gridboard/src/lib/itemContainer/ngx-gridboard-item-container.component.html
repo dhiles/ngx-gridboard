@@ -13,10 +13,12 @@
     <div gbResize [resizeType]="'s-resize-handle'" class="s-resize-handle" (mouseDownEmitter)="itemResizeMouseDown($event)" [item]="item"></div>
 </div>
 
-<div [style.margin.px]="ngxGridboardService.options.marginPx" class="outer" #outer>
-    <div [ngStyle]="ngxGridboardService.options.styles.gridItemContainer.header" [style.height.px]="ngxGridboardService.options.headerPx" #header (panstart)="onPanStart($event)">
+ <div [style.margin.px]="ngxGridboardService.options.marginPx" class="outer" #outer>
+   <div [ngStyle]="ngxGridboardService.options.styles.gridItemContainer.header" [style.height.px]="ngxGridboardService.options.headerPx" #header (panstart)="onPanStart($event)">
         <div [ngStyle]="ngxGridboardService.options.styles.gridItemContainer.title" #title >{{ panelComponent.item.title }}</div>
-        <div [ngStyle]="ngxGridboardService.options.styles.gridItemContainer.headerIcons">
+        <gb-header [panelComponent]="panelComponent" [template]="panelComponent.iconTemplate"></gb-header> 
+
+      <!--  <div [ngStyle]="ngxGridboardService.options.styles.gridItemContainer.headerIcons">
             <ng-container *ngFor="let toolbarItem of panelComponent.item.toolbarItems">
                 <ng-container *ngIf="panelComponent.handleIf(panelComponent.item)">
                     <ng-container *ngIf="panelComponent.iconTemplate">
@@ -24,11 +26,10 @@
                     </ng-container>
                 </ng-container>
             </ng-container>
-        </div>
+        </div> -->
     </div> 
         
- <!--   <gb-header [panel]="panelComponent" [template]="panelComponent.iconTemplate">
-    </gb-header> -->
+
     <div class="inner" [style.top.px]="ngxGridboardService.options.headerPx" #inner>
         <ng-template gbPanelHost></ng-template>
     </div>

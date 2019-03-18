@@ -67,6 +67,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
 
   @HostListener('mousedown', ['$event'])
   onMouseDown(event) {
+    console.log("mousedown");
     this.handleMouseDownEvent(event);
     this.setAbsPosition();
     this.pressStart = { x: event.pageX - (this.absPos.x), y: event.pageY - (this.absPos.y) };
@@ -78,6 +79,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
 
   @HostListener('mousemove', ['$event'])
   onMouseMove(event) {
+    console.log("mousemove");
     this.handleMouseMove({ x: event.pageX, y: event.pageY });
     return false;
   }
@@ -224,11 +226,23 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   }
 
   maximizeItem() {
-    this.renderer.addClass(this.panelComponent.elementRef.nativeElement, "maximize-panel");
+    this.zIndex = 1000;
+    this.left = 0;
+    this.top = 0;
+    this.width = this.ngxGridboardService.options.fixedLanes*this.ngxGridboardService.options.cellWidth;
+    this.height = 600;
+    // this.item.state = ItemState.Maximize;
   }
 
   minimizeItem() {
-
+    console.log("minimizeItem");
+    this.zIndex = 0;
+//    this.item.state = ItemState.Stopped;
+    this.left = this.leftVal;
+    this.top = this.topVal;
+    this.width = this.widthVal;
+    this.height = this.heightVal;
+    this.item.state = ItemState.Stopped; 
   }
 
   ngAfterViewInit() {

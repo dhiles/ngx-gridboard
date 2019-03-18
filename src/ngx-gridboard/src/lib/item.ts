@@ -23,7 +23,8 @@ export interface Dimensions {
 export enum ItemState {
   Stopped,
   Move,
-  Resize
+  Resize,
+  Maximize
 }
 
 export interface Item {

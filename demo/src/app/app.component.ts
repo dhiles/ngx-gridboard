@@ -25,7 +25,7 @@ export class AppComponent {
       sm: 2,
       xs: 1
     },
-    direction: 'horizontal',
+    direction: 'vertical',
     highlightColor: 'black',
     marginPx: 10,
     borderPx: 2,

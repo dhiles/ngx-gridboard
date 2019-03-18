@@ -36,7 +36,8 @@ export class PanelComponent implements AfterViewInit{
     return result;
   }
 
-  handleClick(toolbarItem: any) {
+  handleClick(event: any,toolbarItem: any) {
+    event.stopPropagation();
     if (this[toolbarItem.clickFunction]) {
       this[toolbarItem.clickFunction]();
     }
@@ -47,7 +48,7 @@ export class PanelComponent implements AfterViewInit{
       } else if (toolbarItem.itemSelection !== undefined) {
           this.clickEmitter.next(toolbarItem.itemSelection);
       }
-    }
+    } 
   }
 
   getIconClass(toolbarItem: any) {

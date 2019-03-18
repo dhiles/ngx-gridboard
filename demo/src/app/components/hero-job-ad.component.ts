@@ -5,20 +5,20 @@ import { PanelComponent } from 'ngx-gridboard';
   styles: ['.job-ad { background-color: green; height: 100%; overflow: auto;}'],
   template: `
   <ng-template #iconTemplate let-toolbarItem='toolbarItem'>
-    <i class="material-icons" [ngStyle]="toolbarItem.iconStyle" (click)="handleClick(toolbarItem)" title="{{toolbarItem.title}}">{{ toolbarItem.iconClass }}</i>
+    <i class="material-icons" [ngStyle]="toolbarItem.iconStyle" (click)="handleClick($event,toolbarItem)" title="{{toolbarItem.title}}">{{ toolbarItem.iconClass }}</i>
   </ng-template>
   <div class="job-ad">
       <h4>{{data.headline}}</h4>
-      <button (click)="handleClick(toolbarItem)">Click me</button>
+      <button (click)="handleClick($event,toolbarItem)">Click me</button>
 
       {{data.body}}
     </div>
   `
 })
 export class HeroJobAdComponent extends PanelComponent {
-  handleClick(toolbarItem: any) {
+  handleClick(event: any,toolbarItem: any) {
     alert('clicked');
-    super.handleClick(toolbarItem);
+    super.handleClick(event,toolbarItem);
   }
 
 }

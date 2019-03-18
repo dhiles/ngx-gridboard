@@ -7,6 +7,7 @@ import { NgxGridboardRoutingModule } from './ngx-gridboard-routing.module';
 import { ResizeDirective } from './resize.directive';
 import { Class } from './class.directive';
 import { NgxGridboardItemContainerComponent } from './itemContainer/ngx-gridboard-item-container.component';
+import { HeaderComponent } from './itemContainer/header.component';
 import { NgxGridboardService } from './ngx-gridboard.service';
 import { PanelModule } from './panel/panel.module';
 import { PanelComponent } from './panel/panel.component';
@@ -30,6 +31,7 @@ export class MyHammerConfig extends HammerGestureConfig  {
   declarations: [
     NgxGridboardComponent,
     PanelComponent,
+    HeaderComponent,
     ResizeDirective,
     NgxGridboardItemContainerComponent,
     Class
