@@ -69,11 +69,13 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   @HostListener('mousedown', ['$event'])
   onMouseDown(event) {
     console.log("mousedown");
-    this.handleMouseDownEvent(event);
-    this.setAbsPosition();
-    this.pressStart = { x: event.pageX - (this.absPos.x), y: event.pageY - (this.absPos.y) };
-    if (this.pressStart.y <= this.ngxGridboardService.options.headerPx) {
-      this.handleMouseDown({ x: event.pageX, y: event.pageY });
+    if (!this.maximized) {
+      this.handleMouseDownEvent(event);
+      this.setAbsPosition();
+      this.pressStart = { x: event.pageX - (this.absPos.x), y: event.pageY - (this.absPos.y) };
+      if (this.pressStart.y <= this.ngxGridboardService.options.headerPx) {
+        this.handleMouseDown({ x: event.pageX, y: event.pageY });
+      }
     }
     return false;
   }
@@ -81,70 +83,84 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   @HostListener('mousemove', ['$event'])
   onMouseMove(event) {
     console.log("mousemove");
-    this.handleMouseMove({ x: event.pageX, y: event.pageY });
+    if (!this.maximized) {
+      this.handleMouseMove({ x: event.pageX, y: event.pageY });
+    }
     return false;
   }
 
   @HostListener('mouseup', ['$event'])
   onMouseUp(event: any) {
-    this.handleMouseUp({ x: event.pageX, y: event.pageY });
+    if (!this.maximized) {
+      this.handleMouseUp({ x: event.pageX, y: event.pageY });
+    }
     return false;
   }
 
   @HostListener('press', ['$event'])
   onPress(e) {
-    const left = this.item.x * this.ngxGridboardService.options.cellWidth;
-    const top = this.item.y * this.ngxGridboardService.options.cellHeight;
-    const width = this.item.w * this.ngxGridboardService.options.cellWidth;
-    const height = this.item.h * this.ngxGridboardService.options.cellHeight;
-    this.setAbsPosition();
-    this.pressStart = { x: e.center.x - (this.absPos.x), y: e.center.y - (this.absPos.y) };
+    if (!this.maximized) {
+      const left = this.item.x * this.ngxGridboardService.options.cellWidth;
+      const top = this.item.y * this.ngxGridboardService.options.cellHeight;
+      const width = this.item.w * this.ngxGridboardService.options.cellWidth;
+      const height = this.item.h * this.ngxGridboardService.options.cellHeight;
+      this.setAbsPosition();
+      this.pressStart = { x: e.center.x - (this.absPos.x), y: e.center.y - (this.absPos.y) };
 
-    if (this.pressStart.y > this.ngxGridboardService.options.headerPx && !this.enteredByMouse) {
-      this.inPress = true;
-      this.pressNormalizedLeftOffset = (this.pressStart.x > left) ? (this.pressStart.x - left) / width : 0;
-      this.pressNormalizedTopOffset = (this.pressStart.y > top) ? (this.pressStart.y - top) / height : 0;
-      if (this.pressNormalizedLeftOffset > 0.3 && this.pressNormalizedLeftOffset < 0.7 && this.pressNormalizedTopOffset < 0.5) {
-        this.item.resizeType = 'n-resize-handle';
-      } else if ((this.pressNormalizedLeftOffset > 0.3 && this.pressNormalizedLeftOffset < 0.7) && this.pressNormalizedTopOffset >= 0.5) {
-        this.item.resizeType = 's-resize-handle';
-      } else if (this.pressNormalizedLeftOffset < 0.5) {
-        this.item.resizeType = 'w-resize-handle';
-      } else {
-        this.item.resizeType = 'e-resize-handle';
+      if (this.pressStart.y > this.ngxGridboardService.options.headerPx && !this.enteredByMouse) {
+        this.inPress = true;
+        this.pressNormalizedLeftOffset = (this.pressStart.x > left) ? (this.pressStart.x - left) / width : 0;
+        this.pressNormalizedTopOffset = (this.pressStart.y > top) ? (this.pressStart.y - top) / height : 0;
+        if (this.pressNormalizedLeftOffset > 0.3 && this.pressNormalizedLeftOffset < 0.7 && this.pressNormalizedTopOffset < 0.5) {
+          this.item.resizeType = 'n-resize-handle';
+        } else if ((this.pressNormalizedLeftOffset > 0.3 && this.pressNormalizedLeftOffset < 0.7) && this.pressNormalizedTopOffset >= 0.5) {
+          this.item.resizeType = 's-resize-handle';
+        } else if (this.pressNormalizedLeftOffset < 0.5) {
+          this.item.resizeType = 'w-resize-handle';
+        } else {
+          this.item.resizeType = 'e-resize-handle';
+        }
       }
     }
   }
 
   @HostListener('panstart', ['$event'])
   onHostPanStart(e) {
-    if (this.inPress) {
+    if (!this.maximized) {
+      if (this.inPress) {
+        const pos = { x: e.center.x, y: e.center.y };
+        this.handlePanStartEvent({ x: e.center.x, y: e.center.y });
+      }
+    }
+    return false;
+  }
+
+  onPanStart(e) {
+    if (!this.maximized) {
       const pos = { x: e.center.x, y: e.center.y };
       this.handlePanStartEvent({ x: e.center.x, y: e.center.y });
     }
     return false;
   }
 
-  onPanStart(e) {
-    const pos = { x: e.center.x, y: e.center.y };
-    this.handlePanStartEvent({ x: e.center.x, y: e.center.y });
-    return false;
-  }
-
   @HostListener('panmove', ['$event'])
   onPanMove(e) {
-    if (this.inPress) {
-      this.item.state = ItemState.Resize;
-      this.inPress = false;
+    if (!this.maximized) {
+      if (this.inPress) {
+        this.item.state = ItemState.Resize;
+        this.inPress = false;
+      }
+      this.handleMouseMove({ x: e.center.x, y: e.center.y });
     }
-    this.handleMouseMove({ x: e.center.x, y: e.center.y });
     return false;
   }
 
   @HostListener('panend', ['$event'])
   onPanEnd(e) {
-    this.handleMouseUp({ x: e.center.x, y: e.center.y });
-    return false;
+    if (!this.maximized) {
+      this.handleMouseUp({ x: e.center.x, y: e.center.y });
+      return false;
+    }
   }
 
   constructor(
