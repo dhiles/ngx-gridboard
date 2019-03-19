@@ -52,8 +52,9 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   width: number;
   height: number;
   resizeEmitter: EventEmitter<Size> = new EventEmitter<Size>();
-  clickEmitter: EventEmitter<Size> = new EventEmitter<Size>();  
+  clickEmitter: EventEmitter<Size> = new EventEmitter<Size>();
   absPos: any;
+  maximized: boolean;
 
   @HostListener('mouseenter') onMouseEnter() {
     this.highlight(true);
@@ -214,7 +215,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.inner.nativeElement.style.top = this.ngxGridboardService.options.headerPx + 'px';
     this.highlight(null);
     this.setRect();
-    this.clickEmitter.subscribe( (selection: ItemSelection) => {
+    this.clickEmitter.subscribe((selection: ItemSelection) => {
       if (selection === ItemSelection.Close) {
         this.deleteItem();
       } else if (selection === ItemSelection.Maximize) {
@@ -227,22 +228,24 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
 
   maximizeItem() {
     this.zIndex = 1000;
+    this.maximized = true;
     this.left = 0;
     this.top = 0;
-    this.width = this.ngxGridboardService.options.fixedLanes*this.ngxGridboardService.options.cellWidth;
-    this.height = 600;
-    // this.item.state = ItemState.Maximize;
+    let maxItemsWidth = this.ngxGridboardService.gridboard.getMaxItemsWidth() * this.ngxGridboardService.options.cellWidth;
+    this.width = maxItemsWidth > this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientWidth ?
+      maxItemsWidth : this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientWidth;
+    this.height = this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientHeight;
   }
 
   minimizeItem() {
     console.log("minimizeItem");
+    this.maximized = false;
     this.zIndex = 0;
-//    this.item.state = ItemState.Stopped;
+    this.item.state = ItemState.Stopped;
     this.left = this.leftVal;
     this.top = this.topVal;
     this.width = this.widthVal;
     this.height = this.heightVal;
-    this.item.state = ItemState.Stopped; 
   }
 
   ngAfterViewInit() {
@@ -336,12 +339,17 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   }
 
   setRect() {
-    this.left = this.leftVal;
-    this.top = this.topVal;
-    this.width = this.widthVal;
-    this.height = this.heightVal;
-    const indentSize = ((this.ngxGridboardService.options.marginPx + this.ngxGridboardService.options.borderPx + 3) * 2);
-    this.resizeEmitter.emit({ w: this.width - indentSize, h: this.height - indentSize - this.ngxGridboardService.options.headerPx });
+    if (this.maximized) {
+      this.maximizeItem();
+    }
+    else {
+      this.left = this.leftVal;
+      this.top = this.topVal;
+      this.width = this.widthVal;
+      this.height = this.heightVal;
+      const indentSize = ((this.ngxGridboardService.options.marginPx + this.ngxGridboardService.options.borderPx + 3) * 2);
+      this.resizeEmitter.emit({ w: this.width - indentSize, h: this.height - indentSize - this.ngxGridboardService.options.headerPx });
+    }
   }
 
   setResizeRect() {

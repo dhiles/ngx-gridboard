@@ -20,9 +20,13 @@ export class AppComponent {
     fixedLanes: 5,
     mediaQueryLanes: {
       xl: 5,
+      'lt-xl': 4, 
       lg: 4,
+      'lt-lg': 3, 
       md: 3,
+      'lt-md': 2, 
       sm: 2,
+      'lt-sm': 1,
       xs: 1
     },
     direction: 'vertical',

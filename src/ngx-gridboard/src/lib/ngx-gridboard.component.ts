@@ -62,32 +62,32 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   @ViewChild('positionHighlightItem') positionHighlight: ElementRef;
   @ViewChild('highlightItem') dragElement: ElementRef;
   @ViewChildren(Class, { read: ElementRef }) classes: QueryList<ElementRef>;
-/*
-  @HostListener('mousemove', ['$event'])
-  onMouseMove(event) {
-    if (this.ngxGridboardService.activeItem) {
-     this.itemMouseMove({ pos: { x: event.pageX, y: event.pageY }, item: this.ngxGridboardService.activeItem });
+  /*
+    @HostListener('mousemove', ['$event'])
+    onMouseMove(event) {
+      if (this.ngxGridboardService.activeItem) {
+       this.itemMouseMove({ pos: { x: event.pageX, y: event.pageY }, item: this.ngxGridboardService.activeItem });
+      }
     }
-  }
-
-  @HostListener('mouseup', ['$event'])
-  onMouseUp(event: any) {
-    if (this.ngxGridboardService.activeItem) {
-      this.itemMouseUp({ pos: { x: event.pageX, y: event.pageY }, item: this.ngxGridboardService.activeItem });
+  
+    @HostListener('mouseup', ['$event'])
+    onMouseUp(event: any) {
+      if (this.ngxGridboardService.activeItem) {
+        this.itemMouseUp({ pos: { x: event.pageX, y: event.pageY }, item: this.ngxGridboardService.activeItem });
+      }
     }
-  }
-*/
+  */
   @HostListener('panmove', ['$event'])
   onPanMove(e) {
     if (this.ngxGridboardService.activeItem) {
-     this.itemMouseMove({ pos: {x: e.center.x, y: e.center.y}, item: this.ngxGridboardService.activeItem });
+      this.itemMouseMove({ pos: { x: e.center.x, y: e.center.y }, item: this.ngxGridboardService.activeItem });
     }
   }
 
   @HostListener('panend', ['$event'])
   onPanEnd(e: any) {
     if (this.ngxGridboardService.activeItem) {
-      this.itemMouseUp({ pos: {x: e.center.x, y: e.center.y}, item: this.ngxGridboardService.activeItem });
+      this.itemMouseUp({ pos: { x: e.center.x, y: e.center.y }, item: this.ngxGridboardService.activeItem });
     }
   }
 
@@ -160,7 +160,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
         .pipe(
           map((change: MediaChange) => change.mqAlias)
         ).subscribe((mq) => this.loadResponsiveContent(mq));
-    } 
+    }
     this.gridList = new GridList(this.items, {
       lanes: this.options.fixedLanes,
       direction: this.options.direction
@@ -181,17 +181,18 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   loadResponsiveContent(mq) {
-    this.currentMq = mq;
     let lanes = this.options.fixedLanes;
     if (this.options.mediaQueryLanes && this.options.mediaQueryLanes.hasOwnProperty(mq)) {
+      this.currentMq = mq;
       lanes = this.options.mediaQueryLanes[mq];
       this.options.fixedLanes = lanes;
+
+      if (this.gridList) {
+        this.resizeGrid(lanes);
+        this.calculateCellSize();
+      }
+      this.laneChange.emit({ mq: mq, lanes: lanes });
     }
-    if (this.gridList) {
-      this.resizeGrid(lanes);
-      this.calculateCellSize();
-    }
-    this.laneChange.emit({ mq: mq, lanes: lanes });
   }
 
   render() {
@@ -218,6 +219,18 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     }
     return maxHeight;
   }
+
+  getMaxItemsWidth() {
+    let maxWidth = 0;
+    for (let i = 0; i < this.items.length; i++) {
+      if (this.items[i].x+this.items[i].w > maxWidth) {
+        maxWidth = this.items[i].x+this.items[i].w;
+      }
+    }
+    return maxWidth;
+  }
+
+
 
   resizeGrid(lanes: number) {
     this.gridList.resizeGrid(lanes);
@@ -301,8 +314,8 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   handleItemMouseMove(pos: Coords, item: any) {
     const self = this;
     if (item.state === ItemState.Move || item.state === ItemState.Resize) {
-       this.onDrag(this.ngxGridboardService.activeItem);
-    } 
+      this.onDrag(this.ngxGridboardService.activeItem);
+    }
   }
 
   onDrag(item: any) {

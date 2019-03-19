@@ -1,4 +1,4 @@
-import { Injectable, Renderer2, RendererFactory2 } from "@angular/core";
+import { Injectable, Renderer2, RendererFactory2, ElementRef } from "@angular/core";
 import { Item, ItemMouseEvent } from './item';
 import { NgxGridboardComponent } from './ngx-gridboard.component';
 
@@ -12,6 +12,7 @@ export class NgxGridboardService {
     heightToFontSizeRatio;
     activeItem: Item;
     gridboard: NgxGridboardComponent;
+    gridContainer: ElementRef;
     marginPx: number;
     borderPx: number;
     renderer: Renderer2;
