@@ -29,7 +29,7 @@ export class AppComponent {
       'lt-sm': 1,
       xs: 1
     },
-    direction: 'vertical',
+    direction: 'horizontal',
     highlightColor: 'black',
     marginPx: 10,
     borderPx: 2,

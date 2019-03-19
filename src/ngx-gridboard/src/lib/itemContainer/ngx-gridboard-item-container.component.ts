@@ -231,10 +231,17 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.maximized = true;
     this.left = 0;
     this.top = 0;
-    let maxItemsWidth = this.ngxGridboardService.gridboard.getMaxItemsWidth() * this.ngxGridboardService.options.cellWidth;
-    this.width = maxItemsWidth > this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientWidth ?
-      maxItemsWidth : this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientWidth;
-    this.height = this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientHeight;
+    if (this.ngxGridboardService.options.direction === "vertical") {
+      let maxItemsWidth = this.ngxGridboardService.gridboard.getMaxItemsWidth() * this.ngxGridboardService.options.cellWidth;
+      this.width = maxItemsWidth > this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientWidth ?
+        maxItemsWidth : this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientWidth;
+      this.height = this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientHeight;
+    } else {
+      let maxItemsHeight = this.ngxGridboardService.gridboard.getMaxItemsHeight() * this.ngxGridboardService.options.cellHeight;
+      this.height = maxItemsHeight > this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientHeight ?
+        maxItemsHeight : this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientHeight;
+      this.width = this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientWidth;
+    }
   }
 
   minimizeItem() {

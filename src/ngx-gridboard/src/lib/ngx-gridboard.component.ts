@@ -230,7 +230,15 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     return maxWidth;
   }
 
-
+  getMaxItemsHeight() {
+    let maxHeight = 0;
+    for (let i = 0; i < this.items.length; i++) {
+      if (this.items[i].y+this.items[i].h > maxHeight) {
+        maxHeight = this.items[i].y+this.items[i].h;
+      }
+    }
+    return maxHeight;
+  }
 
   resizeGrid(lanes: number) {
     this.gridList.resizeGrid(lanes);
