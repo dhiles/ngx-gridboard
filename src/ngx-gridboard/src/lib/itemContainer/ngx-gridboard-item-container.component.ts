@@ -12,6 +12,9 @@ import { PanelComponent } from '../panel/panel.component';
 import { Item, ItemState, ItemSelection, ItemMouseEvent, Coords, Size, Dimensions } from '../item';
 import { Class } from '../class.directive';
 
+const topZIndex = 1000;
+const bottomZIndex = 0;
+
 @Component({
   selector: 'gb-item-container',
   templateUrl: './ngx-gridboard-item-container.component.html',
@@ -20,9 +23,9 @@ import { Class } from '../class.directive';
 export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit {
   @Input() item: Item;
   @Input() layoutChangeEmitter: EventEmitter<any>;
-  @Output() mouseDownEmitter: EventEmitter<ItemMouseEvent> = new EventEmitter<any>();
+  mouseDownEmitter: EventEmitter<ItemMouseEvent> = new EventEmitter<any>();
   @Output() mouseMoveEmitter: EventEmitter<ItemMouseEvent> = new EventEmitter<any>();
-  @Output() resizeMouseDownEmitter: EventEmitter<ItemMouseEvent> = new EventEmitter<any>();
+  //@Output() resizeMouseDownEmitter: EventEmitter<ItemMouseEvent> = new EventEmitter<any>();
   @Output() mouseUpEmitter: EventEmitter<ItemMouseEvent> = new EventEmitter<any>();
 
   panelComponent: PanelComponent;
@@ -42,7 +45,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   pressStart: Coords = { x: 0, y: 0 };
   pressNormalizedLeftOffset = 0;
   pressNormalizedTopOffset = 0;
-  zIndex = 0;
+  zIndex = bottomZIndex;
   keyValueDiffer: any;
   changeCount = 0;
   scale = 0;
@@ -243,7 +246,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   }
 
   maximizeItem() {
-    this.zIndex = 1000;
+    this.zIndex = topZIndex;
     this.maximized = true;
     this.left = 0;
     this.top = 0;
@@ -263,7 +266,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   minimizeItem() {
     console.log("minimizeItem");
     this.maximized = false;
-    this.zIndex = 0;
+    this.zIndex = bottomZIndex;
     this.item.state = ItemState.Stopped;
     this.left = this.leftVal;
     this.top = this.topVal;
@@ -316,7 +319,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
 
   handleMouseDown(pos: Coords) {
 
-    this.zIndex = 1000;
+    this.zIndex = topZIndex;
     if (!(this.item.state === ItemState.Resize)) {
       this.item.state = ItemState.Move;
     }
@@ -325,8 +328,6 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.startMovePos = pos;
     this.startMoveDimensions = { x: this.item.x, y: this.item.y, w: this.item.w, h: this.item.h };
     this.moveDelta = { x: 0, y: 0 };
-
-    this.mouseDownEmitter.emit({ pos: pos, item: this.item });
 
   }
 
@@ -343,7 +344,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   }
 
   handleMouseUp(pos: Coords) {
-    this.zIndex = 0;
+    this.zIndex = bottomZIndex;
     this.moveDelta = { x: 0, y: 0 };
     this.mouseUpEmitter.emit({ pos: pos, item: this.item });
   }
