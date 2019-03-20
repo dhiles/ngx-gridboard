@@ -1,6 +1,6 @@
 import {
   Component, Input, Output, OnInit, ViewChild, ViewChildren, ComponentFactoryResolver,
-  OnDestroy, EventEmitter, HostListener, ElementRef, Renderer2,
+  EventEmitter, HostListener, ElementRef, Renderer2,
   QueryList, AfterViewInit, ContentChildren, AfterContentInit, forwardRef, KeyValueDiffers
 } from '@angular/core';
 import { fromEvent } from 'rxjs';
@@ -58,6 +58,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   clickEmitter: EventEmitter<Size> = new EventEmitter<Size>();
   absPos: any;
   maximized: boolean;
+  outerMouseDownListener: any;
 
   @HostListener('mouseenter') onMouseEnter() {
     this.highlight(true);
@@ -67,20 +68,6 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   @HostListener('mouseleave') onMouseLeave() {
     this.highlight(null);
     this.enteredByMouse = false;
-  }
-
-  @HostListener('mousedown', ['$event'])
-  onMouseDown(event) {
-    console.log("mousedown");
-    if (!this.maximized) {
-      this.handleMouseDownEvent(event);
-      this.setAbsPosition();
-      this.pressStart = { x: event.pageX - (this.absPos.x), y: event.pageY - (this.absPos.y) };
-      if (this.pressStart.y <= this.ngxGridboardService.options.headerPx) {
-        this.handleMouseDown({ x: event.pageX, y: event.pageY });
-      }
-    }
-    return false;
   }
 
   @HostListener('mousemove', ['$event'])
@@ -274,7 +261,24 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.height = this.heightVal;
   }
 
+  setupMouseDown(event) {
+    console.log("mousedown");
+    if (!this.maximized) {
+      this.handleMouseDownEvent(event);
+      this.setAbsPosition();
+      this.pressStart = { x: event.pageX - (this.absPos.x), y: event.pageY - (this.absPos.y) };
+      if (this.pressStart.y <= this.ngxGridboardService.options.headerPx) {
+        this.handleMouseDown({ x: event.pageX, y: event.pageY });
+      }
+    }
+    return false;
+  }
+
+
   ngAfterViewInit() {
+    this.outerMouseDownListener = this.renderer.listen(this.outer.nativeElement, 'mousedown', (event) => {
+      this.setupMouseDown(event);
+    });
     this.setRect();
   }
 
