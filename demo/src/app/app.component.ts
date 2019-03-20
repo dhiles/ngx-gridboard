@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { PanelItem, LaneChange, NgxGridboardService, ItemSelection } from 'ngx-gridboard';
 import { HeroProfileComponent } from './components/hero-profile.component';
 import { HeroJobAdComponent } from './components/hero-job-ad.component';
@@ -12,9 +12,10 @@ import { Observable, Subject, fromEvent, of } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'the ngx-gridboard 1.1.9 demo app';
+  title = 'the ngx-gridboard 1.1.10 demo app';
   activeItem: any;
   laneChanges: Subject<LaneChange> = new Subject();
+  itemUpdateEmitter: EventEmitter<any> = new EventEmitter<any>();
 
   options = {
     fixedLanes: 5,
@@ -177,7 +178,12 @@ export class AppComponent {
         body: 'New Item!'
       })
     };
-    this.items.push(item);
+    // this.items.push(item);
+    this.itemUpdateEmitter.emit({ 
+      operation: "add",
+      item: item 
+    });
+
   }
 
   removeFirstItem() {
