@@ -17,15 +17,16 @@
         (mouseDownEmitter)="itemResizeMouseDown($event)" [item]="item"></div>
 </div>
 
+
 <div [style.margin.px]="ngxGridboardService.options.marginPx" class="outer" #outer>
     <div [ngStyle]="ngxGridboardService.options.styles.gridItemContainer.header"
         [style.height.px]="ngxGridboardService.options.headerPx" #header (panstart)="onPanStart($event)">
-        <div [ngStyle]="ngxGridboardService.options.styles.gridItemContainer.title" #title>
-            {{ panelComponent.item.title }}</div>
-        <gb-header [panelComponent]="panelComponent" [template]="panelComponent.iconTemplate"></gb-header>
+        <div [ngStyle]="ngxGridboardService.options.styles.gridItemContainer.title" #title>{{ panelComponent.item.title }}</div>
     </div>
 
     <div class="inner" [style.top.px]="ngxGridboardService.options.headerPx" #inner>
         <ng-template gbPanelHost></ng-template>
     </div>
 </div>
+
+<gb-header class="header" [panelComponent]="panelComponent" [template]="panelComponent.iconTemplate"></gb-header>

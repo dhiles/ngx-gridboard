@@ -173,7 +173,7 @@ export class AppComponent {
           iconClass: 'close'
         }
       ], 
-      w: 1, h: 1, x: 1, y: 0, panelItem: new PanelItem(HeroJobAdComponent, {
+      w: 1, h: 1, x: 0, y: 0, panelItem: new PanelItem(HeroJobAdComponent, {
         headline: 'adding',
         body: 'New Item!'
       })

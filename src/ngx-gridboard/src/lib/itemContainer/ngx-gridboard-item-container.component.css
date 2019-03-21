@@ -112,4 +112,9 @@
     background-color: red;
   }
   
+  .header {
+    position: absolute;
+    right: 0px;
+    padding: 10px;  
+  }
 

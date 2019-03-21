@@ -18,24 +18,6 @@ import { NgxGridboardService } from '../ngx-gridboard.service';
 `
 })
 export class HeaderComponent {
-    @HostListener('mousedown', ['$event'])
-    onMouseDown(event) {
-      console.log("header mousedown");
-      event.stopPropagation();
-    }
-
-    @HostListener('mouseup', ['$event'])
-    onMouseUp(event) {
-      console.log("header mouseup");
-      event.stopPropagation();
-    }
-
-    @HostListener('mousemove', ['$event'])
-    onMouseMove(event) {
-      console.log("header mousemove");
-      event.stopPropagation();
-    }
-
     @Input() panelComponent: PanelComponent;
     @Input() template;
     @Output() someEvent = new EventEmitter();
