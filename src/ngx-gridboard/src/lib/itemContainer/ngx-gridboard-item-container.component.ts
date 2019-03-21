@@ -72,7 +72,6 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
 
   @HostListener('mousemove', ['$event'])
   onMouseMove(event) {
-    console.log("mousemove");
     if (!this.maximized) {
       this.handleMouseMove({ x: event.pageX, y: event.pageY });
     }
@@ -248,10 +247,10 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
         maxItemsHeight : this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientHeight;
       this.width = this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientWidth;
     }
+    this.emitResize();
   }
 
   minimizeItem() {
-    console.log("minimizeItem");
     this.maximized = false;
     this.zIndex = bottomZIndex;
     this.item.state = ItemState.Stopped;
@@ -259,10 +258,10 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.top = this.topVal;
     this.width = this.widthVal;
     this.height = this.heightVal;
+    this.emitResize();
   }
 
   setupMouseDown(event) {
-    console.log("mousedown");
     if (!this.maximized) {
       this.handleMouseDownEvent(event);
       this.setAbsPosition();
@@ -375,9 +374,13 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
       this.top = this.topVal;
       this.width = this.widthVal;
       this.height = this.heightVal;
-      const indentSize = ((this.ngxGridboardService.options.marginPx + this.ngxGridboardService.options.borderPx + 3) * 2);
-      this.resizeEmitter.emit({ w: this.width - indentSize, h: this.height - indentSize - this.ngxGridboardService.options.headerPx });
+      this.emitResize();
     }
+  }
+
+  emitResize() {
+    const indentSize = ((this.ngxGridboardService.options.marginPx + this.ngxGridboardService.options.borderPx + 3) * 2);
+    this.resizeEmitter.emit({ w: this.width - indentSize, h: this.height - indentSize - this.ngxGridboardService.options.headerPx });
   }
 
   setResizeRect() {

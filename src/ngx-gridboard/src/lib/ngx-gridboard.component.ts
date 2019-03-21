@@ -63,21 +63,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   @ViewChild('positionHighlightItem') positionHighlight: ElementRef;
   @ViewChild('highlightItem') dragElement: ElementRef;
   @ViewChildren(Class, { read: ElementRef }) classes: QueryList<ElementRef>;
-  /*
-    @HostListener('mousemove', ['$event'])
-    onMouseMove(event) {
-      if (this.ngxGridboardService.activeItem) {
-       this.itemMouseMove({ pos: { x: event.pageX, y: event.pageY }, item: this.ngxGridboardService.activeItem });
-      }
-    }
-  
-    @HostListener('mouseup', ['$event'])
-    onMouseUp(event: any) {
-      if (this.ngxGridboardService.activeItem) {
-        this.itemMouseUp({ pos: { x: event.pageX, y: event.pageY }, item: this.ngxGridboardService.activeItem });
-      }
-    }
-  */
+
   @HostListener('panmove', ['$event'])
   onPanMove(e) {
     if (this.ngxGridboardService.activeItem) {

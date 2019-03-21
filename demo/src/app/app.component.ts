@@ -12,7 +12,7 @@ import { Observable, Subject, fromEvent, of } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'the ngx-gridboard 1.1.10-beta.0 demo app';
+  title = 'the ngx-gridboard 1.1.10-beta.1 demo app';
   activeItem: any;
   laneChanges: Subject<LaneChange> = new Subject();
   itemUpdateEmitter: EventEmitter<any> = new EventEmitter<any>();
@@ -81,6 +81,18 @@ export class AppComponent {
       id: 0, title: 'Pizza Chart', 
       toolbarItems: [
         {
+          title: 'maximize',
+          ariaLabel: 'maximize',
+          itemSelection: ItemSelection.Maximize,
+          iconClass: 'maximize'
+        },
+        {
+          title: 'minimize',
+          ariaLabel: 'minimize',
+          itemSelection: ItemSelection.Minimize,
+          iconClass: 'minimize'
+        },
+        {
           title: 'close',
           ariaLabel: 'close',
           itemSelection: ItemSelection.Close,
@@ -104,12 +116,6 @@ export class AppComponent {
           iconStyle: { 'color': 'pink' },
         },
         {
-          title: 'close',
-          ariaLabel: 'close',
-          itemSelection: ItemSelection.Close,
-          iconClass: 'close'
-        },
-        {
           title: 'maximize',
           ariaLabel: 'maximize',
           itemSelection: ItemSelection.Maximize,
@@ -120,6 +126,12 @@ export class AppComponent {
           ariaLabel: 'minimize',
           itemSelection: ItemSelection.Minimize,
           iconClass: 'minimize'
+        },
+        {
+          title: 'close',
+          ariaLabel: 'close',
+          itemSelection: ItemSelection.Close,
+          iconClass: 'close'
         }
       ],w: 1, h: 1, x: 0, y: 0,
       panelItem: new PanelItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })

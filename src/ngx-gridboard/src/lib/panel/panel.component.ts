@@ -19,9 +19,6 @@ export class PanelComponent implements AfterViewInit{
   }
 
   ngAfterViewInit() {
-    if (this.iconTemplate) {
-      console.log(this.iconTemplate);
-    }
   }
 
   handleItemSelection(selection: ItemSelection) {
@@ -37,7 +34,6 @@ export class PanelComponent implements AfterViewInit{
   }
 
   handleClick(event: any,toolbarItem: any) {
-    event.stopPropagation();
     if (this[toolbarItem.clickFunction]) {
       this[toolbarItem.clickFunction]();
     }
