@@ -1,4 +1,4 @@
-import { Component, Input, Renderer2, ElementRef, OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, Renderer2, ElementRef, OnInit, EventEmitter, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { PanelComponent } from 'ngx-gridboard';
 
 @Component({
@@ -26,11 +26,11 @@ export class ChartComponent extends PanelComponent implements OnInit {
   options: any;
   title: string;
   type: string;
-  resizeWidth = 50;
-  resizeHeight = 50;
+  resizeWidth: number;
+  resizeHeight: number;
 
 
-  constructor(private renderer: Renderer2, public elementRef: ElementRef) {
+  constructor(private renderer: Renderer2, public elementRef: ElementRef,private cd: ChangeDetectorRef) {
     super(elementRef); 
   }
 
@@ -38,6 +38,7 @@ export class ChartComponent extends PanelComponent implements OnInit {
     this.loadChart();
     this.resizeEmitter.subscribe((size) => {
       this.handleResize(size.w,size.h);
+      this.cd.detectChanges();
     })
   }
 
