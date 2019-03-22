@@ -12,7 +12,7 @@ import { Observable, Subject, fromEvent, of } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'the ngx-gridboard 1.1.10-beta.1 demo app';
+  title = 'the ngx-gridboard 1.1.10-beta.2 demo app';
   activeItem: any;
   laneChanges: Subject<LaneChange> = new Subject();
   itemUpdateEmitter: EventEmitter<any> = new EventEmitter<any>();
@@ -176,7 +176,7 @@ export class AppComponent {
 
   addItem() {
     const item = {
-      id: 0, title: 'Job Ad',
+      id: 0, title: 'Job Ad1',
       toolbarItems: [
         {
           title: 'close',
@@ -193,6 +193,7 @@ export class AppComponent {
     // this.items.push(item);
     this.itemUpdateEmitter.emit({ 
       operation: "add",
+      lanePosition: "last",
       item: item 
     });
 

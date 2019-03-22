@@ -6,7 +6,7 @@
 			<div class="outer">
 				<gb-item-container [layoutChangeEmitter]="layoutChangeEmitter" [style.left.px]="item.containerComponent.left" [style.top.px]="item.containerComponent.top" 
 				[style.width.px]="item.containerComponent.width" [style.height.px]="item.containerComponent.height" 
-				[style.z-index]="item.containerComponent.zIndex" #dragItem (mouseMoveEmitter)="itemMouseMove($event)" (mouseUpEmitter)="itemMouseUp($event)" [item]="item" class="ui-draggable myitem">
+				[style.z-index]="item.containerComponent.zIndex" #dragItem (mouseDownEmitter)="itemMouseDown($event)" (mouseMoveEmitter)="itemMouseMove($event)" (mouseUpEmitter)="itemMouseUp($event)" [item]="item" class="ui-draggable myitem">
 				</gb-item-container>
 			</div>
 		</div>

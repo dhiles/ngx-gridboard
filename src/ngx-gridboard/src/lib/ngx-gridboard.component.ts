@@ -39,6 +39,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   pos: Coords = { x: 0, y: 0 };
   name: string;
   _items: any;
+  initialItems: any;
   gridList: any;
   gridElement: any;
   mouseMoves: any;
@@ -155,8 +156,27 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     if (this.itemUpdateEmitter) {
       this.itemUpdateEmitter.subscribe((request: any) => {
         if (request.operation === "add") {
+          let x = request.item.x;
+          let y = request.item.y;
+          if (request.lanePosition === "last") {
+            if (this.options.direction === "vertical") {
+              x = 0;
+              for (let i = 0; i < this.items.length; i++) {
+                if (this.items[i].y === y && this.items[i].x + this.items[i].w > x) {
+                  x = this.items[i].x + this.items[i].w;
+                }
+              }
+            } else {
+              y = 0;
+              for (let i = 0; i < this.items.length; i++) {
+                if (this.items[i].x === x && this.items[i].y + this.items[i].h > y) {
+                  y = this.items[i].y + this.items[i].h;
+                }
+              }
+            }
+          }
           this.items.push(request.item);
-          this.gridList.moveItemToPosition(request.item, [request.item.x, request.item.y]);
+          this.gridList.moveItemToPosition(request.item, [x, y]);
           this.render();
         }
       });
@@ -218,8 +238,8 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   getMaxItemsWidth() {
     let maxWidth = 0;
     for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].x+this.items[i].w > maxWidth) {
-        maxWidth = this.items[i].x+this.items[i].w;
+      if (this.items[i].x + this.items[i].w > maxWidth) {
+        maxWidth = this.items[i].x + this.items[i].w;
       }
     }
     return maxWidth;
@@ -228,8 +248,8 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   getMaxItemsHeight() {
     let maxHeight = 0;
     for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].y+this.items[i].h > maxHeight) {
-        maxHeight = this.items[i].y+this.items[i].h;
+      if (this.items[i].y + this.items[i].h > maxHeight) {
+        maxHeight = this.items[i].y + this.items[i].h;
       }
     }
     return maxHeight;
@@ -298,6 +318,10 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     }
   }
 
+  itemMouseDown(result: ItemMouseEvent) {
+    this.initialItems = GridListHelper.cloneItems(this.items);
+  }
+
   itemMouseUp(result: ItemMouseEvent) {
     this.ngxGridboardService.activeItem = result.item;
     this.handleItemMouseUp();
@@ -305,8 +329,20 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
 
   handleItemMouseUp() {
     if (this.ngxGridboardService.activeItem) {
+      // this.fixIntermediateStates();
       this.onStop();
       this.ngxGridboardService.activeItem = null;
+    }
+  }
+
+  fixIntermediateStates() {
+    let changedItems = [];
+    for (let i = 0; i < this.initialItems.length; i++) {
+      if (this.items[i].x !== this.initialItems[i].x ||
+        this.items[i].y !== this.initialItems[i].y &&
+        this.items[i] !== this.ngxGridboardService.activeItem) {
+        changedItems.push(this.items[i]);
+      }
     }
   }
 
