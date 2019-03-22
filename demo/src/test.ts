@@ -8,6 +8,10 @@ import {
 } from '@angular/platform-browser-dynamic/testing';
 
 declare const require: any;
+const materialIcons = document.createElement('link');
+materialIcons.href = 'https://fonts.googleapis.com/icon?family=Material+Icons';
+materialIcons.rel = 'stylesheet';
+document.head.appendChild(materialIcons);
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(
@@ -18,3 +22,4 @@ getTestBed().initTestEnvironment(
 const context = require.context('./', true, /\.spec\.ts$/);
 // And load the modules.
 context.keys().map(context);
+
