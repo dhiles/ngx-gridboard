@@ -22,7 +22,7 @@ npm install ngx-gridboard --save
 
   
 
-<gb-gridboard  [items]="items"  [options]="options"></gb-gridboard>
+<gb-gridboard  [items]="items"  [options]="options" [itemUpdateEmitter]="itemUpdateEmitter"></gb-gridboard>
 
   
 
@@ -38,7 +38,6 @@ npm install ngx-gridboard --save
 
 #### toolbarItems: an array of definitions of icons displayed in the header of a panel item. In each component html a ng-template with a #iconTemplate template reference variable can be included i.e.
 
-  
 
 ```javascript
 
@@ -65,7 +64,9 @@ rel="stylesheet"> which is included in index.html. You can customize this projec
 
 ###### clickFunction: [myClickFunction(toolbarItem:any): void] name of a custom function defined in the component to be classed on click of the icon.
 
-###### itemSelection:  parameter of type ItemSelection. Currently the only enum constant supported is ItemSelection.Close. When itemSelection is defined, a click event on the toolbarItem icon will trigger a panel close. If a clickFunction is already defined for the icon, the itemSelection will not be triggered.   
+###### itemSelection:  parameter of type ItemSelection. Currently the enum constant supported are ItemSelection.Close, ItemSelection.Minimize, and ItemSelection.Maximize. When itemSelection is defined, a click event on the toolbarItem icon will trigger a panel close, minimize or maximize. If a clickFunction is already defined for the icon, the itemSelection will not be triggered. 
+
+
 
 ###### ifFunction: [myIfFunction(toolbarItem:any): boolean] name of a custom function defined in the component to be tested. When this function returns false, the icon is hidden. If a function is named but not defined for the component, the default result is true.
 
@@ -73,227 +74,169 @@ rel="stylesheet"> which is included in index.html. You can customize this projec
 
 ###### iconStyle: icon style definitions i.e. { 'color': 'pink' }. These styles are applied to the specific toolbarItem and override styles applied to all toolbar icons defined in options.gridItemContainer.headerIcons.  
   
-  
-  
+#### add new panels 
+new panels can be added either by pushing a new item to the items array or defining an
+item updater and emitting an item to add as follows:
+```javascript
+     itemUpdateEmitter: EventEmitter<any> = new EventEmitter<any>(); 
+
+    this.itemUpdateEmitter.emit({ 
+      operation: "add",
+      item: item 
+    });
+``` 
+##### in the last lane position
+
+```javascript
+
+    this.itemUpdateEmitter.emit({ 
+      operation: "add",
+      lanePosition: "last",
+      item: item 
+    });
+```    
+
+when "lanePosition" is "last", and the direction is vertical, the newly added panel is positioned immediately to the right of the last panel on the specified 'x' row and for horizontal the newly added panel is positioned below the last panel on the specified 'y' column' If "lanePosition' is undefined or not "last" the default behavior is to attempt to position the newly added panel at the specified x,y position.  
 
 #### options example
 
 ```javascript
  
-options  = {
-
-fixedLanes:  5,
-
-mediaQueryLanes: {
-
-xl:  5,
-
-lg:  4,
-
-md:  3,
-
-sm:  2,
-
-xs:  1
-
-},
-
-direction:  'vertical',
-
-highlightColor:  'black',
-
-marginPx:  10,
-
-borderPx:  2,
-
-headerPx:  40,
-
-styles: {
-
-gridContainer: {
-
-'grid-container': {
-
-'background-color':  'rgb(171, 171, 196)'
-
-},
-
-'position-highlight': {
-
-color:  'blue'
-
-}
-
-},
-
-gridItemContainer: {
-
-header: {
-
-display:  'flex',
-
-'justify-content':  'center',
-
-'align-items':  'center',
-
-'background':  '#fff',
-
-'border-bottom':  '1px solid #bbb',
-
-top:  '0px',
-
-left:  '0px',
-
-right:  '0px',
-
-'z-index':  1,
-
-cursor:  'move'
-
-},
-
-title: {
-
-color:  'green',
-
-flex:  1,
-
-'text-align':  'center'
-
-},
-
-'headerIcons': {
-
-color:  'black',
-
-'margin-left':  'auto',
-
-cursor:  'pointer',
-
-'margin-right':  '5px',
-
-display:  'flex',
-
-'justify-content':  'center',
-
-'align-items':  'center'
-
-}
-
-}
-
-}
-
-};
-
-  
-  
-
-items  = [
-
-{
-
-id:  0, title:  'Pizza Chart',
-
-toolbarItems: [
-
-{
-
-title:  'close',
-
-ariaLabel:  'close',
-
-itemSelection:  ItemSelection.Close,
-
-iconClass:  'close'
-
-}
-
-],
-
-w:  1, h:  1, x:  4, y:  0, panelItem:  new  PanelItem(ChartComponent, {
-
-headline:  'Hiring for several positions',
-
-body:  'Submit your resume today!'
-
-})
-
-},
-
-{
-
-id:  1, title:  'Hero Profile',
-
-toolbarItems: [
-
-{
-
-title:  'publish',
-
-ariaLabel:  'publish',
-
-clickFunction:  'publishClicked',
-
-ifFunction:  'isAuthenticated',
-
-iconClass:  'publish',
-
-iconStyle: { 'color':  'pink' },
-
-},
-
-{
-
-title:  'close',
-
-ariaLabel:  'close',
-
-itemSelection:  ItemSelection.Close,
-
-iconClass:  'close'
-
-}
-
-],w:  1, h:  1, x:  0, y:  0,
-
-panelItem:  new  PanelItem(HeroProfileComponent, { name:  'Bombasto', bio:  'Brave as they come' })
-
-},
-
-{
-
-id:  2, title:  'Job Ad',
-
-toolbarItems: [
-
-{
-
-title:  'close',
-
-ariaLabel:  'close',
-
-itemSelection:  ItemSelection.Close,
-
-iconClass:  'close',
-
-iconStyle: { 'color':  'blue' },
-
-}
-
-],
-
-w:  1, h:  1, x:  0, y:  1, panelItem:  new  PanelItem(HeroJobAdComponent, {
-
-headline:  'Openings in all departments',
-
-body:  'Apply today'
-
-})
-
-}
-
-];
+  options = {
+    fixedLanes: 5,
+    mediaQueryLanes: {
+      xl: 5,
+      'lt-xl': 4, 
+      lg: 4,
+      'lt-lg': 3, 
+      md: 3,
+      'lt-md': 2, 
+      sm: 2,
+      'lt-sm': 1,
+      xs: 1
+    },
+    direction: 'vertical',
+    highlightColor: 'black',
+    marginPx: 10,
+    borderPx: 2,
+    headerPx: 40,
+    styles: {
+      gridContainer: {
+        'grid-container': {
+          'background-color': 'rgb(171, 171, 196)'
+        },
+        'position-highlight': {
+          color: 'blue'
+        }
+      },
+      gridItemContainer: {
+        header: {
+          display: 'flex', 
+          'justify-content': 'center', 
+          'align-items': 'center',
+          'background': '#fff',
+          'border-bottom': '1px solid #bbb',
+          top: '0px',
+          left: '0px',
+          right: '0px', 
+          'z-index': 1,
+          cursor: 'move'
+        },
+        title: {
+          color: 'green',    
+          flex: 1,
+          'text-align': 'center'      
+        },
+        'headerIcons': {
+          color: 'black',
+          'margin-left': 'auto',
+          cursor: 'pointer',
+          'margin-right': '5px', 
+          display: 'flex', 
+          'justify-content': 'center', 
+          'align-items': 'center'                
+        }
+      }
+    }
+  };
+
+  items = [
+    {
+      id: 0, title: 'Pizza Chart', 
+      toolbarItems: [
+        {
+          title: 'maximize',
+          ariaLabel: 'maximize',
+          itemSelection: ItemSelection.Maximize,
+          iconClass: 'maximize'
+        },
+        {
+          title: 'minimize',
+          ariaLabel: 'minimize',
+          itemSelection: ItemSelection.Minimize,
+          iconClass: 'minimize'
+        },
+        {
+          title: 'close',
+          ariaLabel: 'close',
+          itemSelection: ItemSelection.Close,
+          iconClass: 'close'
+        }
+      ],
+      w: 1, h: 1, x: 4, y: 0, panelItem: new PanelItem(ChartComponent, {
+        headline: 'Hiring for several positions',
+        body: 'Submit your resume today!'
+      })
+    },
+    {
+      id: 1, title: 'Hero Profile', 
+      toolbarItems: [
+        {
+          title: 'publish',
+          ariaLabel: 'publish',
+          clickFunction: 'publishClicked',
+          ifFunction: 'isAuthenticated',
+          iconClass: 'publish',
+          iconStyle: { 'color': 'pink' },
+        },
+        {
+          title: 'maximize',
+          ariaLabel: 'maximize',
+          itemSelection: ItemSelection.Maximize,
+          iconClass: 'maximize'
+        },
+        {
+          title: 'minimize',
+          ariaLabel: 'minimize',
+          itemSelection: ItemSelection.Minimize,
+          iconClass: 'minimize'
+        },
+        {
+          title: 'close',
+          ariaLabel: 'close',
+          itemSelection: ItemSelection.Close,
+          iconClass: 'close'
+        }
+      ],w: 1, h: 1, x: 0, y: 0,
+      panelItem: new PanelItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })
+    },
+    {
+      id: 2, title: 'Job Ad',
+      toolbarItems: [
+        {
+          title: 'close',
+          ariaLabel: 'close',
+          itemSelection: ItemSelection.Close,
+          iconClass: 'close',
+          iconStyle: { 'color': 'blue' },
+        }
+      ],
+      w: 1, h: 1, x: 0, y: 1, panelItem: new PanelItem(HeroJobAdComponent, {
+        headline: 'Openings in all departments',
+        body: 'Apply today'
+      })
+    }
+  ];
 
 ```
 
@@ -352,7 +295,10 @@ npm run demo
 
 - custom icons in panel header
 
-  
+### 1.1.10
+
+- add panel minimize/maximize
+- itemUpdateEmitter lanePosition paramter for add  
   
 
 ## Author
