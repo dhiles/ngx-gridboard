@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostListener, ViewEncapsulation } from '@angular/core';
 import { PanelComponent } from '../panel/panel.component';
 import { ItemSelection } from '../item';
 import { NgxGridboardService } from '../ngx-gridboard.service';
@@ -15,7 +15,9 @@ import { NgxGridboardService } from '../ngx-gridboard.service';
                 </ng-container>
             </ng-container>
         </div>
-`
+`,
+  styleUrls: ['./headerIcons.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class HeaderIconsComponent {
     @Input() panelComponent: PanelComponent;

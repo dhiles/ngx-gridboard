@@ -59,18 +59,17 @@ export class AppComponent {
         },
         title: {
           color: 'green',    
-          flex: 1,
-          'text-align': 'center'      
+          flex: 1
         },
         'headerIcons': {
           color: 'black',
-          'margin-left': 'auto',
-          cursor: 'pointer',
-          'margin-right': '5px', 
+          flex: 1,
           display: 'flex', 
           'justify-content': 'center', 
-          'align-items': 'center'                
-        }
+          'align-items': 'center',
+          cursor: 'pointer',
+          'margin-right': '10px'
+         }
       }
     }
   };
