@@ -298,7 +298,12 @@ npm run demo
 ### 1.1.10
 
 - add panel minimize/maximize
-- itemUpdateEmitter lanePosition paramter for add  
+- itemUpdateEmitter lanePosition paramter for add 
+
+### 1.1.11
+
+- fix header alignment
+- 
   
 
 ## Author
