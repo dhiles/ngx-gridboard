@@ -16,6 +16,7 @@ export class NgxGridboardService {
     marginPx: number;
     borderPx: number;
     renderer: Renderer2;
+    maximizedItem: Item;
 
     constructor(private rendererFactory: RendererFactory2) {
         this.renderer = rendererFactory.createRenderer(null, null)
