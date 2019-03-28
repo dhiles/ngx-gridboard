@@ -12,6 +12,7 @@ import { PanelDirective } from '../panel/panel.directive';
 import { PanelComponent } from '../panel/panel.component';
 import { Item, ItemState, ItemSelection, ItemMouseEvent, Coords, Size, Dimensions } from '../item';
 import { Class } from '../class.directive';
+import { debounce } from '../decorators';
 
 const topZIndex = 1000;
 const bottomZIndex = 0;
@@ -59,18 +60,20 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   absPos: any;
   maximized: boolean;
   outerMouseDownListener: any;
+  private _highlight: boolean;
 
   @HostListener('mouseenter') onMouseEnter() {
-    this.highlight(true);
+    this.highlight = true;
     this.enteredByMouse = true;
   }
 
   @HostListener('mouseleave') onMouseLeave() {
-    this.highlight(null);
+    this.highlight = false;
     this.enteredByMouse = false;
   }
 
   @HostListener('mousemove', ['$event'])
+  @debounce()
   onMouseMove(event) {
     if (!this.maximized) {
       this.handleMouseMove({ x: event.pageX, y: event.pageY });
@@ -163,6 +166,19 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.keyValueDiffer = keyValueDiffers.find({}).create();
   }
 
+  get highlight() {
+    return this._highlight;
+  }
+
+  set highlight(value:boolean) {
+    this._highlight = value;
+    if (value) {
+      this.renderer.setStyle(this.outer.nativeElement, 'border', this.ngxGridboardService.options.borderPx + 'px solid ' + this.ngxGridboardService.options.highlightColor);
+    } else {
+      this.renderer.setStyle(this.outer.nativeElement, 'border', this.ngxGridboardService.options.borderPx + 'px solid transparent');
+    }
+  }
+
   setAbsPosition() {
     let offsetLeft = 0;
     let offsetTop = 0;
@@ -210,7 +226,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.item.elementRef = this.elementRef;
 
     this.mouseUpEmitter.subscribe(() => {
-      this.highlight(false);
+      this.highlight = false;
     });
 
     this.layoutChangeEmitter.subscribe(() => {
@@ -219,7 +235,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
 
     // this.header.nativeElement.style.height = this.ngxGridboardService.options.headerPx + 'px';
     this.inner.nativeElement.style.top = this.ngxGridboardService.options.headerPx + 'px';
-    this.highlight(null);
+    this.highlight = false;
     this.setRect();
     this.clickEmitter.subscribe((selection: ItemSelection) => {
       if (selection === ItemSelection.Close) {
@@ -325,7 +341,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     if (!(this.item.state === ItemState.Resize)) {
       this.item.state = ItemState.Move;
     }
-    this.highlight(true);
+    this.highlight = true;
     this.ngxGridboardService.activeItem = this.item;
     this.startMovePos = pos;
     this.startMoveDimensions = { x: this.item.x, y: this.item.y, w: this.item.w, h: this.item.h };
@@ -349,14 +365,6 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.zIndex = bottomZIndex;
     this.moveDelta = { x: 0, y: 0 };
     this.mouseUpEmitter.emit({ pos: pos, item: this.item });
-  }
-
-  private highlight(on: boolean) {
-    if (on) {
-      this.renderer.setStyle(this.outer.nativeElement, 'border', this.ngxGridboardService.options.borderPx + 'px solid ' + this.ngxGridboardService.options.highlightColor);
-    } else {
-      this.renderer.setStyle(this.outer.nativeElement, 'border', this.ngxGridboardService.options.borderPx + 'px solid transparent');
-    }
   }
 
   itemResizeMouseDown(result: ItemMouseEvent) {
@@ -422,7 +430,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
         this.height = height + this.moveDelta.x;
       }
     }
-
+    this.emitResize();
   }
 
   deleteItem() {
