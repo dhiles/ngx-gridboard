@@ -3,12 +3,14 @@
 		<div #positionHighlightItem class="position-highlight">
 		</div>
 		<div *ngFor="let item of items; let i = index">
-			<div *ngIf="ngxGridboardService.maximizedItem && item === ngxGridboardService.maximizedItem || !ngxGridboardService.maximizedItem">
-				<gb-item-container [layoutChangeEmitter]="layoutChangeEmitter" [style.left.px]="item.containerComponent.left" [style.top.px]="item.containerComponent.top" 
-				[style.width.px]="item.containerComponent.width" [style.height.px]="item.containerComponent.height" 
-				[style.z-index]="item.containerComponent.zIndex" #dragItem (mouseDownEmitter)="itemMouseDown($event)" (mouseMoveEmitter)="itemMouseMove($event)" (mouseUpEmitter)="itemMouseUp($event)" [item]="item" class="ui-draggable myitem">
-				</gb-item-container>
-			</div>
+			<gb-item-container
+				[hidden]="ngxGridboardService.maximizedItem && item !== ngxGridboardService.maximizedItem"
+				[layoutChangeEmitter]="layoutChangeEmitter" [style.left.px]="item.containerComponent.left"
+				[style.top.px]="item.containerComponent.top" [style.width.px]="item.containerComponent.width"
+				[style.height.px]="item.containerComponent.height" [style.z-index]="item.containerComponent.zIndex"
+				#dragItem (mouseDownEmitter)="itemMouseDown($event)" (mouseMoveEmitter)="itemMouseMove($event)"
+				(mouseUpEmitter)="itemMouseUp($event)" [item]="item" class="ui-draggable myitem">
+			</gb-item-container>
 		</div>
 	</ul>
 </div>
