@@ -47,7 +47,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   previousDragPosition: Coords = null;
   maxItemWidth: number;
   maxItemHeight: number;
-  _previousDragPosition: any;
+  _previousDragPosition: Coords;
   keyValueDiffer: any;
   iterableDiffer: any;
   itemDiffer: any;
@@ -364,7 +364,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
       if (this.dragPositionChanged(newPosition)) {
         this._previousDragPosition = newPosition;
 
-        this.gridList.moveItemToPosition(item, newPosition);
+        this.gridList.moveItemToPosition(item, [newPosition.x,newPosition.y]);
 
         // Visually update item positions and highlight shape
         this.resizeGridContainer();
@@ -383,7 +383,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
         this._previousDragPosition = newPosition;
 
         this.gridList.resizeItem(item, { w: width, h: height });
-        this.gridList.moveItemToPosition(item, newPosition);
+        this.gridList.moveItemToPosition(item, [newPosition.x,newPosition.y]);
 
         this.itemChange.emit({ item: item });
 
@@ -402,15 +402,15 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     this.removePositionHighlight();
   }
 
-  dragPositionChanged(newPosition: any) {
+  dragPositionChanged(newPosition: Coords): boolean {
     if (!this._previousDragPosition) {
       return true;
     }
-    return (newPosition[0] !== this._previousDragPosition[0] ||
-      newPosition[1] !== this._previousDragPosition[1]);
+    return (newPosition.x !== this._previousDragPosition.x ||
+      newPosition.y !== this._previousDragPosition.y);
   }
 
-  snapItemPositionToGrid(item: any) {
+  snapItemPositionToGrid(item: any): Coords {
     const positionLeft = item.elementRef.nativeElement.offsetLeft;
     const positionTop = item.elementRef.nativeElement.offsetTop;
 
@@ -430,7 +430,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
       row = Math.min(row, this.gridList.grid.length);
     }
     console.log('row=' + row + " col=" + col);
-    return [col, row];
+    return {x:col, y:row};
   }
 
 }
