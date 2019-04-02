@@ -302,9 +302,9 @@ npm run demo
 
 ### 1.1.11
 
-- fix header alignment
-- 
-  
+- fix icon header alignment
+- set non-maximized panels to hidden on maximize  
+- emit resize events when resizing 
 
 ## Author
 
