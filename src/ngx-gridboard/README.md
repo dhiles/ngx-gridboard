@@ -304,7 +304,12 @@ npm run demo
 
 - fix icon header alignment
 - set non-maximized panels to hidden on maximize  
-- emit resize events when resizing 
+- emit resize events when resizing
+
+### 1.1.12
+
+- snap back temp moved items during drag
+
 
 ## Author
 

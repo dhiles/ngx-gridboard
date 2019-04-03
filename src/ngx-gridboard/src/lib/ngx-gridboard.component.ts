@@ -38,8 +38,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   currentMq: any;
   pos: Coords = { x: 0, y: 0 };
   name: string;
-  _items: any;
-  initialItems: any;
+  dragStates = new Array();
   gridList: any;
   gridElement: any;
   mouseMoves: any;
@@ -319,7 +318,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   itemMouseDown(result: ItemMouseEvent) {
-    this.initialItems = GridListHelper.cloneItems(this.items);
+    this.dragStates = new Array();
   }
 
   itemMouseUp(result: ItemMouseEvent) {
@@ -332,17 +331,6 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
       // this.fixIntermediateStates();
       this.onStop();
       this.ngxGridboardService.activeItem = null;
-    }
-  }
-
-  fixIntermediateStates() {
-    let changedItems = [];
-    for (let i = 0; i < this.initialItems.length; i++) {
-      if (this.items[i].x !== this.initialItems[i].x ||
-        this.items[i].y !== this.initialItems[i].y &&
-        this.items[i] !== this.ngxGridboardService.activeItem) {
-        changedItems.push(this.items[i]);
-      }
     }
   }
 
@@ -363,8 +351,9 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
 
       if (this.dragPositionChanged(newPosition)) {
         this._previousDragPosition = newPosition;
-
-        this.gridList.moveItemToPosition(item, [newPosition.x,newPosition.y]);
+        this.dragStates.push(GridListHelper.cloneItems(this.items));
+        this.gridList.moveItemToPosition(item, [newPosition.x, newPosition.y]);
+        this.snapBack();
 
         // Visually update item positions and highlight shape
         this.resizeGridContainer();
@@ -383,7 +372,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
         this._previousDragPosition = newPosition;
 
         this.gridList.resizeItem(item, { w: width, h: height });
-        this.gridList.moveItemToPosition(item, [newPosition.x,newPosition.y]);
+        this.gridList.moveItemToPosition(item, [newPosition.x, newPosition.y]);
 
         this.itemChange.emit({ item: item });
 
@@ -400,6 +389,21 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     this._previousDragPosition = null;
     this.resizeGridContainer();
     this.removePositionHighlight();
+  }
+
+  snapBack() {
+    if (this.dragStates.length > 1) {
+      let dragStateIndex = this.dragStates.length - 2;
+      this.items.forEach((item, i) => {
+        if (item !== this.ngxGridboardService.activeItem) {
+          let originalItem = this.dragStates[dragStateIndex][i];
+          if (originalItem.x != item.x || originalItem.y != item.y) {
+            this.gridList.moveItemToPosition(this.items[1], [originalItem.x, originalItem.y]);
+          }
+        }
+      });
+      this.resizeGridContainer();
+    }
   }
 
   dragPositionChanged(newPosition: Coords): boolean {
@@ -430,7 +434,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
       row = Math.min(row, this.gridList.grid.length);
     }
     console.log('row=' + row + " col=" + col);
-    return {x:col, y:row};
+    return { x: col, y: row };
   }
 
 }
