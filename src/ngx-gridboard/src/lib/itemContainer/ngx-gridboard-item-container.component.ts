@@ -170,7 +170,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     return this._highlight;
   }
 
-  set highlight(value:boolean) {
+  set highlight(value: boolean) {
     this._highlight = value;
     if (value) {
       this.renderer.setStyle(this.outer.nativeElement, 'border', this.ngxGridboardService.options.borderPx + 'px solid ' + this.ngxGridboardService.options.highlightColor);
@@ -255,12 +255,14 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     });
   }
 
-  handleIf(itemSelection:ItemSelection) {
+  handleIf(itemSelection: ItemSelection) {
     let result = true;
-    if (itemSelection === ItemSelection.Maximize && this.maximized) {
-      result = false;
-    } else if (itemSelection === ItemSelection.Minimize && !this.maximized) {
-      result = false;
+    if (this.ngxGridboardService.options.mutexMinMaxIcons) {
+      if (itemSelection === ItemSelection.Maximize && this.maximized) {
+        result = false;
+      } else if (itemSelection === ItemSelection.Minimize && !this.maximized) {
+        result = false;
+      }
     }
     return result;
   }
