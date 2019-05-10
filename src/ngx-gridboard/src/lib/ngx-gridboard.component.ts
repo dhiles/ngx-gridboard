@@ -2,7 +2,7 @@
 import {
   Component, Directive, HostListener,
   Input, Output, Query, EventEmitter, AfterContentInit,
-  AfterViewInit, ViewChild, ContentChildren, ViewChildren,
+  AfterViewInit, ViewChild, ChangeDetectorRef, ContentChildren, ViewChildren,
   QueryList, forwardRef, Inject, ElementRef, Renderer2,
   ComponentFactoryResolver, OnInit, OnDestroy, KeyValueDiffers, IterableDiffers, KeyValueChangeRecord, DoCheck
 } from '@angular/core';
@@ -90,7 +90,8 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     public media: MediaObserver,
     public ngxGridboardService: NgxGridboardService,
     private keyValueDiffers: KeyValueDiffers,
-    private iterableDiffers: IterableDiffers
+    private iterableDiffers: IterableDiffers,
+    private cdRef : ChangeDetectorRef
   ) {
     this.keyValueDiffer = keyValueDiffers.find({}).create();
     this.iterableDiffer = iterableDiffers.find([]).create(null);
@@ -193,6 +194,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     this.render();
     this.loadResponsiveContent(this.currentMq);
     this.initialized = true;
+    this.cdRef.detectChanges();
   }
 
   loadResponsiveContent(mq) {
