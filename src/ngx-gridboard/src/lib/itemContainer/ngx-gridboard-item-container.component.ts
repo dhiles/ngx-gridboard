@@ -255,6 +255,16 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     });
   }
 
+  handleIf(itemSelection:ItemSelection) {
+    let result = true;
+    if (itemSelection === ItemSelection.Maximize && this.maximized) {
+      result = false;
+    } else if (itemSelection === ItemSelection.Minimize && !this.maximized) {
+      result = false;
+    }
+    return result;
+  }
+
   maximizeItem() {
     this.maximized = true;
     this.ngxGridboardService.maximizedItem = this.item;

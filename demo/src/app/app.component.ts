@@ -124,7 +124,8 @@ export class AppComponent {
           title: 'minimize',
           ariaLabel: 'minimize',
           itemSelection: ItemSelection.Minimize,
-          iconClass: 'minimize'
+          iconClass: 'minimize',
+          ifFunction: 'isMaximized',
         },
         {
           title: 'close',

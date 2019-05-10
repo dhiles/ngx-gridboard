@@ -8,7 +8,7 @@ import { NgxGridboardService } from '../ngx-gridboard.service';
    template: `
         <div [ngStyle]="ngxGridboardService.options.styles.gridItemContainer.headerIcons">
             <ng-container *ngFor="let toolbarItem of panelComponent.item.toolbarItems">
-                <ng-container *ngIf="panelComponent.handleIf(panelComponent.item)">
+                <ng-container *ngIf="panelComponent.handleIf(toolbarItem)">
                     <ng-container *ngIf="panelComponent.iconTemplate">
                         <ng-container [ngTemplateOutlet]="panelComponent.iconTemplate" [ngTemplateOutletContext]="{toolbarItem:toolbarItem}"></ng-container>
                     </ng-container>

@@ -26,3 +26,7 @@ export class HeroProfileComponent extends PanelComponent {
 }
 
 
+
+
+
+
