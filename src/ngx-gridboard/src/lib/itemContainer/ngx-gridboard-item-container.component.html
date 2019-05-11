@@ -21,7 +21,7 @@
 <div [style.margin.px]="ngxGridboardService.options.marginPx" class="outer" #outer>
     <div [ngStyle]="ngxGridboardService.options.styles.gridItemContainer.header"
         [style.height.px]="ngxGridboardService.options.headerPx" #header (panstart)="onPanStart($event)">
-        <div [ngStyle]="ngxGridboardService.options.styles.gridItemContainer.title" #title>{{ panelComponent.item.title }}</div>
+        <div [ngStyle]="ngxGridboardService.options.styles.gridItemContainer.title" #title [title]="description">{{ panelComponent.item.title }}</div>
         <gb-header-icons [panelComponent]="panelComponent" [template]="panelComponent.iconTemplate"></gb-header-icons>
     </div>
 

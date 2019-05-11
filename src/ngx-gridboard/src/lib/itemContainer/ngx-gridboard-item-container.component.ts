@@ -166,6 +166,10 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.keyValueDiffer = keyValueDiffers.find({}).create();
   }
 
+  get description() {
+    return this.panelComponent.item.description ? this.panelComponent.item.description : "";
+  }
+
   get highlight() {
     return this._highlight;
   }

@@ -35,7 +35,7 @@ export class ItemChange {
   styleUrls: ['ngx-gridboard.component.css']
 })
 export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
-  currentMq: any;
+  currentMq = '';
   pos: Coords = { x: 0, y: 0 };
   name: string;
   _items: any;
@@ -140,9 +140,26 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     }
   }
 
+  getMqBreakpoint() {
+    const width = this.gridContainer.nativeElement.width;
+    let mq = 'xs';
+    if (width > 600) {
+      mq = 'sm';
+    } else if (width > 960) {
+      mq = 'md';
+    } else if (width > 1280) {
+      mq = 'lg';
+    } else if (width > 1920) {
+      mq = 'xl';
+    }
+    return mq; 
+  }
+
   ngOnInit() {
     this.ngxGridboardService.options = this.options;
     this.ngxGridboardService.gridboard = this;
+    // let mq = this.getMqBreakpoint();
+    // this.loadResponsiveContent(mq);
     of(this.items).subscribe(e => console.log(e));
     if (this.options.mediaQueryLanes) {
       this.media.media$
@@ -191,10 +208,10 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     this.maxItemHeight = this.getMaxItemHeight();
     this.removePositionHighlight();
     this.calculateCellSize();
-    this.render();
     this.loadResponsiveContent(this.currentMq);
+    this.render();
     this.initialized = true;
-    this.cdRef.detectChanges();
+    this.cdRef.detectChanges();    
   }
 
   loadResponsiveContent(mq) {

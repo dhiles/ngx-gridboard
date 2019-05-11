@@ -105,7 +105,9 @@ export class AppComponent {
       })
     },
     {
-      id: 1, title: 'Hero Profile', 
+      id: 1, 
+      title: 'Hero Profile',
+      description: 'hero info', 
       toolbarItems: [
         {
           title: 'publish',
