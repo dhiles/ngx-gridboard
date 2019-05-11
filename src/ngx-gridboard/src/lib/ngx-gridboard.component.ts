@@ -2,7 +2,7 @@
 import {
   Component, Directive, HostListener,
   Input, Output, Query, EventEmitter, AfterContentInit, OnChanges,
-  AfterViewInit, ViewChild, ChangeDetectorRef, ContentChildren, ViewChildren,
+  AfterViewInit, AfterViewChecked, ViewChild, ChangeDetectorRef, ContentChildren, ViewChildren,
   QueryList, forwardRef, Inject, ElementRef, Renderer2,
   ComponentFactoryResolver, OnInit, OnDestroy, KeyValueDiffers, IterableDiffers, KeyValueChangeRecord, DoCheck
 } from '@angular/core';
@@ -34,7 +34,7 @@ export class ItemChange {
   templateUrl: './ngx-gridboard.component.html',
   styleUrls: ['ngx-gridboard.component.css']
 })
-export class NgxGridboardComponent implements OnInit, OnChanges, AfterViewInit, DoCheck {
+export class NgxGridboardComponent implements OnInit, OnChanges, AfterViewInit, AfterViewChecked, DoCheck {
   currentMq = '';
   pos: Coords = { x: 0, y: 0 };
   name: string;
@@ -158,8 +158,8 @@ export class NgxGridboardComponent implements OnInit, OnChanges, AfterViewInit, 
   ngOnInit() {
     this.ngxGridboardService.options = this.options;
     this.ngxGridboardService.gridboard = this;
-    // let mq = this.getMqBreakpoint();
-    // this.loadResponsiveContent(mq);
+    let mq = this.getMqBreakpoint();
+    this.loadResponsiveContent(mq);
     of(this.items).subscribe(e => console.log(e));
     if (this.options.mediaQueryLanes) {
       this.media.media$
@@ -209,11 +209,16 @@ export class NgxGridboardComponent implements OnInit, OnChanges, AfterViewInit, 
     this.maxItemHeight = this.getMaxItemHeight();
     this.removePositionHighlight();
     this.calculateCellSize();
-    this.loadResponsiveContent(this.currentMq);
+  //  let mq = this.getMqBreakpoint();
+  //  this.loadResponsiveContent(mq);
     this.resizeGrid(this.options.fixedLanes);
     this.render();
     this.initialized = true;
     this.cdRef.detectChanges();
+  }
+
+  ngAfterViewChecked() {
+    this.resizeGrid(this.options.fixedLanes);
   }
 
   ngOnChanges() {
