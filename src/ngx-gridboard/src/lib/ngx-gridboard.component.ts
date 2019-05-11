@@ -1,7 +1,7 @@
 
 import {
   Component, Directive, HostListener,
-  Input, Output, Query, EventEmitter, AfterContentInit,
+  Input, Output, Query, EventEmitter, AfterContentInit, OnChanges,
   AfterViewInit, ViewChild, ChangeDetectorRef, ContentChildren, ViewChildren,
   QueryList, forwardRef, Inject, ElementRef, Renderer2,
   ComponentFactoryResolver, OnInit, OnDestroy, KeyValueDiffers, IterableDiffers, KeyValueChangeRecord, DoCheck
@@ -34,7 +34,7 @@ export class ItemChange {
   templateUrl: './ngx-gridboard.component.html',
   styleUrls: ['ngx-gridboard.component.css']
 })
-export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
+export class NgxGridboardComponent implements OnInit, OnChanges, AfterViewInit, DoCheck {
   currentMq = '';
   pos: Coords = { x: 0, y: 0 };
   name: string;
@@ -91,7 +91,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     public ngxGridboardService: NgxGridboardService,
     private keyValueDiffers: KeyValueDiffers,
     private iterableDiffers: IterableDiffers,
-    private cdRef : ChangeDetectorRef
+    private cdRef: ChangeDetectorRef
   ) {
     this.keyValueDiffer = keyValueDiffers.find({}).create();
     this.iterableDiffer = iterableDiffers.find([]).create(null);
@@ -152,7 +152,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     } else if (width > 1920) {
       mq = 'xl';
     }
-    return mq; 
+    return mq;
   }
 
   ngOnInit() {
@@ -202,6 +202,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   ngAfterViewInit() {
+    console.log('ngAfterViewInit');
     this.ngxGridboardService.setStyles("gridContainer", this.classes);
     this.calculateCellSize();
     this.maxItemWidth = this.getMaxItemWidth();
@@ -209,9 +210,15 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     this.removePositionHighlight();
     this.calculateCellSize();
     this.loadResponsiveContent(this.currentMq);
+    this.resizeGrid(this.options.fixedLanes);
     this.render();
     this.initialized = true;
-    this.cdRef.detectChanges();    
+    this.cdRef.detectChanges();
+    //this.resizeGrid(this.options.fixedLanes);  
+  }
+
+  ngOnChanges() {
+    console.log('ngOnChanges');
   }
 
   loadResponsiveContent(mq) {

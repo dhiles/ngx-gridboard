@@ -120,6 +120,7 @@ when "lanePosition" is "last", and the direction is vertical, the newly added pa
     marginPx: 10,
     borderPx: 2,
     headerPx: 40,
+    mutexMinMaxIcons: true,
     styles: {
       gridContainer: {
         'grid-container': {
@@ -144,23 +145,22 @@ when "lanePosition" is "last", and the direction is vertical, the newly added pa
         },
         title: {
           color: 'green',    
-          flex: 1,
-          'text-align': 'center'      
+          flex: 1
         },
         'headerIcons': {
           color: 'black',
-          'margin-left': 'auto',
-          cursor: 'pointer',
-          'margin-right': '5px', 
+          flex: 1,
           display: 'flex', 
           'justify-content': 'center', 
-          'align-items': 'center'                
-        }
+          'align-items': 'center',
+          cursor: 'pointer',
+          'margin-right': '10px'
+         }
       }
     }
   };
 
-  items = [
+items = [
     {
       id: 0, title: 'Pizza Chart', 
       toolbarItems: [
@@ -189,36 +189,20 @@ when "lanePosition" is "last", and the direction is vertical, the newly added pa
       })
     },
     {
-      id: 1, title: 'Hero Profile', 
+      id: 1, title: 'Job Ad',
       toolbarItems: [
-        {
-          title: 'publish',
-          ariaLabel: 'publish',
-          clickFunction: 'publishClicked',
-          ifFunction: 'isAuthenticated',
-          iconClass: 'publish',
-          iconStyle: { 'color': 'pink' },
-        },
-        {
-          title: 'maximize',
-          ariaLabel: 'maximize',
-          itemSelection: ItemSelection.Maximize,
-          iconClass: 'maximize'
-        },
-        {
-          title: 'minimize',
-          ariaLabel: 'minimize',
-          itemSelection: ItemSelection.Minimize,
-          iconClass: 'minimize'
-        },
         {
           title: 'close',
           ariaLabel: 'close',
           itemSelection: ItemSelection.Close,
-          iconClass: 'close'
+          iconClass: 'close',
+          iconStyle: { 'color': 'red' },
         }
-      ],w: 1, h: 1, x: 0, y: 0,
-      panelItem: new PanelItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })
+      ],
+      w: 1, h: 1, x: 0, y: 1, panelItem: new PanelItem(HeroJobAdComponent, {
+        headline: 'Openings in all departments',
+        body: 'Apply today'
+      })
     },
     {
       id: 2, title: 'Job Ad',
