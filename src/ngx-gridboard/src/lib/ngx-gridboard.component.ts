@@ -214,7 +214,6 @@ export class NgxGridboardComponent implements OnInit, OnChanges, AfterViewInit, 
     this.render();
     this.initialized = true;
     this.cdRef.detectChanges();
-    //this.resizeGrid(this.options.fixedLanes);  
   }
 
   ngOnChanges() {
