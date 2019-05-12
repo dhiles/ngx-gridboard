@@ -162,7 +162,9 @@ when "lanePosition" is "last", and the direction is vertical, the newly added pa
 
 items = [
     {
-      id: 0, title: 'Pizza Chart', 
+      id: 0, 
+      title: 'Pizza Chart',
+      description: 'types of pizza eaten', 
       toolbarItems: [
         {
           title: 'maximize',
@@ -189,23 +191,44 @@ items = [
       })
     },
     {
-      id: 1, title: 'Job Ad',
+      id: 1, 
+      title: 'Hero Profile',
+      description: 'hero info', 
       toolbarItems: [
+        {
+          title: 'publish',
+          ariaLabel: 'publish',
+          clickFunction: 'publishClicked',
+          ifFunction: 'isAuthenticated',
+          iconClass: 'publish',
+          iconStyle: { 'color': 'pink' },
+        },
+        {
+          title: 'maximize',
+          ariaLabel: 'maximize',
+          itemSelection: ItemSelection.Maximize,
+          iconClass: 'maximize'
+        },
+        {
+          title: 'minimize',
+          ariaLabel: 'minimize',
+          itemSelection: ItemSelection.Minimize,
+          iconClass: 'minimize',
+          ifFunction: 'isMaximized',
+        },
         {
           title: 'close',
           ariaLabel: 'close',
           itemSelection: ItemSelection.Close,
-          iconClass: 'close',
-          iconStyle: { 'color': 'red' },
+          iconClass: 'close'
         }
-      ],
-      w: 1, h: 1, x: 0, y: 1, panelItem: new PanelItem(HeroJobAdComponent, {
-        headline: 'Openings in all departments',
-        body: 'Apply today'
-      })
+      ],w: 1, h: 1, x: 0, y: 0,
+      panelItem: new PanelItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })
     },
     {
-      id: 2, title: 'Job Ad',
+      id: 2, 
+      title: 'Job Ad',
+      description: 'find a job',
       toolbarItems: [
         {
           title: 'close',
@@ -294,8 +317,8 @@ npm run demo
 
 - fix npm security violation in tar node pkg version by setting node-gyp version 4.0.0 
 - fix bug with not passing toolbaritem to ifFunction
-- add option to remove or disable minimize icon when panel is not maximized and remove or disable maximize icon when panel is maximized
-- display description tooltip for panel title 
+- add mutexMinMaxIcons option to remove or disable minimize icon when panel is not maximized and remove or disable maximize icon when panel is maximized
+- add description field to panel item to display description tooltip on title 
 
 ## Author
 

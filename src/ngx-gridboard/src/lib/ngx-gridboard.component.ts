@@ -81,7 +81,6 @@ export class NgxGridboardComponent implements OnInit, OnChanges, AfterViewInit, 
 
   @HostListener('panstart', ['$event'])
   onPanStart(e: any) {
-    console.log("panstart");
   }
 
   constructor(
@@ -160,7 +159,7 @@ export class NgxGridboardComponent implements OnInit, OnChanges, AfterViewInit, 
     this.ngxGridboardService.gridboard = this;
     let mq = this.getMqBreakpoint();
     this.loadResponsiveContent(mq);
-    of(this.items).subscribe(e => console.log(e));
+    // of(this.items).subscribe(e => console.log(e));
     if (this.options.mediaQueryLanes) {
       this.media.media$
         .pipe(
@@ -202,15 +201,12 @@ export class NgxGridboardComponent implements OnInit, OnChanges, AfterViewInit, 
   }
 
   ngAfterViewInit() {
-    console.log('ngAfterViewInit');
     this.ngxGridboardService.setStyles("gridContainer", this.classes);
     this.calculateCellSize();
     this.maxItemWidth = this.getMaxItemWidth();
     this.maxItemHeight = this.getMaxItemHeight();
     this.removePositionHighlight();
     this.calculateCellSize();
-  //  let mq = this.getMqBreakpoint();
-  //  this.loadResponsiveContent(mq);
     this.resizeGrid(this.options.fixedLanes);
     this.render();
     this.initialized = true;
@@ -222,7 +218,6 @@ export class NgxGridboardComponent implements OnInit, OnChanges, AfterViewInit, 
   }
 
   ngOnChanges() {
-    console.log('ngOnChanges');
   }
 
   loadResponsiveContent(mq) {
@@ -459,7 +454,6 @@ export class NgxGridboardComponent implements OnInit, OnChanges, AfterViewInit, 
       col = Math.min(col, this.options.fixedLanes - item.w);
       row = Math.min(row, this.gridList.grid.length);
     }
-    console.log('row=' + row + " col=" + col);
     return [col, row];
   }
 

@@ -61,7 +61,6 @@ export class PanelComponent implements AfterViewInit{
     if (toolbarItem.iconClass) {
       iconClass += toolbarItem.iconClass;
     }
-    //console.log('getIconClass: iconClass='+iconClass);
     return iconClass;
   }
 

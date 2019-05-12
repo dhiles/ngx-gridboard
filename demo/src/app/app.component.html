@@ -4,8 +4,8 @@
   </h1>
   <div *ngIf="laneChanges | async as laneChange ">responsive media size={{ laneChange.mq }}</div>
   <div>lanes={{ options.fixedLanes }}</div>
-  <button class="my-button" (click)="decrementLanes()">decrement lanes</button>
-  <button class="my-button" (click)="incrementLanes()">increment lanes</button>
+  <button *ngIf="!options.mediaQueryLanes" class="my-button" (click)="decrementLanes()">decrement lanes</button>
+  <button *ngIf="!options.mediaQueryLanes" class="my-button" (click)="incrementLanes()">increment lanes</button>
   <button class="my-button" (click)="addItem()">add item</button>
   <button class="my-button" (click)="removeFirstItem()">remove first item</button>  
 </div>

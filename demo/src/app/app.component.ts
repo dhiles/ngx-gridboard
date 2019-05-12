@@ -18,7 +18,7 @@ export class AppComponent {
   itemUpdateEmitter: EventEmitter<any> = new EventEmitter<any>();
 
   options = {
-    fixedLanes: 0,
+    fixedLanes: 5,
     mediaQueryLanes: {
       xl: 5,
       'lt-xl': 4, 
@@ -78,7 +78,9 @@ export class AppComponent {
 
   items = [
     {
-      id: 0, title: 'Pizza Chart', 
+      id: 0, 
+      title: 'Pizza Chart',
+      description: 'types of pizza eaten', 
       toolbarItems: [
         {
           title: 'maximize',
@@ -140,7 +142,9 @@ export class AppComponent {
       panelItem: new PanelItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })
     },
     {
-      id: 2, title: 'Job Ad',
+      id: 2, 
+      title: 'Job Ad',
+      description: 'find a job',
       toolbarItems: [
         {
           title: 'close',

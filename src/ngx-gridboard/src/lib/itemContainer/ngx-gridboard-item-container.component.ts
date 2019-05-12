@@ -234,7 +234,6 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     });
 
     this.layoutChangeEmitter.subscribe(() => {
-      console.log('layoutChangeEmitter for'+this.item.id);
       this.setRect()
     });
 
