@@ -1,8 +1,8 @@
 
 import {
   Component, Directive, HostListener,
-  Input, Output, Query, EventEmitter, AfterContentInit,
-  AfterViewInit, ViewChild, ContentChildren, ViewChildren,
+  Input, Output, Query, EventEmitter, AfterContentInit, OnChanges,
+  AfterViewInit, AfterViewChecked, ViewChild, ChangeDetectorRef, ContentChildren, ViewChildren,
   QueryList, forwardRef, Inject, ElementRef, Renderer2,
   ComponentFactoryResolver, OnInit, OnDestroy, KeyValueDiffers, IterableDiffers, KeyValueChangeRecord, DoCheck
 } from '@angular/core';
@@ -34,8 +34,8 @@ export class ItemChange {
   templateUrl: './ngx-gridboard.component.html',
   styleUrls: ['ngx-gridboard.component.css']
 })
-export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
-  currentMq: any;
+export class NgxGridboardComponent implements OnInit, OnChanges, AfterViewInit, AfterViewChecked, DoCheck {
+  currentMq = '';
   pos: Coords = { x: 0, y: 0 };
   name: string;
   _items: any;
@@ -81,7 +81,6 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
 
   @HostListener('panstart', ['$event'])
   onPanStart(e: any) {
-    console.log("panstart");
   }
 
   constructor(
@@ -90,7 +89,8 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     public media: MediaObserver,
     public ngxGridboardService: NgxGridboardService,
     private keyValueDiffers: KeyValueDiffers,
-    private iterableDiffers: IterableDiffers
+    private iterableDiffers: IterableDiffers,
+    private cdRef: ChangeDetectorRef
   ) {
     this.keyValueDiffer = keyValueDiffers.find({}).create();
     this.iterableDiffer = iterableDiffers.find([]).create(null);
@@ -140,26 +140,26 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   getMqBreakpoint() {
-    const width = this.gridContainer.nativeElement.clientWidth;
-    let mq = 'xl';
-    if (width < 600) {
-      mq = 'xs';
-    } else if (width < 960) {
+    const width = this.gridContainer.nativeElement.width;
+    let mq = 'xs';
+    if (width > 600) {
       mq = 'sm';
-    } else if (width < 1280) {
+    } else if (width > 960) {
       mq = 'md';
-    } else if (width < 1920) {
+    } else if (width > 1280) {
       mq = 'lg';
-    } 
+    } else if (width > 1920) {
+      mq = 'xl';
+    }
     return mq;
   }
 
   ngOnInit() {
-    this.currentMq = this.getMqBreakpoint();
-    this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq]; 
     this.ngxGridboardService.options = this.options;
     this.ngxGridboardService.gridboard = this;
-    of(this.items).subscribe(e => console.log(e));
+    let mq = this.getMqBreakpoint();
+    this.loadResponsiveContent(mq);
+    // of(this.items).subscribe(e => console.log(e));
     if (this.options.mediaQueryLanes) {
       this.media.media$
         .pipe(
@@ -207,8 +207,17 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     this.maxItemHeight = this.getMaxItemHeight();
     this.removePositionHighlight();
     this.calculateCellSize();
+    this.resizeGrid(this.options.fixedLanes);
     this.render();
     this.initialized = true;
+    this.cdRef.detectChanges();
+  }
+
+  ngAfterViewChecked() {
+    this.resizeGrid(this.options.fixedLanes);
+  }
+
+  ngOnChanges() {
   }
 
   loadResponsiveContent(mq) {
@@ -445,7 +454,6 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
       col = Math.min(col, this.options.fixedLanes - item.w);
       row = Math.min(row, this.gridList.grid.length);
     }
-    console.log('row=' + row + " col=" + col);
     return [col, row];
   }
 

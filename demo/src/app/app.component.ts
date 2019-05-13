@@ -18,7 +18,7 @@ export class AppComponent {
   itemUpdateEmitter: EventEmitter<any> = new EventEmitter<any>();
 
   options = {
-    fixedLanes: 5,
+    fixedLanes: 0,
     mediaQueryLanes: {
       xl: 5,
       'lt-xl': 4, 
