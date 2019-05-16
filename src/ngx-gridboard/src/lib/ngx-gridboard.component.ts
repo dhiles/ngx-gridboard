@@ -3,7 +3,7 @@ import {
   Component, Directive, HostListener,
   Input, Output, Query, EventEmitter, AfterContentInit,
   AfterViewInit, ViewChild, ContentChildren, ViewChildren,
-  QueryList, forwardRef, Inject, ElementRef, Renderer2,
+  QueryList, forwardRef, Inject, ElementRef, Renderer2, ChangeDetectorRef,
   ComponentFactoryResolver, OnInit, OnDestroy, KeyValueDiffers, IterableDiffers, KeyValueChangeRecord, DoCheck
 } from '@angular/core';
 
@@ -81,7 +81,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
 
   @HostListener('panstart', ['$event'])
   onPanStart(e: any) {
-    console.log("panstart");
+    // console.log('panstart');
   }
 
   constructor(
@@ -90,7 +90,8 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     public media: MediaObserver,
     public ngxGridboardService: NgxGridboardService,
     private keyValueDiffers: KeyValueDiffers,
-    private iterableDiffers: IterableDiffers
+    private iterableDiffers: IterableDiffers,
+    private changeDetector: ChangeDetectorRef
   ) {
     this.keyValueDiffer = keyValueDiffers.find({}).create();
     this.iterableDiffer = iterableDiffers.find([]).create(null);
@@ -150,16 +151,16 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
       mq = 'md';
     } else if (width < 1920) {
       mq = 'lg';
-    } 
+    }
     return mq;
   }
 
   ngOnInit() {
     this.currentMq = this.getMqBreakpoint();
-    this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq]; 
+    this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
     this.ngxGridboardService.options = this.options;
     this.ngxGridboardService.gridboard = this;
-    of(this.items).subscribe(e => console.log(e));
+    // of(this.items).subscribe(e => console.log(e));
     if (this.options.mediaQueryLanes) {
       this.media.media$
         .pipe(
@@ -172,11 +173,11 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     });
     if (this.itemUpdateEmitter) {
       this.itemUpdateEmitter.subscribe((request: any) => {
-        if (request.operation === "add") {
+        if (request.operation === 'add') {
           let x = request.item.x;
           let y = request.item.y;
-          if (request.lanePosition === "last") {
-            if (this.options.direction === "vertical") {
+          if (request.lanePosition === 'last') {
+            if (this.options.direction === 'vertical') {
               x = 0;
               for (let i = 0; i < this.items.length; i++) {
                 if (this.items[i].y === y && this.items[i].x + this.items[i].w > x) {
@@ -201,13 +202,18 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   ngAfterViewInit() {
-    this.ngxGridboardService.setStyles("gridContainer", this.classes);
+    this.doAfterViewInit();
+  }
+
+  doAfterViewInit() {
+    this.ngxGridboardService.setStyles('gridContainer', this.classes);
     this.calculateCellSize();
     this.maxItemWidth = this.getMaxItemWidth();
     this.maxItemHeight = this.getMaxItemHeight();
     this.removePositionHighlight();
     this.calculateCellSize();
     this.render();
+    this.changeDetector.detectChanges();
     this.initialized = true;
   }
 
@@ -352,7 +358,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   fixIntermediateStates() {
-    let changedItems = [];
+    const changedItems = [];
     for (let i = 0; i < this.initialItems.length; i++) {
       if (this.items[i].x !== this.initialItems[i].x ||
         this.items[i].y !== this.initialItems[i].y &&
@@ -406,7 +412,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
         // Visually update item positions and highlight shape
         this.resizeGridContainer();
         this.highlightPositionForItem(item);
-        //item.containerComponent.resize();
+        // item.containerComponent.resize();
       }
     }
   }
@@ -445,7 +451,6 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
       col = Math.min(col, this.options.fixedLanes - item.w);
       row = Math.min(row, this.gridList.grid.length);
     }
-    console.log('row=' + row + " col=" + col);
     return [col, row];
   }
 

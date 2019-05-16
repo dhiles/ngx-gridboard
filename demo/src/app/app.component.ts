@@ -161,12 +161,6 @@ export class AppComponent {
     }
   ];
 
-  getItems() {
-    this.items.forEach(function (item) {
-      console.log(item);
-    });
-  }
-
   decrementLanes() {
     if (this.options.fixedLanes > 1) {
       this.options.fixedLanes -= 1;

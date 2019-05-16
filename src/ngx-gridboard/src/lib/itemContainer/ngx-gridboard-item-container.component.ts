@@ -177,9 +177,11 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   set highlight(value: boolean) {
     this._highlight = value;
     if (value) {
-      this.renderer.setStyle(this.outer.nativeElement, 'border', this.ngxGridboardService.options.borderPx + 'px solid ' + this.ngxGridboardService.options.highlightColor);
+      this.renderer.setStyle(this.outer.nativeElement, 'border',
+        this.ngxGridboardService.options.borderPx + 'px solid ' + this.ngxGridboardService.options.highlightColor);
     } else {
-      this.renderer.setStyle(this.outer.nativeElement, 'border', this.ngxGridboardService.options.borderPx + 'px solid transparent');
+      this.renderer.setStyle(this.outer.nativeElement,
+        'border', this.ngxGridboardService.options.borderPx + 'px solid transparent');
     }
   }
 
@@ -215,7 +217,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   }
 
   get widthVal(): number {
-    let width = (this.item) ? this.item.w * this.ngxGridboardService.options.cellWidth : 10;
+    const width = (this.item) ? this.item.w * this.ngxGridboardService.options.cellWidth : 10;
     return width;
   }
 
@@ -234,7 +236,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     });
 
     this.layoutChangeEmitter.subscribe(() => {
-      this.setRect()
+      this.setRect();
     });
 
     // this.header.nativeElement.style.height = this.ngxGridboardService.options.headerPx + 'px';
@@ -310,7 +312,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.outerMouseDownListener = this.renderer.listen(this.outer.nativeElement, 'mousedown', (event) => {
       this.setupMouseDown(event);
     });
-    this.setRect();
+  //  this.setRect();
   }
 
   ngDoCheck() {
@@ -391,8 +393,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   setRect() {
     if (this.maximized) {
       this.maximizeItem();
-    }
-    else {
+    } else {
       this.left = this.leftVal;
       this.top = this.topVal;
       this.width = this.widthVal;
@@ -402,8 +403,10 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   }
 
   emitResize() {
-    const indentSize = ((this.ngxGridboardService.options.marginPx + this.ngxGridboardService.options.borderPx + 3) * 2);
-    this.resizeEmitter.emit({ w: this.width - indentSize, h: this.height - indentSize - this.ngxGridboardService.options.headerPx });
+    if (this.width && this.height) {
+      const indentSize = ((this.ngxGridboardService.options.marginPx + this.ngxGridboardService.options.borderPx + 3) * 2);
+      this.resizeEmitter.emit({ w: this.width - indentSize, h: this.height - indentSize - this.ngxGridboardService.options.headerPx });
+    }
   }
 
   setResizeRect() {
@@ -419,11 +422,15 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
       this.height = height * this.scale;
     }
 
-    if (this.item.resizeType === 'se-resize-handle' || this.item.resizeType === 'e-resize-handle' || this.item.resizeType === 'ne-resize-handle') {
+    if (this.item.resizeType === 'se-resize-handle' ||
+      this.item.resizeType === 'e-resize-handle' ||
+      this.item.resizeType === 'ne-resize-handle') {
       this.width = width + this.moveDelta.x;
     }
 
-    if (this.item.resizeType === 'w-resize-handle' || this.item.resizeType === 'nw-resize-handle' || this.item.resizeType === 'sw-resize-handle') {
+    if (this.item.resizeType === 'w-resize-handle' ||
+      this.item.resizeType === 'nw-resize-handle' ||
+      this.item.resizeType === 'sw-resize-handle') {
       if (width - this.moveDelta.x < 0) {
         this.left = left - width;
         this.width = 0;
@@ -433,11 +440,15 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
       }
     }
 
-    if (this.item.resizeType === 'se-resize-handle' || this.item.resizeType === 's-resize-handle' || this.item.resizeType === 'sw-resize-handle') {
+    if (this.item.resizeType === 'se-resize-handle' ||
+      this.item.resizeType === 's-resize-handle' ||
+      this.item.resizeType === 'sw-resize-handle') {
       this.height = top + height + this.moveDelta.y;
     }
 
-    if (this.item.resizeType === 'ne-resize-handle' || this.item.resizeType === 'n-resize-handle' || this.item.resizeType === 'nw-resize-handle') {
+    if (this.item.resizeType === 'ne-resize-handle' ||
+      this.item.resizeType === 'n-resize-handle' ||
+      this.item.resizeType === 'nw-resize-handle') {
       if (height - this.moveDelta.y < 0) {
         this.top = top - height;
         this.height = 0;
