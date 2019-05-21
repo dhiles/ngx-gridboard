@@ -15,7 +15,7 @@ export class GridListHelper {
     }
     for (let i = 0; i < items.length; i++) {
          const obj = _items[i] ? _items[i] : {};
-        _items[i] = Object.assign(obj,items[i]);
+        _items[i] = Object.assign(obj, items[i]);
     }
     return _items;
   }

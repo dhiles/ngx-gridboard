@@ -54,6 +54,11 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   initialized = false;
   moveSubscription: any;
   layoutChangeEmitter: EventEmitter<any> = new EventEmitter();
+  gridContainerEl: any;
+  clientWidth: number;
+  maxClientWidth: number;
+  panelHidden: boolean;
+  responsiveContentLoaded: boolean;
 
   @Input() items: any;
   @Input() options: any;
@@ -82,6 +87,17 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   @HostListener('panstart', ['$event'])
   onPanStart(e: any) {
     // console.log('panstart');
+  }
+  @HostListener('window:resize') onResize() {
+    if (this.gridContainer) {
+      this.clientWidth = this.gridContainer.nativeElement.clientWidth;
+      this.maxClientWidth = this.getMaxItemsWidth();
+      if (this.clientWidth <= this.maxClientWidth * this.options.cellWidth) {
+        this.options.fixedLanes -= 1;
+      } else if (this.clientWidth > (this.maxClientWidth + 1) * this.options.cellWidth ) {
+        this.options.fixedLanes += 1;
+      }
+    }
   }
 
   constructor(
@@ -214,12 +230,13 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     this.calculateCellSize();
     this.render();
     this.changeDetector.detectChanges();
+    this.gridContainerEl = this.gridContainer.nativeElement;
     this.initialized = true;
   }
 
   loadResponsiveContent(mq) {
     let lanes = this.options.fixedLanes;
-    if (this.options.mediaQueryLanes && this.options.mediaQueryLanes.hasOwnProperty(mq)) {
+    if (!this.responsiveContentLoaded && this.options.mediaQueryLanes && this.options.mediaQueryLanes.hasOwnProperty(mq)) {
       this.currentMq = mq;
       lanes = this.options.mediaQueryLanes[mq];
       this.options.fixedLanes = lanes;
@@ -229,6 +246,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
         this.calculateCellSize();
       }
       this.laneChange.emit({ mq: mq, lanes: lanes });
+      this.responsiveContentLoaded = true;
     }
   }
 
