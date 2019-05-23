@@ -318,7 +318,12 @@ npm run demo
 - fix npm security violation in tar node pkg version by setting node-gyp version 4.0.0 
 - fix bug with not passing toolbaritem to ifFunction
 - add mutexMinMaxIcons option to remove or disable minimize icon when panel is not maximized and remove or disable maximize icon when panel is maximized
-- add description field to panel item to display description tooltip on title 
+- add description field to panel item to display description tooltip on title
+
+### 1.1.13
+
+- make sure all panels are visible rather than allowing scrollbar 
+
 
 ## Author
 

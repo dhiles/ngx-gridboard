@@ -92,9 +92,12 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     if (this.gridContainer) {
       this.clientWidth = this.gridContainer.nativeElement.clientWidth;
       this.maxClientWidth = this.getMaxItemsWidth();
+
       if (this.clientWidth <= this.maxClientWidth * this.options.cellWidth) {
-        this.options.fixedLanes -= 1;
-      } else if (this.clientWidth > (this.maxClientWidth + 1) * this.options.cellWidth ) {
+        if (this.options.fixedLanes > 1) {
+          this.options.fixedLanes -= 1;
+        }
+      } else if (this.clientWidth > (this.maxClientWidth + 1) * this.options.cellWidth) {
         this.options.fixedLanes += 1;
       }
     }
@@ -172,21 +175,23 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   ngOnInit() {
-    this.currentMq = this.getMqBreakpoint();
-    this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
     this.ngxGridboardService.options = this.options;
     this.ngxGridboardService.gridboard = this;
     // of(this.items).subscribe(e => console.log(e));
-    if (this.options.mediaQueryLanes) {
-      this.media.media$
-        .pipe(
-          map((change: MediaChange) => change.mqAlias)
-        ).subscribe((mq) => this.loadResponsiveContent(mq));
-    }
+    // if (this.options.mediaQueryLanes) {
+    //  this.media.media$
+    //    .pipe(
+    //      map((change: MediaChange) => change.mqAlias)
+    //    ).subscribe((mq) => this.loadResponsiveContent(mq));
+    // }
+    this.currentMq = this.getMqBreakpoint();
+    this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
     this.gridList = new GridList(this.items, {
       lanes: this.options.fixedLanes,
       direction: this.options.direction
     });
+    this.loadResponsiveContent(this.currentMq);
+
     if (this.itemUpdateEmitter) {
       this.itemUpdateEmitter.subscribe((request: any) => {
         if (request.operation === 'add') {
@@ -224,8 +229,6 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   doAfterViewInit() {
     this.ngxGridboardService.setStyles('gridContainer', this.classes);
     this.calculateCellSize();
-    this.maxItemWidth = this.getMaxItemWidth();
-    this.maxItemHeight = this.getMaxItemHeight();
     this.removePositionHighlight();
     this.calculateCellSize();
     this.render();
@@ -235,23 +238,23 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   loadResponsiveContent(mq) {
-    let lanes = this.options.fixedLanes;
-    if (!this.responsiveContentLoaded && this.options.mediaQueryLanes && this.options.mediaQueryLanes.hasOwnProperty(mq)) {
-      this.currentMq = mq;
-      lanes = this.options.mediaQueryLanes[mq];
-      this.options.fixedLanes = lanes;
+    //    let lanes = this.options.fixedLanes;
+    //    if (!this.responsiveContentLoaded && this.options.mediaQueryLanes && this.options.mediaQueryLanes.hasOwnProperty(mq)) {
+    //      this.currentMq = mq;
+    //      lanes = this.options.mediaQueryLanes[mq];
+    //     this.options.fixedLanes = lanes;
 
-      if (this.gridList) {
-        this.resizeGrid(lanes);
-        this.calculateCellSize();
-      }
-      this.laneChange.emit({ mq: mq, lanes: lanes });
-      this.responsiveContentLoaded = true;
+    if (this.gridList) {
+      this.resizeGrid(this.options.fixedLanes);
+      this.calculateCellSize();
     }
+    this.laneChange.emit({ mq: mq, lanes: this.options.fixedLanes });
+    //      this.responsiveContentLoaded = true;
+    //    }
   }
 
   render() {
-    this.resizeGridContainer();
+    this.sizeGridContainer();
     this.layoutChangeEmitter.emit();
   }
 
@@ -346,15 +349,19 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     }
   }
 
-  resizeGridContainer() {
+  sizeGridContainer() {
     // Update the width of the entire grid container with enough room on the
     // right to allow dragging items to the end of the grid.
     if (this.options.direction === 'horizontal') {
-      this.renderer.setStyle(this.gridContainer.nativeElement, 'width',
-        (this.gridList.grid.length + this.maxItemWidth) * this.ngxGridboardService.options.cellWidth + 'px');
+      const gridWidth = this.ngxGridboardService.options.gridContainer.width ?
+        this.ngxGridboardService.options.gridContainer.width :
+        (this.getMaxItemsWidth() + 1) * this.ngxGridboardService.options.cellWidth;
+      this.renderer.setStyle(this.gridContainer.nativeElement, 'width', gridWidth + 'px');
     } else {
-      this.renderer.setStyle(this.gridContainer.nativeElement, 'height',
-        (this.gridList.grid.length + this.maxItemHeight) * this.ngxGridboardService.options.cellHeight + 'px');
+      const gridHeight = this.ngxGridboardService.options.gridContainer.height ?
+        this.ngxGridboardService.options.gridContainer.height :
+        (this.getMaxItemsHeight() + 1) * this.ngxGridboardService.options.cellHeight;
+      this.renderer.setStyle(this.gridContainer.nativeElement, 'height', gridHeight + 'px');
     }
   }
 
@@ -407,7 +414,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
         this.gridList.moveItemToPosition(item, newPosition);
 
         // Visually update item positions and highlight shape
-        this.resizeGridContainer();
+        this.sizeGridContainer();
         this.highlightPositionForItem(item);
       }
     } else if (item.state === ItemState.Resize) {
@@ -428,7 +435,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
         this.itemChange.emit({ item: item });
 
         // Visually update item positions and highlight shape
-        this.resizeGridContainer();
+        this.sizeGridContainer();
         this.highlightPositionForItem(item);
         // item.containerComponent.resize();
       }
@@ -438,7 +445,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   onStop() {
     this.ngxGridboardService.activeItem.state = ItemState.Stopped;
     this._previousDragPosition = null;
-    this.resizeGridContainer();
+    this.sizeGridContainer();
     this.removePositionHighlight();
   }
 

@@ -1,6 +1,5 @@
-<div [ngStyle]="{'color': panelHidden ? 'red' : 'green' }">width={{ clientWidth }} maxClientWidth={{ maxClientWidth }}</div>
 <div #gridContainer class="grid-container">
-	<ul class="grid">
+	<div class="grid">
 		<div #positionHighlightItem class="position-highlight">
 		</div>
 		<div *ngFor="let item of items; let i = index">
@@ -13,5 +12,5 @@
 				(mouseUpEmitter)="itemMouseUp($event)" [item]="item" class="ui-draggable myitem">
 			</gb-item-container>
 		</div>
-	</ul>
+	</div>
 </div>
