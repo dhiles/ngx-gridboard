@@ -177,20 +177,13 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   ngOnInit() {
     this.ngxGridboardService.options = this.options;
     this.ngxGridboardService.gridboard = this;
-    // of(this.items).subscribe(e => console.log(e));
-    // if (this.options.mediaQueryLanes) {
-    //  this.media.media$
-    //    .pipe(
-    //      map((change: MediaChange) => change.mqAlias)
-    //    ).subscribe((mq) => this.loadResponsiveContent(mq));
-    // }
     this.currentMq = this.getMqBreakpoint();
     this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
     this.gridList = new GridList(this.items, {
       lanes: this.options.fixedLanes,
       direction: this.options.direction
     });
-    this.loadResponsiveContent(this.currentMq);
+    this.gridList.resizeGrid(this.options.fixedLanes);
 
     if (this.itemUpdateEmitter) {
       this.itemUpdateEmitter.subscribe((request: any) => {
@@ -228,29 +221,12 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
 
   doAfterViewInit() {
     this.ngxGridboardService.setStyles('gridContainer', this.classes);
-    this.calculateCellSize();
     this.removePositionHighlight();
     this.calculateCellSize();
     this.render();
     this.changeDetector.detectChanges();
     this.gridContainerEl = this.gridContainer.nativeElement;
     this.initialized = true;
-  }
-
-  loadResponsiveContent(mq) {
-    //    let lanes = this.options.fixedLanes;
-    //    if (!this.responsiveContentLoaded && this.options.mediaQueryLanes && this.options.mediaQueryLanes.hasOwnProperty(mq)) {
-    //      this.currentMq = mq;
-    //      lanes = this.options.mediaQueryLanes[mq];
-    //     this.options.fixedLanes = lanes;
-
-    if (this.gridList) {
-      this.resizeGrid(this.options.fixedLanes);
-      this.calculateCellSize();
-    }
-    this.laneChange.emit({ mq: mq, lanes: this.options.fixedLanes });
-    //      this.responsiveContentLoaded = true;
-    //    }
   }
 
   render() {
@@ -337,26 +313,26 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   calculateCellSize() {
-    if (this.options.direction === 'horizontal') {
-      this.ngxGridboardService.options.cellHeight = Math.floor(this.gridContainer.nativeElement.clientHeight / this.options.fixedLanes);
-      this.ngxGridboardService.options.cellWidth = this.ngxGridboardService.options.cellHeight * this.ngxGridboardService.widthHeightRatio;
-    } else {
-      this.ngxGridboardService.options.cellWidth = Math.floor(this.gridContainer.nativeElement.clientWidth / this.options.fixedLanes);
-      this.ngxGridboardService.options.cellHeight = this.ngxGridboardService.options.cellWidth / this.ngxGridboardService.widthHeightRatio;
-    }
+    this.ngxGridboardService.options.cellWidth = Math.floor(this.gridContainer.nativeElement.clientWidth / this.options.fixedLanes);
+    this.ngxGridboardService.options.cellHeight = this.ngxGridboardService.options.cellWidth / this.ngxGridboardService.widthHeightRatio;
     if (this.options.heightToFontSizeRatio) {
       this.ngxGridboardService.fontSize = this.ngxGridboardService.options.cellHeight * this.ngxGridboardService.heightToFontSizeRatio;
     }
   }
 
   sizeGridContainer() {
-    // Update the width of the entire grid container with enough room on the
-    // right to allow dragging items to the end of the grid.
+    // Update the width or height of the entire grid container with enough room on the
+    // right or bottom to allow dragging items to the end of the grid.
     if (this.options.direction === 'horizontal') {
       const gridWidth = this.ngxGridboardService.options.gridContainer.width ?
         this.ngxGridboardService.options.gridContainer.width :
         (this.getMaxItemsWidth() + 1) * this.ngxGridboardService.options.cellWidth;
       this.renderer.setStyle(this.gridContainer.nativeElement, 'width', gridWidth + 'px');
+      const gridHeight = this.ngxGridboardService.options.gridContainer.height ?
+        this.ngxGridboardService.options.gridContainer.height :
+        (this.getMaxItemsHeight() + 1) * this.ngxGridboardService.options.cellHeight;
+      this.renderer.setStyle(this.gridContainer.nativeElement, 'height', gridHeight + 'px');
+
     } else {
       const gridHeight = this.ngxGridboardService.options.gridContainer.height ?
         this.ngxGridboardService.options.gridContainer.height :
