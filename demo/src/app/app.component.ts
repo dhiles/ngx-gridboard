@@ -31,7 +31,7 @@ export class AppComponent {
       xs: 1
     },
     gridContainer: {
-      width: 2000,
+      widthx: 2000,
       heightx: 400
     },
     direction: 'vertical',
@@ -105,9 +105,7 @@ export class AppComponent {
           iconClass: 'close'
         }
       ],
-      w: 1, h: 1, x: 4, y: 0, panelItem: new PanelItem(ChartComponent, {
-        headline: 'Hiring for several positions',
-        body: 'Submit your resume today!'
+      w: 1, h: 1, x: 0, y: 3, panelItem: new PanelItem(ChartComponent, {
       })
     },
     {

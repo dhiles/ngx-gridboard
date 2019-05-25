@@ -9,4 +9,6 @@
   <button class="my-button" (click)="addItem()">add item</button>
   <button class="my-button" (click)="removeFirstItem()">remove first item</button>  
 </div>
-<gb-gridboard #gridboard [items]="items" [options]="options" (laneChange)="onLaneChange($event)" [itemUpdateEmitter]="itemUpdateEmitter"></gb-gridboard>
+<div class="demo-gridboard-container">
+  <gb-gridboard #gridboard [items]="items" [options]="options" (laneChange)="onLaneChange($event)" [itemUpdateEmitter]="itemUpdateEmitter"></gb-gridboard>
+</div>
