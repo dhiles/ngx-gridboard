@@ -90,16 +90,21 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
   @HostListener('window:resize') onResize() {
     if (this.gridContainer) {
-      this.clientWidth = this.gridContainer.nativeElement.clientWidth;
-      this.maxClientWidth = this.getMaxItemsWidth();
+      if (this.options.direction === "vertical") {
+        this.clientWidth = this.gridContainer.nativeElement.clientWidth;
+        this.maxClientWidth = this.getMaxItemsWidth();
 
-      if (this.clientWidth <= this.maxClientWidth * this.options.cellWidth) {
-        if (this.options.fixedLanes > 1) {
-          this.options.fixedLanes -= 1;
+        if (this.clientWidth <= this.maxClientWidth * this.options.cellWidth) {
+          if (this.options.fixedLanes > 1) {
+            this.options.fixedLanes -= 1;
+          }
         }
-      } else if (this.clientWidth > (this.maxClientWidth + 1) * this.options.cellWidth) {
-        this.options.fixedLanes += 1;
-      }
+
+        if (this.clientWidth - (this.options.fixedLanes * this.options.cellWidth) > this.options.cellWidth) {
+          this.currentMq = this.getMqBreakpoint();
+          this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
+        }
+      } 
     }
   }
 
@@ -183,7 +188,9 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
       lanes: this.options.fixedLanes,
       direction: this.options.direction
     });
+    console.log(this.gridList.toString());
     this.gridList.resizeGrid(this.options.fixedLanes);
+    console.log(this.gridList.toString());
 
     if (this.itemUpdateEmitter) {
       this.itemUpdateEmitter.subscribe((request: any) => {

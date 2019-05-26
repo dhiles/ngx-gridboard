@@ -20,15 +20,15 @@ export class AppComponent {
   options = {
     fixedLanes: 0,
     mediaQueryLanes: {
-      xl: 5,
-      'lt-xl': 4, 
-      lg: 4,
-      'lt-lg': 3, 
-      md: 3,
-      'lt-md': 2, 
-      sm: 2,
-      'lt-sm': 1,
-      xs: 1
+      xl: 8,
+      'lt-xl': 7, 
+      lg: 7,
+      'lt-lg': 6, 
+      md: 6,
+      'lt-md': 5, 
+      sm: 5,
+      'lt-sm': 4,
+      xs: 4
     },
     gridContainer: {
       widthx: 2000,
@@ -105,7 +105,7 @@ export class AppComponent {
           iconClass: 'close'
         }
       ],
-      w: 1, h: 1, x: 0, y: 3, panelItem: new PanelItem(ChartComponent, {
+      w: 1, h: 1, x: 3, y: 0, panelItem: new PanelItem(ChartComponent, {
       })
     },
     {
@@ -156,7 +156,7 @@ export class AppComponent {
           iconStyle: { 'color': 'blue' },
         }
       ],
-      w: 1, h: 1, x: 0, y: 1, panelItem: new PanelItem(HeroJobAdComponent, {
+      w: 1, h: 1, x: 1, y: 0, panelItem: new PanelItem(HeroJobAdComponent, {
         headline: 'Openings in all departments',
         body: 'Apply today'
       })
