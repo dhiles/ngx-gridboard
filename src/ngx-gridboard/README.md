@@ -322,7 +322,7 @@ npm run demo
 
 ### 1.1.13
 
-- make sure all panels are visible rather than allowing scrollbar 
+- when make sure all panels are visible by decrementing lane count when a panel is covered (rather than scrolling) and triggering a responsive lane count update when a full row or column is visible  
 
 
 ## Author

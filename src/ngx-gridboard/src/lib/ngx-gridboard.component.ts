@@ -16,7 +16,7 @@ import { PanelItem } from './panel/panel-item';
 import { PanelDirective } from './panel/panel.directive';
 import { PanelComponent } from './panel/panel.component';
 import { GridList, GridListHelper } from './gridList/gridList';
-import { NgxGridboardService } from './ngx-gridboard.service';
+import { NgxGridboardService, vertical } from './ngx-gridboard.service';
 import { NgxGridboardItemContainerComponent } from './itemContainer/ngx-gridboard-item-container.component'
 import { Class } from './class.directive';
 
@@ -90,7 +90,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
   @HostListener('window:resize') onResize() {
     if (this.gridContainer) {
-      if (this.options.direction === "vertical") {
+      if (this.options.direction === vertical) {
         this.clientWidth = this.gridContainer.nativeElement.clientWidth;
         this.maxClientWidth = this.getMaxItemsWidth();
 
@@ -198,7 +198,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
           let x = request.item.x;
           let y = request.item.y;
           if (request.lanePosition === 'last') {
-            if (this.options.direction === 'vertical') {
+            if (this.options.direction === vertical) {
               x = 0;
               for (let i = 0; i < this.items.length; i++) {
                 if (this.items[i].y === y && this.items[i].x + this.items[i].w > x) {
@@ -292,9 +292,9 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   deleteItem(item: Item) {
-    this.gridList.resizeItem(item, { w: 1, h: 1 })
-    const x = (this.options.direction === 'vertical') ? 0 : 1000;
-    const y = (this.options.direction === 'vertical') ? 1000 : 0;
+    this.gridList.resizeItem(item, { w: 1, h: 1 });
+    const x = (this.options.direction === vertical) ? 0 : 1000;
+    const y = (this.options.direction === vertical) ? 1000 : 0;
     this.gridList.moveItemToPosition(item, [x, y]);
     const i = this.items.indexOf(item);
     if (i > -1) {
@@ -330,7 +330,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   sizeGridContainer() {
     // Update the width or height of the entire grid container with enough room on the
     // right or bottom to allow dragging items to the end of the grid.
-    if (this.options.direction === 'horizontal') {
+    if (this.options.direction !== vertical) {
       const gridWidth = this.ngxGridboardService.options.gridContainer.width ?
         this.ngxGridboardService.options.gridContainer.width :
         (this.getMaxItemsWidth() + 1) * this.ngxGridboardService.options.cellWidth;
@@ -452,7 +452,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     col = Math.max(col, 0);
     row = Math.max(row, 0);
 
-    if (this.options.direction === 'horizontal') {
+    if (this.options.direction !== vertical) {
       col = Math.min(col, this.gridList.grid.length);
       row = Math.min(row, this.options.fixedLanes - item.h);
     } else {

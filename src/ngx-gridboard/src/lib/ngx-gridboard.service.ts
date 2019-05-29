@@ -2,6 +2,8 @@ import { Injectable, Renderer2, RendererFactory2, ElementRef } from "@angular/co
 import { Item, ItemMouseEvent } from './item';
 import { NgxGridboardComponent } from './ngx-gridboard.component';
 
+export const vertical = 'vertical';
+
 @Injectable()
 export class NgxGridboardService {
     options: any;

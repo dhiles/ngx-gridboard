@@ -2,22 +2,23 @@ import { Component, Input, Renderer2, ElementRef, OnInit, EventEmitter, ChangeDe
 import { PanelComponent } from 'ngx-gridboard';
 
 @Component({
-  styles: ['.hero-profile { background-color: orange; height: 100%; overflow: auto;}'],
+  styles: ['.chart-container {padding: 20px;background-color: lime;}'],
   template: `
   <ng-template #iconTemplate let-toolbarItem='toolbarItem'>
     <i class="material-icons" [ngStyle]="toolbarItem.iconStyle" (click)="handleClick($event,toolbarItem)" title="{{toolbarItem.title}}">{{ toolbarItem.iconClass }}</i>
   </ng-template>
-  
-  <google-chart
-    [title]="title"
-    [type]="type"
-    [data]="chartData"
-    [columnNames]="columnNames"
-    [options]="options"
-    [width]="resizeWidth"
-    [height]="resizeHeight"
-    >
-  </google-chart>
+  <div class="chart-container">
+    <google-chart
+      [title]="title"
+      [type]="type"
+      [data]="chartData"
+      [columnNames]="columnNames"
+      [options]="options"
+      [width]="resizeWidth"
+      [height]="resizeHeight"
+      >
+    </google-chart>
+  <div>
   `
 })
 export class ChartComponent extends PanelComponent implements OnInit {
@@ -61,8 +62,8 @@ export class ChartComponent extends PanelComponent implements OnInit {
   }
 
   handleResize(width, height) {
-    this.resizeWidth = width;
-    this.resizeHeight = height;
+    this.resizeWidth = width-40;
+    this.resizeHeight = height-40;
   }
 }
 
