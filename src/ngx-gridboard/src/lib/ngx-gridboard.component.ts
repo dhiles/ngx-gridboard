@@ -60,6 +60,28 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   panelHidden: boolean;
   responsiveContentLoaded: boolean;
 
+  get gridContainerWidth() {
+    let width = 0;
+    if (this.ngxGridboardService.options.gridContainer.width) {
+      width = this.ngxGridboardService.options.gridContainer.width;
+    } else {
+      width = this.gridContainer.nativeElement ?
+        Math.max(this.gridContainer.nativeElement.clientWidth, this.gridContainer.nativeElement.innerWidth || 0) : 0;
+    }
+    return width;
+  }
+
+  get gridContainerHeight() {
+    let height = 0;
+    if (this.ngxGridboardService.options.gridContainer.height) {
+      height = this.ngxGridboardService.options.gridContainer.height;
+    } else {
+      height = this.gridContainer.nativeElement ?
+        Math.max(this.gridContainer.nativeElement.clientHeight, this.gridContainer.nativeElement.innerHeight || 0) : 0;
+    }
+    return height;
+  }
+
   @Input() items: any;
   @Input() options: any;
   @Input() itemUpdateEmitter: EventEmitter<any>;
@@ -91,7 +113,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   @HostListener('window:resize') onResize() {
     if (this.gridContainer) {
       if (this.options.direction === vertical) {
-        this.clientWidth = this.gridContainer.nativeElement.clientWidth;
+        this.clientWidth = this.gridContainerWidth;
         this.maxClientWidth = this.getMaxItemsWidth();
 
         if (this.clientWidth <= this.maxClientWidth * this.options.cellWidth) {
@@ -104,7 +126,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
           this.currentMq = this.getMqBreakpoint();
           this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
         }
-      } 
+      }
     }
   }
 
@@ -165,7 +187,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   getMqBreakpoint() {
-    const width = this.gridContainer.nativeElement.clientWidth;
+    const width = this.gridContainerWidth;
     let mq = 'xl';
     if (width < 600) {
       mq = 'xs';
@@ -320,7 +342,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   calculateCellSize() {
-    this.ngxGridboardService.options.cellWidth = Math.floor(this.gridContainer.nativeElement.clientWidth / this.options.fixedLanes);
+    this.ngxGridboardService.options.cellWidth = Math.floor(this.gridContainerWidth / this.options.fixedLanes);
     this.ngxGridboardService.options.cellHeight = this.ngxGridboardService.options.cellWidth / this.ngxGridboardService.widthHeightRatio;
     if (this.options.heightToFontSizeRatio) {
       this.ngxGridboardService.fontSize = this.ngxGridboardService.options.cellHeight * this.ngxGridboardService.heightToFontSizeRatio;

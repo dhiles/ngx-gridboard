@@ -31,7 +31,7 @@ export class AppComponent {
       xs: 2
     },
     gridContainer: {
-      widthx: 2000,
+      width: 500,
       heightx: 400
     },
     direction: 'vertical',

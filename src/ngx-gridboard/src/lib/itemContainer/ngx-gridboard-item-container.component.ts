@@ -254,8 +254,8 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     });
     this.resizeService.onResize$.subscribe(result => {
       if (this.maximized) {
-        this.height = this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientHeight;
-        this.width = this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientWidth;
+        this.height = this.ngxGridboardService.gridboard.gridContainerHeight;
+        this.width = this.ngxGridboardService.gridboard.gridContainerWidth;
         this.emitResize();
       }
     });
@@ -279,8 +279,8 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
 
     this.left = 0;
     this.top = 0;
-    this.height = this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientHeight;
-    this.width = this.ngxGridboardService.gridboard.gridContainer.nativeElement.clientWidth;
+    this.height = this.ngxGridboardService.gridContainerHeight;
+    this.width = this.ngxGridboardService.gridContainerWidth;
     this.emitResize();
   }
 

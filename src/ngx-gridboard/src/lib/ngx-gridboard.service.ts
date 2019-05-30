@@ -42,4 +42,14 @@ export class NgxGridboardService {
         }
     }
 
+    get gridContainerWidth() {
+        return (this.gridContainer && this.gridContainer.nativeElement) ?
+            Math.max(this.gridContainer.nativeElement.clientWidth, this.gridContainer.nativeElement.innerWidth || 0) : 0;
+    }
+
+    get gridContainerHeight() {
+        return (this.gridContainer && this.gridContainer.nativeElement) ?
+            Math.max(this.gridContainer.nativeElement.clientHeight, this.gridContainer.nativeElement.innerHeight || 0) : 0;
+    }
+
 }
