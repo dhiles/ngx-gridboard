@@ -76,6 +76,10 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     this._height = h;
   }
 
+  get visibleHeight() {
+    return window.innerHeight-this.gridContainer.nativeElement.offsetTop;
+  }
+
 
   @Input() items: any;
   @Input() options: any;
@@ -198,8 +202,8 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   setContainerSize() {
-    this.width = this.options.gridContainer.width ? this.options.gridContainer.width : this.gridContainer.nativeElement.offsetWidth;
-    this.height = this.options.gridContainer.height ? this.options.gridContainer.height : this.gridContainer.nativeElement.offsetHeight;
+    this.width = this.options.gridContainer.width ? this.options.gridContainer.width : this.gridContainer.nativeElement.scrollWidth;
+    this.height = this.options.gridContainer.height ? this.options.gridContainer.height : this.gridContainer.nativeElement.scrollHeight;
   }
 
   ngOnInit() {

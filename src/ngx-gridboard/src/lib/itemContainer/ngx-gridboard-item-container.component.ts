@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { NgxGridboardService } from '../ngx-gridboard.service';
+import { NgxGridboardService, vertical } from '../ngx-gridboard.service';
 import { ResizeService } from '../resize.service';
 import { PanelItem } from '../panel/panel-item';
 import { PanelDirective } from '../panel/panel.directive';
@@ -254,8 +254,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     });
     this.resizeService.onResize$.subscribe(result => {
       if (this.maximized) {
-        this.height = this.ngxGridboardService.gridboard.height;
-        this.width = this.ngxGridboardService.gridboard.width;
+        this.setMaximizedSize();
         this.emitResize();
       }
     });
@@ -273,14 +272,23 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     return result;
   }
 
+  setMaximizedSize() {
+    if (this.ngxGridboardService.options.direction !== vertical) {
+      this.height = this.ngxGridboardService.gridboard.height;
+      this.width = this.ngxGridboardService.gridboard.width;
+    } else {
+      this.height = this.ngxGridboardService.gridboard.visibleHeight;
+      this.width = this.ngxGridboardService.gridboard.width;
+    }
+  }
+
   maximizeItem() {
     this.maximized = true;
     this.ngxGridboardService.maximizedItem = this.item;
 
     this.left = 0;
     this.top = 0;
-    this.height = this.ngxGridboardService.gridboard.height;
-    this.width = this.ngxGridboardService.gridboard.width;
+    this.setMaximizedSize();
     this.emitResize();
   }
 
@@ -312,7 +320,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.outerMouseDownListener = this.renderer.listen(this.outer.nativeElement, 'mousedown', (event) => {
       this.setupMouseDown(event);
     });
-  //  this.setRect();
+    //  this.setRect();
   }
 
   ngDoCheck() {
