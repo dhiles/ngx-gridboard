@@ -26,9 +26,9 @@ export class AppComponent {
       'lt-lg': 4, 
       md: 3,
       'lt-md': 3, 
-      sm: 3,
+      sm: 2,
       'lt-sm': 2,
-      xs: 2
+      xs: 1
     },
     gridContainer: {
       width: 2000,

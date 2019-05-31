@@ -107,18 +107,19 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
   @HostListener('window:resize') onResize() {
     if (this.gridContainer) {
-      this.setContainerSize();
+      //this.setContainerSize();
       if (this.options.direction === vertical) {
+        const width = this.gridContainer.nativeElement.offsetWidth;
         const maxClientWidth = this.getMaxItemsWidth();
 
-        if (this.width <= maxClientWidth * this.options.cellWidth) {
+        if (width <= maxClientWidth * this.options.cellWidth) {
           if (this.options.fixedLanes > 1) {
             this.options.fixedLanes -= 1;
           }
         }
 
-        if (this.width - (this.options.fixedLanes * this.options.cellWidth) > this.options.cellWidth) {
-          this.currentMq = this.getMqBreakpoint();
+        if (width - (this.options.fixedLanes * this.options.cellWidth) > this.options.cellWidth) {
+          this.currentMq = this.getMqBreakpoint(width);
           this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
         }
       } 
@@ -181,8 +182,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     }
   }
 
-  getMqBreakpoint() {
-    const width = this.width;
+  getMqBreakpoint(width) {
     let mq = 'xl';
     if (width < 600) {
       mq = 'xs';
@@ -205,7 +205,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     this.setContainerSize();
     this.ngxGridboardService.options = this.options;
     this.ngxGridboardService.gridboard = this;
-    this.currentMq = this.getMqBreakpoint();
+    this.currentMq = this.getMqBreakpoint(this.width);
     this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
     this.gridList = new GridList(this.items, {
       lanes: this.options.fixedLanes,
