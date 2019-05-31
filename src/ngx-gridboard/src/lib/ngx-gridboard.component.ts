@@ -55,10 +55,27 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   moveSubscription: any;
   layoutChangeEmitter: EventEmitter<any> = new EventEmitter();
   gridContainerEl: any;
-  offsetWidth: number;
-  maxClientWidth: number;
   panelHidden: boolean;
   responsiveContentLoaded: boolean;
+  _width: number;
+  _height: number;
+
+  get width() {
+    return this._width;
+  }
+
+  set width(w) {
+    this._width = w;
+  }
+
+  get height() {
+    return this._height;
+  }
+
+  set height(h) {
+    this._height = h;
+  }
+
 
   @Input() items: any;
   @Input() options: any;
@@ -90,17 +107,17 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
   @HostListener('window:resize') onResize() {
     if (this.gridContainer) {
+      this.setContainerSize();
       if (this.options.direction === vertical) {
-        this.offsetWidth = this.gridContainer.nativeElement.offsetWidth;
-        this.maxClientWidth = this.getMaxItemsWidth();
+        const maxClientWidth = this.getMaxItemsWidth();
 
-        if (this.offsetWidth <= this.maxClientWidth * this.options.cellWidth) {
+        if (this.width <= maxClientWidth * this.options.cellWidth) {
           if (this.options.fixedLanes > 1) {
             this.options.fixedLanes -= 1;
           }
         }
 
-        if (this.offsetWidth - (this.options.fixedLanes * this.options.cellWidth) > this.options.cellWidth) {
+        if (this.width - (this.options.fixedLanes * this.options.cellWidth) > this.options.cellWidth) {
           this.currentMq = this.getMqBreakpoint();
           this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
         }
@@ -165,7 +182,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   getMqBreakpoint() {
-    const width = this.gridContainer.nativeElement.offsetWidth;
+    const width = this.width;
     let mq = 'xl';
     if (width < 600) {
       mq = 'xs';
@@ -179,7 +196,13 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     return mq;
   }
 
+  setContainerSize() {
+    this.width = this.options.gridContainer.width ? this.options.gridContainer.width : this.gridContainer.nativeElement.offsetWidth;
+    this.height = this.options.gridContainer.height ? this.options.gridContainer.height : this.gridContainer.nativeElement.offsetHeight;
+  }
+
   ngOnInit() {
+    this.setContainerSize();
     this.ngxGridboardService.options = this.options;
     this.ngxGridboardService.gridboard = this;
     this.currentMq = this.getMqBreakpoint();
@@ -320,7 +343,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   calculateCellSize() {
-    this.ngxGridboardService.options.cellWidth = Math.floor(this.gridContainer.nativeElement.offsetWidth / this.options.fixedLanes);
+    this.ngxGridboardService.options.cellWidth = Math.floor(this.width / this.options.fixedLanes);
     this.ngxGridboardService.options.cellHeight = this.ngxGridboardService.options.cellWidth / this.ngxGridboardService.widthHeightRatio;
     if (this.options.heightToFontSizeRatio) {
       this.ngxGridboardService.fontSize = this.ngxGridboardService.options.cellHeight * this.ngxGridboardService.heightToFontSizeRatio;
