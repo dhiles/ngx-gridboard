@@ -105,11 +105,12 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   onPanStart(e: any) {
     // console.log('panstart');
   }
+  
   @HostListener('window:resize') onResize() {
     if (this.gridContainer) {
-      //this.setContainerSize();
+      this.setContainerSize();
       if (this.options.direction === vertical) {
-        const width = this.gridContainer.nativeElement.offsetWidth;
+        const width = this.width; // this.gridContainer.nativeElement.offsetWidth;
         const maxClientWidth = this.getMaxItemsWidth();
 
         if (width <= maxClientWidth * this.options.cellWidth) {
