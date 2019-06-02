@@ -3,6 +3,12 @@ import { Item, ItemMouseEvent } from './item';
 import { NgxGridboardComponent } from './ngx-gridboard.component';
 
 export const vertical = 'vertical';
+const responsiveBreakpoints = {
+    xs: 600,
+    sm: 960,
+    md: 1280,
+    lg: 1920,
+};
 
 @Injectable()
 export class NgxGridboardService {
@@ -41,5 +47,25 @@ export class NgxGridboardService {
             }
         }
     }
+
+    getMqBreakpoint(width) {
+        let mq = 'xl';
+        if (width < ((this.options.responsiveBreakpoints && this.options.responsiveBreakpoints.xs) ? 
+            this.options.responsiveBreakpoints.xs : responsiveBreakpoints.xs)) {
+          mq = 'xs';
+        } else if (width < ((this.options.responsiveBreakpoints && this.options.responsiveBreakpoints.sm) ? 
+            this.options.responsiveBreakpoints.sm : responsiveBreakpoints.sm)) {
+          mq = 'sm';
+        } else if ((width < this.options.responsiveBreakpoints && this.options.responsiveBreakpoints.md ? 
+            this.options.responsiveBreakpoints.md : responsiveBreakpoints.md)) {
+          mq = 'md';
+        } else if ((width < this.options.responsiveBreakpoints && this.options.responsiveBreakpoints.lg ? 
+            this.options.responsiveBreakpoints.lg : responsiveBreakpoints.lg)) {
+          mq = 'lg';
+        }
+        return mq;
+      }
+    
+    
 
 }

@@ -114,7 +114,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     if (this.gridContainer) {
       this.setContainerSize();
       if (this.options.direction === vertical) {
-        const width = this.width; // this.gridContainer.nativeElement.offsetWidth;
+        const width = this.width; 
         const maxClientWidth = this.getMaxItemsWidth();
 
         if (width <= maxClientWidth * this.options.cellWidth) {
@@ -124,7 +124,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
         }
 
         if (width - (this.options.fixedLanes * this.options.cellWidth) > this.options.cellWidth) {
-          this.currentMq = this.getMqBreakpoint(width);
+          this.currentMq = this.ngxGridboardService.getMqBreakpoint(width);
           this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
         }
       } 
@@ -187,20 +187,6 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     }
   }
 
-  getMqBreakpoint(width) {
-    let mq = 'xl';
-    if (width < 600) {
-      mq = 'xs';
-    } else if (width < 960) {
-      mq = 'sm';
-    } else if (width < 1280) {
-      mq = 'md';
-    } else if (width < 1920) {
-      mq = 'lg';
-    }
-    return mq;
-  }
-
   setContainerSize() {
     this.width = this.options.gridContainer.width ? this.options.gridContainer.width : this.gridContainer.nativeElement.scrollWidth;
     this.height = this.options.gridContainer.height ? this.options.gridContainer.height : this.gridContainer.nativeElement.scrollHeight;
@@ -210,7 +196,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
     this.setContainerSize();
     this.ngxGridboardService.options = this.options;
     this.ngxGridboardService.gridboard = this;
-    this.currentMq = this.getMqBreakpoint(this.width);
+    this.currentMq = this.ngxGridboardService.getMqBreakpoint(this.width);
     this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
     this.gridList = new GridList(this.items, {
       lanes: this.options.fixedLanes,

@@ -21,14 +21,18 @@ export class AppComponent {
     fixedLanes: 0,
     mediaQueryLanes: {
       xl: 5,
-      'lt-xl': 5, 
+      'lt-xl': 5,
       lg: 4,
-      'lt-lg': 4, 
+      'lt-lg': 4,
       md: 3,
-      'lt-md': 3, 
+      'lt-md': 3,
       sm: 2,
       'lt-sm': 2,
       xs: 1
+    },
+    responsiveBreakpoints: {
+      sm: 500,
+      xs: 200
     },
     gridContainer: {
       widthx: 2000,
@@ -51,30 +55,30 @@ export class AppComponent {
       },
       gridItemContainer: {
         header: {
-          display: 'flex', 
-          'justify-content': 'center', 
+          display: 'flex',
+          'justify-content': 'center',
           'align-items': 'center',
           'background': '#fff',
           'border-bottom': '1px solid #bbb',
           top: '0px',
           left: '0px',
-          right: '0px', 
+          right: '0px',
           'z-index': 1,
           cursor: 'move'
         },
         title: {
-          color: 'green',    
+          color: 'green',
           flex: 1
         },
         'headerIcons': {
           color: 'black',
           flex: 1,
-          display: 'flex', 
-          'justify-content': 'center', 
+          display: 'flex',
+          'justify-content': 'center',
           'align-items': 'center',
           cursor: 'pointer',
           'margin-right': '10px'
-         }
+        }
       }
     }
   };
@@ -82,9 +86,9 @@ export class AppComponent {
 
   items = [
     {
-      id: 0, 
+      id: 0,
       title: 'Pizza Chart',
-      description: 'types of pizza eaten', 
+      description: 'types of pizza eaten',
       toolbarItems: [
         {
           title: 'maximize',
@@ -109,9 +113,9 @@ export class AppComponent {
       })
     },
     {
-      id: 1, 
+      id: 1,
       title: 'Hero Profile',
-      description: 'hero info', 
+      description: 'hero info',
       toolbarItems: [
         {
           title: 'publish',
@@ -140,11 +144,11 @@ export class AppComponent {
           itemSelection: ItemSelection.Close,
           iconClass: 'close'
         }
-      ],w: 1, h: 1, x: 0, y: 0,
+      ], w: 1, h: 1, x: 0, y: 0,
       panelItem: new PanelItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })
     },
     {
-      id: 2, 
+      id: 2,
       title: 'Job Ad',
       description: 'find a job',
       toolbarItems: [
@@ -187,17 +191,17 @@ export class AppComponent {
           itemSelection: ItemSelection.Close,
           iconClass: 'close'
         }
-      ], 
+      ],
       w: 1, h: 1, x: 0, y: 0, panelItem: new PanelItem(HeroJobAdComponent, {
         headline: 'adding',
         body: 'New Item!'
       })
     };
     // this.items.push(item);
-    this.itemUpdateEmitter.emit({ 
+    this.itemUpdateEmitter.emit({
       operation: "add",
       lanePosition: "last",
-      item: item 
+      item: item
     });
 
   }
