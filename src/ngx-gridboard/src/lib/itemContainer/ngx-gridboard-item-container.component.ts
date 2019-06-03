@@ -3,8 +3,8 @@ import {
   EventEmitter, HostListener, ElementRef, Renderer2,
   QueryList, AfterViewInit, ContentChildren, AfterContentInit, forwardRef, KeyValueDiffers
 } from '@angular/core';
-import { fromEvent } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Subject, fromEvent } from 'rxjs';
+import { map, throttleTime } from 'rxjs/operators';
 import { NgxGridboardService, vertical } from '../ngx-gridboard.service';
 import { ResizeService } from '../resize.service';
 import { PanelItem } from '../panel/panel-item';
@@ -12,7 +12,6 @@ import { PanelDirective } from '../panel/panel.directive';
 import { PanelComponent } from '../panel/panel.component';
 import { Item, ItemState, ItemSelection, ItemMouseEvent, Coords, Size, Dimensions } from '../item';
 import { Class } from '../class.directive';
-import { debounce } from '../decorators';
 
 const topZIndex = 1000;
 const bottomZIndex = 0;
@@ -61,6 +60,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   maximized: boolean;
   outerMouseDownListener: any;
   private _highlight: boolean;
+  mouseMoves$: Subject<any> = new Subject<any>();
 
   @HostListener('mouseenter') onMouseEnter() {
     this.highlight = true;
@@ -70,15 +70,6 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   @HostListener('mouseleave') onMouseLeave() {
     this.highlight = false;
     this.enteredByMouse = false;
-  }
-
-  @HostListener('mousemove', ['$event'])
-  @debounce()
-  onMouseMove(event) {
-    if (!this.maximized) {
-      this.handleMouseMove({ x: event.pageX, y: event.pageY });
-    }
-    return false;
   }
 
   @HostListener('mouseup', ['$event'])
@@ -142,7 +133,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
         this.item.state = ItemState.Resize;
         this.inPress = false;
       }
-      this.handleMouseMove({ x: e.center.x, y: e.center.y });
+      this.mouseMoves$.next(e);
     }
     return false;
   }
@@ -230,7 +221,11 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.loadComponent();
     this.item.state = ItemState.Stopped;
     this.item.elementRef = this.elementRef;
-
+    this.mouseMoves$.asObservable().pipe(throttleTime(100))
+      .subscribe((e:any) => {
+      console.log("item panmove" + " x=" + e.center.x + " y=" + e.center.y);
+      this.handleMouseMove({ x: e.center.x, y: e.center.y });
+    });
     this.mouseUpEmitter.subscribe(() => {
       this.highlight = false;
     });
@@ -258,6 +253,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
         this.emitResize();
       }
     });
+
   }
 
   handleIf(itemSelection: ItemSelection) {
@@ -320,6 +316,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.outerMouseDownListener = this.renderer.listen(this.outer.nativeElement, 'mousedown', (event) => {
       this.setupMouseDown(event);
     });
+
     //  this.setRect();
   }
 

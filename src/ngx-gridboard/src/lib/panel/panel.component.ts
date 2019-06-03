@@ -7,15 +7,15 @@ declare type deleteHandler = () => void;
   selector: 'gb-panel',
   template: ''
 })
-export class PanelComponent implements AfterViewInit{
-  @ViewChild('iconTemplate') iconTemplate; 
+export class PanelComponent implements AfterViewInit {
+  @ViewChild('iconTemplate') iconTemplate;
   data: any;
   resizeEmitter: EventEmitter<Size>;
   clickEmitter: EventEmitter<any>;
   item: Item;
   toolbarItem: any;
-   
-  constructor(public elementRef: ElementRef) {   
+
+  constructor(public elementRef: ElementRef) {
   }
 
   ngAfterViewInit() {
@@ -30,7 +30,7 @@ export class PanelComponent implements AfterViewInit{
     if (toolbarItem.ifFunction && this[toolbarItem.ifFunction]) {
       result = this[toolbarItem.ifFunction]();
     } else {
-      if (toolbarItem.itemSelection ) {
+      if (toolbarItem.itemSelection) {
         result = this.item.containerComponent.handleIf(toolbarItem.itemSelection);
       }
     }
@@ -38,18 +38,20 @@ export class PanelComponent implements AfterViewInit{
     return result;
   }
 
-  handleClick(event: any,toolbarItem: any) {
-    if (this[toolbarItem.clickFunction]) {
-      this[toolbarItem.clickFunction]();
-    }
-    else {
-      var funcAccess: any = this;
-      if (funcAccess[toolbarItem.clickFunction]) {
-        funcAccess[toolbarItem.clickFunction]();
-      } else if (toolbarItem.itemSelection !== undefined) {
-          this.clickEmitter.next(toolbarItem.itemSelection);
+  handleClick(event: any, toolbarItem: any) {
+    if (toolbarItem) {
+      if (this[toolbarItem.clickFunction]) {
+        this[toolbarItem.clickFunction]();
       }
-    } 
+      else {
+        var funcAccess: any = this;
+        if (funcAccess[toolbarItem.clickFunction]) {
+          funcAccess[toolbarItem.clickFunction]();
+        } else if (toolbarItem.itemSelection !== undefined) {
+          this.clickEmitter.next(toolbarItem.itemSelection);
+        }
+      }
+    }
   }
 
   getIconClass(toolbarItem: any) {

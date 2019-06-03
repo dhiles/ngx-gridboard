@@ -9,7 +9,7 @@ import {
 
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Observable, Subject, fromEvent, of } from 'rxjs';
-import { map, filter, catchError, mergeMap, debounceTime } from 'rxjs/operators';
+import { map, filter, catchError, mergeMap, throttleTime } from 'rxjs/operators';
 import { containsTree } from '@angular/router/src/url_tree';
 import { Item, ItemState, ItemMouseEvent, Coords } from './item';
 import { PanelItem } from './panel/panel-item';
@@ -59,6 +59,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   responsiveContentLoaded: boolean;
   _width: number;
   _height: number;
+  mouseMoves$: Subject<any> = new Subject<any>();
 
   get width() {
     return this._width;
@@ -77,9 +78,8 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   get visibleHeight() {
-    return window.innerHeight-this.gridContainer.nativeElement.offsetTop;
+    return window.innerHeight - this.gridContainer.nativeElement.offsetTop;
   }
-
 
   @Input() items: any;
   @Input() options: any;
@@ -94,7 +94,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   @HostListener('panmove', ['$event'])
   onPanMove(e) {
     if (this.ngxGridboardService.activeItem) {
-      this.itemMouseMove({ pos: { x: e.center.x, y: e.center.y }, item: this.ngxGridboardService.activeItem });
+      this.mouseMoves$.next(e);
     }
   }
 
@@ -109,12 +109,12 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   onPanStart(e: any) {
     // console.log('panstart');
   }
-  
+
   @HostListener('window:resize') onResize() {
     if (this.gridContainer) {
       this.setContainerSize();
       if (this.options.direction === vertical) {
-        const width = this.width; 
+        const width = this.width;
         const maxClientWidth = this.getMaxItemsWidth();
 
         if (width <= maxClientWidth * this.options.cellWidth) {
@@ -127,7 +127,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
           this.currentMq = this.ngxGridboardService.getMqBreakpoint(width);
           this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
         }
-      } 
+      }
     }
   }
 
@@ -202,9 +202,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
       lanes: this.options.fixedLanes,
       direction: this.options.direction
     });
-    console.log(this.gridList.toString());
     this.gridList.resizeGrid(this.options.fixedLanes);
-    console.log(this.gridList.toString());
 
     if (this.itemUpdateEmitter) {
       this.itemUpdateEmitter.subscribe((request: any) => {
@@ -234,6 +232,11 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
         }
       });
     }
+    this.mouseMoves$.asObservable().pipe(throttleTime(100))
+      .subscribe((e: any) => {
+        console.log("gridboard mouseMoves$ item panmove" + " x=" + e.center.x + " y=" + e.center.y);
+        this.itemMouseMove({ pos: { x: e.center.x, y: e.center.y }, item: this.ngxGridboardService.activeItem });
+      });
   }
 
   ngAfterViewInit() {
