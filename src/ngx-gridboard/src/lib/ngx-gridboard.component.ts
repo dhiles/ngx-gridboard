@@ -34,7 +34,7 @@ export class ItemChange {
   templateUrl: './ngx-gridboard.component.html',
   styleUrls: ['ngx-gridboard.component.css']
 })
-export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
+export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, DoCheck {
   currentMq: any;
   pos: Coords = { x: 0, y: 0 };
   name: string;
@@ -53,6 +53,8 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   itemDiffer: any;
   initialized = false;
   moveSubscription: any;
+  resizeSubscription: any;
+
   layoutChangeEmitter: EventEmitter<any> = new EventEmitter();
   gridContainerEl: any;
   panelHidden: boolean;
@@ -60,6 +62,11 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   _width: number;
   _height: number;
   mouseMoves$: Subject<any> = new Subject<any>();
+  mouseMoveStreamSubscription: Observable<any>;
+  mouseMoveStreamSubscription1: Observable<any>;
+
+  resizeStream: Subject<any> = new Subject<any>();
+  resizeStreamSubscription: Observable<any>;
 
   get width() {
     return this._width;
@@ -111,24 +118,7 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   @HostListener('window:resize') onResize() {
-    if (this.gridContainer) {
-      this.setContainerSize();
-      if (this.options.direction === vertical) {
-        const width = this.width;
-        const maxClientWidth = this.getMaxItemsWidth();
-
-        if (width <= maxClientWidth * this.options.cellWidth) {
-          if (this.options.fixedLanes > 1) {
-            this.options.fixedLanes -= 1;
-          }
-        }
-
-        if (width - (this.options.fixedLanes * this.options.cellWidth) > this.options.cellWidth) {
-          this.currentMq = this.ngxGridboardService.getMqBreakpoint(width);
-          this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
-        }
-      }
-    }
+    this.resizeStream.next();
   }
 
   constructor(
@@ -232,15 +222,44 @@ export class NgxGridboardComponent implements OnInit, AfterViewInit, DoCheck {
         }
       });
     }
-    this.mouseMoves$.asObservable().pipe(throttleTime(100))
+
+    this.moveSubscription = this.mouseMoves$.asObservable().pipe(throttleTime(100))
       .subscribe((e: any) => {
         console.log("gridboard mouseMoves$ item panmove" + " x=" + e.center.x + " y=" + e.center.y);
         this.itemMouseMove({ pos: { x: e.center.x, y: e.center.y }, item: this.ngxGridboardService.activeItem });
       });
+
+    this.resizeSubscription = this.resizeStream.asObservable().pipe(throttleTime(100))
+    .subscribe((e: any) => {
+      if (this.gridContainer) {
+        this.setContainerSize();
+        if (this.options.direction === vertical) {
+          const width = this.width;
+          const maxClientWidth = this.getMaxItemsWidth();
+
+          if (width <= maxClientWidth * this.options.cellWidth) {
+            if (this.options.fixedLanes > 1) {
+              this.options.fixedLanes -= 1;
+            }
+          }
+
+          if (width - (this.options.fixedLanes * this.options.cellWidth) > this.options.cellWidth) {
+            this.currentMq = this.ngxGridboardService.getMqBreakpoint(width);
+            this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
+          }
+        }
+      }
+    });
   }
+
 
   ngAfterViewInit() {
     this.doAfterViewInit();
+  }
+
+  ngOnDestroy() {
+    this.moveSubscription.unsubscribe();
+    this.resizeSubscription.unsubscribe();
   }
 
   doAfterViewInit() {
