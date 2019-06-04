@@ -297,6 +297,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.width = this.widthVal;
     this.height = this.heightVal;
     this.ngxGridboardService.gridboard.calcLanes();
+    this.emitResize();
   }
 
   setupMouseDown(event) {

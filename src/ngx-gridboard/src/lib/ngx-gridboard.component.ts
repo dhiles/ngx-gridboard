@@ -84,7 +84,7 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   get visibleHeight() {
-    return window.innerHeight - this.gridContainer.nativeElement.offsetTop + window.scrollY;
+    return window.innerHeight - this.gridContainer.nativeElement.offsetTop +  (window.scrollY === undefined ? window.pageYOffset : window.scrollY);
   }
 
   @Input() items: any;
