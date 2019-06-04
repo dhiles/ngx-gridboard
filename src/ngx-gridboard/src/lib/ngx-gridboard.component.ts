@@ -64,7 +64,7 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   resizeStream: Subject<any> = new Subject<any>();
   resizeStreamSubscription: Observable<any>;
   scrollWidth = 0;
-  clientWidth = 0;
+  scrollTop = 0;
   offsetWidth = 0;
 
   get width() {
@@ -84,7 +84,7 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   get visibleHeight() {
-    return window.innerHeight - this.gridContainer.nativeElement.offsetTop;
+    return window.innerHeight - this.gridContainer.nativeElement.offsetTop + window.scrollY;
   }
 
   @Input() items: any;
@@ -232,7 +232,7 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.resizeSubscription = this.resizeStream.asObservable().pipe(throttleTime(100))
       .subscribe((e: any) => {
         this.scrollWidth = this.gridContainer.nativeElement.scrollWidth;
-        this.clientWidth = this.gridContainer.nativeElement.clientWidth;
+        this.scrollTop = this.gridContainer.nativeElement.scrollTop;
         this.offsetWidth = this.gridContainer.nativeElement.offsetWidth;
 
         if (this.gridContainer) {
