@@ -280,7 +280,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
 
   maximizeItem() {
     this.maximized = true;
-    this.ngxGridboardService.maximizedItem = this.item;
+    this.ngxGridboardService.maximizedItemContainerComponent = this;
 
     this.left = 0;
     this.top = 0;
@@ -290,13 +290,14 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
 
   minimizeItem() {
     this.maximized = false;
-    this.ngxGridboardService.maximizedItem = undefined;
+    this.ngxGridboardService.maximizedItemContainerComponent = undefined;
     this.item.state = ItemState.Stopped;
     this.left = this.leftVal;
     this.top = this.topVal;
     this.width = this.widthVal;
     this.height = this.heightVal;
-    this.emitResize();
+    this.ngxGridboardService.gridboard.calcLanes();
+    // this.emitResize();
   }
 
   setupMouseDown(event) {

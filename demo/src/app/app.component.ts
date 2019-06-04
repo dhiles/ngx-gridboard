@@ -30,7 +30,7 @@ export class AppComponent {
       'lt-sm': 2,
       xs: 1
     },
-    responsiveBreakpoints: {
+    responsiveBreakpointsX: {
       sm: 500,
       xs: 200
     },

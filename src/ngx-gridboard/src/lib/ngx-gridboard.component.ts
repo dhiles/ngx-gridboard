@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
-import { Observable, Subject, fromEvent, of } from 'rxjs';
+import { Observable, Subject, fromEvent, of, Subscription } from 'rxjs';
 import { map, filter, catchError, mergeMap, throttleTime } from 'rxjs/operators';
 import { containsTree } from '@angular/router/src/url_tree';
 import { Item, ItemState, ItemMouseEvent, Coords } from './item';
@@ -52,9 +52,8 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   iterableDiffer: any;
   itemDiffer: any;
   initialized = false;
-  moveSubscription: any;
-  resizeSubscription: any;
-
+  moveSubscription: Subscription;
+  resizeSubscription: Subscription;
   layoutChangeEmitter: EventEmitter<any> = new EventEmitter();
   gridContainerEl: any;
   panelHidden: boolean;
@@ -62,11 +61,11 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   _width: number;
   _height: number;
   mouseMoves$: Subject<any> = new Subject<any>();
-  mouseMoveStreamSubscription: Observable<any>;
-  mouseMoveStreamSubscription1: Observable<any>;
-
   resizeStream: Subject<any> = new Subject<any>();
   resizeStreamSubscription: Observable<any>;
+  scrollWidth = 0;
+  clientWidth = 0;
+  offsetWidth = 0;
 
   get width() {
     return this._width;
@@ -117,8 +116,9 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
     // console.log('panstart');
   }
 
-  @HostListener('window:resize') onResize() {
-    this.resizeStream.next();
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeStream.next(event);
   }
 
   constructor(
@@ -230,28 +230,39 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
       });
 
     this.resizeSubscription = this.resizeStream.asObservable().pipe(throttleTime(100))
-    .subscribe((e: any) => {
-      if (this.gridContainer) {
-        this.setContainerSize();
-        if (this.options.direction === vertical) {
-          const width = this.width;
-          const maxClientWidth = this.getMaxItemsWidth();
+      .subscribe((e: any) => {
+        this.scrollWidth = this.gridContainer.nativeElement.scrollWidth;
+        this.clientWidth = this.gridContainer.nativeElement.clientWidth;
+        this.offsetWidth = this.gridContainer.nativeElement.offsetWidth;
 
-          if (width <= maxClientWidth * this.options.cellWidth) {
-            if (this.options.fixedLanes > 1) {
-              this.options.fixedLanes -= 1;
-            }
-          }
-
-          if (width - (this.options.fixedLanes * this.options.cellWidth) > this.options.cellWidth) {
-            this.currentMq = this.ngxGridboardService.getMqBreakpoint(width);
-            this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
+        if (this.gridContainer) {
+          if (this.ngxGridboardService.maximizedItemContainerComponent) {
+            this.width = this.options.gridContainer.width ? this.options.gridContainer.width : this.gridContainer.nativeElement.offsetWidth;
+          } else {
+            this.setContainerSize();
+            this.calcLanes();
           }
         }
-      }
-    });
+      });
   }
 
+  calcLanes() {
+    if (this.options.direction === vertical) {
+      const width = this.width;
+      const maxClientWidth = this.getMaxItemsWidth();
+
+      if (width <= maxClientWidth * this.options.cellWidth) {
+        if (this.options.fixedLanes > 1) {
+          this.options.fixedLanes -= 1;
+        }
+      }
+
+      if (width - (this.options.fixedLanes * this.options.cellWidth) > this.options.cellWidth) {
+        this.currentMq = this.ngxGridboardService.getMqBreakpoint(width);
+        this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
+      }
+    }    
+  }
 
   ngAfterViewInit() {
     this.doAfterViewInit();

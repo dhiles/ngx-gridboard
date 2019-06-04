@@ -1,6 +1,7 @@
 import { Injectable, Renderer2, RendererFactory2, ElementRef } from "@angular/core";
 import { Item, ItemMouseEvent } from './item';
 import { NgxGridboardComponent } from './ngx-gridboard.component';
+import { NgxGridboardItemContainerComponent } from './itemContainer/ngx-gridboard-item-container.component';
 
 export const vertical = 'vertical';
 const responsiveBreakpoints = {
@@ -24,7 +25,7 @@ export class NgxGridboardService {
     marginPx: number;
     borderPx: number;
     renderer: Renderer2;
-    maximizedItem: Item;
+    maximizedItemContainerComponent: NgxGridboardItemContainerComponent;
 
     constructor(private rendererFactory: RendererFactory2) {
         this.renderer = rendererFactory.createRenderer(null, null)

@@ -1,10 +1,11 @@
+clientWidth={{clientWidth}} scrollWidth={{scrollWidth}} offsetWidth={{offsetWidth}} width={{ width }} height={{ height }}
 <div #gridContainer class="grid-container">
 	<div class="grid">
 		<div #positionHighlightItem class="position-highlight">
 		</div>
 		<div *ngFor="let item of items; let i = index">
 			<gb-item-container
-				[hidden]="ngxGridboardService.maximizedItem && item !== ngxGridboardService.maximizedItem"
+				[hidden]="ngxGridboardService.maximizedItemContainerComponent && item !== ngxGridboardService.maximizedItemContainerComponent.item"
 				[layoutChangeEmitter]="layoutChangeEmitter" [style.left.px]="item.containerComponent.left"
 				[style.top.px]="item.containerComponent.top" [style.width.px]="item.containerComponent.width"
 				[style.height.px]="item.containerComponent.height" [style.z-index]="item.containerComponent.zIndex"
