@@ -178,8 +178,8 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   setContainerSize() {
-    this.width = this.options.gridContainer.width ? this.options.gridContainer.width : this.gridContainer.nativeElement.scrollWidth;
-    this.height = this.options.gridContainer.height ? this.options.gridContainer.height : this.gridContainer.nativeElement.scrollHeight;
+    this.width = (this.options.gridContainer && this.options.gridContainer.width) ? this.options.gridContainer.width : this.gridContainer.nativeElement.scrollWidth;
+    this.height = (this.options.gridContainer && this.options.gridContainer.height) ? this.options.gridContainer.height : this.gridContainer.nativeElement.scrollHeight;
   }
 
   ngOnInit() {
@@ -237,7 +237,7 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
 
         if (this.gridContainer) {
           if (this.ngxGridboardService.maximizedItemContainerComponent) {
-            this.width = this.options.gridContainer.width ? this.options.gridContainer.width : this.gridContainer.nativeElement.offsetWidth;
+            this.width = (this.options.gridContainer && this.options.gridContainer.width) ? this.options.gridContainer.width : this.gridContainer.nativeElement.offsetWidth;
           } else {
             this.setContainerSize();
             this.calcLanes();
@@ -378,17 +378,17 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
     // Update the width or height of the entire grid container with enough room on the
     // right or bottom to allow dragging items to the end of the grid.
     if (this.options.direction !== vertical) {
-      const gridWidth = this.ngxGridboardService.options.gridContainer.width ?
+      const gridWidth = (this.ngxGridboardService.options.gridContainer && this.ngxGridboardService.options.gridContainer.width) ?
         this.ngxGridboardService.options.gridContainer.width :
         (this.getMaxItemsWidth() + 1) * this.ngxGridboardService.options.cellWidth;
       this.renderer.setStyle(this.gridContainer.nativeElement, 'width', gridWidth + 'px');
-      const gridHeight = this.ngxGridboardService.options.gridContainer.height ?
+      const gridHeight = (this.ngxGridboardService.options.gridContainer && this.ngxGridboardService.options.gridContainer.height) ?
         this.ngxGridboardService.options.gridContainer.height :
         (this.getMaxItemsHeight() + 1) * this.ngxGridboardService.options.cellHeight;
       this.renderer.setStyle(this.gridContainer.nativeElement, 'height', gridHeight + 'px');
 
     } else {
-      const gridHeight = this.ngxGridboardService.options.gridContainer.height ?
+      const gridHeight = (this.ngxGridboardService.options.gridContainer && this.ngxGridboardService.options.gridContainer.height) ?
         this.ngxGridboardService.options.gridContainer.height :
         (this.getMaxItemsHeight() + 1) * this.ngxGridboardService.options.cellHeight;
       this.renderer.setStyle(this.gridContainer.nativeElement, 'height', gridHeight + 'px');

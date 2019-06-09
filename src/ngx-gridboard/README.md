@@ -32,6 +32,10 @@ npm install ngx-gridboard --save
 
 #### options: fields for mediaQuery lanes are optional. When defined, lanes will be set to the current media query size. If mediaQueryLanes is undefined, the value for fixedLanes is used.
 
+##### responsiveBreakpoints: media query defaults to xs: 600, sm: 960, md: 1280, lg: 1920. Breakpoint values can be optionally set to custom values by defining the responsiveBreakpoints options as folloows as shown in the options example section. You may define one or more of the breakpoints.
+
+##### gridContainer: the gridContainer can optionally be set to a static width and height by setting pixel values as shown in the options example section. If one or both of these optional values are not defined the default gridContainer sizing is to add an extra row width to the bottom of the gridContainer to facilitate panel dragging when the direction option is set to vertical. For horizontal direction an extra column width is added to the right if an optional gridContainer width is not defined.
+
 ### items: PanelItems are created with a component and a data parameter. PanelItem Components are added to the entryComponents section of the calling module (see the demo code for an example).
 
 #### header: each panel item has a header. A header contains a title and icons.  The height of headers is set in options.headerPx. Styling for headers are set in options.gridItemContainer.header,  options.gridItemContainer.title, and options.gridItemContainer.headerIcons.  The title displayed in each panel item comes from the item title defined in the items array,
@@ -103,17 +107,28 @@ when "lanePosition" is "last", and the direction is vertical, the newly added pa
 ```javascript
  
   options = {
-    fixedLanes: 5,
+    fixedLanes: 0,
     mediaQueryLanes: {
       xl: 5,
-      'lt-xl': 4, 
+      'lt-xl': 5,
       lg: 4,
-      'lt-lg': 3, 
+      'lt-lg': 4,
       md: 3,
-      'lt-md': 2, 
+      'lt-md': 3,
       sm: 2,
-      'lt-sm': 1,
+      'lt-sm': 2,
       xs: 1
+    },
+    responsiveBreakpoints: {
+      xl,1111
+      lg: 960,
+      md: 700,
+      sm: 500,
+      xs: 200
+    },
+    gridContainer: {
+      width: 2000,
+      height: 500
     },
     direction: 'vertical',
     highlightColor: 'black',
@@ -132,30 +147,30 @@ when "lanePosition" is "last", and the direction is vertical, the newly added pa
       },
       gridItemContainer: {
         header: {
-          display: 'flex', 
-          'justify-content': 'center', 
+          display: 'flex',
+          'justify-content': 'center',
           'align-items': 'center',
           'background': '#fff',
           'border-bottom': '1px solid #bbb',
           top: '0px',
           left: '0px',
-          right: '0px', 
+          right: '0px',
           'z-index': 1,
           cursor: 'move'
         },
         title: {
-          color: 'green',    
+          color: 'green',
           flex: 1
         },
         'headerIcons': {
           color: 'black',
           flex: 1,
-          display: 'flex', 
-          'justify-content': 'center', 
+          display: 'flex',
+          'justify-content': 'center',
           'align-items': 'center',
           cursor: 'pointer',
           'margin-right': '10px'
-         }
+        }
       }
     }
   };
@@ -278,25 +293,17 @@ npm run demo
 
 - added gestures for mobile sensitive devices. Touch gesture triggers a pan which allows for repositioning of grid items. Press followed by a pan gesture allows resizing of grid items.
 
-  
-
 ### 1.1.4
 
 - fix README.md
-
-  
 
 ### 1.1.5
 
 - fix README.md
 
-  
-
 ### 1.1.6
 
 - resize on media query breakpoint changes
-
-  
 
 ### 1.1.9
 
@@ -323,6 +330,12 @@ npm run demo
 ### 1.1.13
 
 - when make sure all panels are visible by decrementing lane count when a panel is covered (rather than scrolling) and triggering a responsive lane count update when a full row or column is visible  
+
+### 1.1.14
+
+- throttle mouse events
+- fix npm security violation by setting querystringify to version 2.1.1
+- add responsiveBreakpoints and gridContainer width and height options 
 
 
 ## Author
