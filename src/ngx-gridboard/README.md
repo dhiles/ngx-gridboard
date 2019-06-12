@@ -335,7 +335,10 @@ npm run demo
 
 - throttle mouse events
 - fix npm security violation by setting querystringify to version 2.1.1
-- add responsiveBreakpoints and gridContainer width and height options 
+- add responsiveBreakpoints and gridContainer width and height options
+
+### 1.1.14
+- upgrade to angular 8
 
 
 ## Author

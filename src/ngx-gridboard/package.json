@@ -1,9 +1,9 @@
 {
   "name": "ngx-gridboard",
-  "version": "1.1.14",
+  "version": "1.1.15",
   "peerDependencies": {
-    "@angular/common": "^7.0.0-rc.0 || ^7.0.0",
-    "@angular/core": "^7.0.0-rc.0 || ^7.0.0",
-    "@angular/flex-layout": ">=7.0.0-beta.23"
+    "@angular/common": "^8.0.0",
+    "@angular/core": "^8.0.0",
+    "@angular/flex-layout": ">=8.0.0-beta.26"
   }
 }
