@@ -10,7 +10,7 @@ import {
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Observable, Subject, fromEvent, of, Subscription } from 'rxjs';
 import { map, filter, catchError, mergeMap, throttleTime } from 'rxjs/operators';
-import { containsTree } from '@angular/router/src/url_tree';
+// import { containsTree } from '@angular/router/src/url_tree';
 import { Item, ItemState, ItemMouseEvent, Coords } from './item';
 import { PanelItem } from './panel/panel-item';
 import { PanelDirective } from './panel/panel.directive';
@@ -84,7 +84,8 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   get visibleHeight() {
-    return window.innerHeight - this.gridContainer.nativeElement.offsetTop +  (window.scrollY === undefined ? window.pageYOffset : window.scrollY);
+    return window.innerHeight - this.gridContainer.nativeElement.offsetTop +
+      (window.scrollY === undefined ? window.pageYOffset : window.scrollY);
   }
 
   @Input() items: any;
@@ -92,9 +93,9 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   @Input() itemUpdateEmitter: EventEmitter<any>;
   @Output() laneChange: EventEmitter<LaneChange> = new EventEmitter();
   @Output() itemChange: EventEmitter<ItemChange> = new EventEmitter();
-  @ViewChild('gridContainer') gridContainer: ElementRef;
-  @ViewChild('positionHighlightItem') positionHighlight: ElementRef;
-  @ViewChild('highlightItem') dragElement: ElementRef;
+  @ViewChild('gridContainer', { static: true }) gridContainer: ElementRef;
+  @ViewChild('positionHighlightItem', { static: true }) positionHighlight: ElementRef;
+  @ViewChild('highlightItem', { static: true }) dragElement: ElementRef;
   @ViewChildren(Class, { read: ElementRef }) classes: QueryList<ElementRef>;
 
   @HostListener('panmove', ['$event'])

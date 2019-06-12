@@ -29,10 +29,10 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   @Output() mouseUpEmitter: EventEmitter<ItemMouseEvent> = new EventEmitter<any>();
 
   panelComponent: PanelComponent;
-  @ViewChild('outer') outer: ElementRef;
-  @ViewChild('inner') inner: ElementRef;
-  @ViewChild('header') header: ElementRef;
-  @ViewChild(PanelDirective) panelHost: PanelDirective;
+  @ViewChild('outer', { static: true } ) outer: ElementRef;
+  @ViewChild('inner', { static: true } ) inner: ElementRef;
+  @ViewChild('header', { static: true } ) header: ElementRef;
+  @ViewChild(PanelDirective, { static: true } ) panelHost: PanelDirective;
 
 
   mouseDown: any;

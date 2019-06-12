@@ -8,7 +8,7 @@ declare type deleteHandler = () => void;
   template: ''
 })
 export class PanelComponent implements AfterViewInit {
-  @ViewChild('iconTemplate') iconTemplate;
+  @ViewChild('iconTemplate', { static: true }) iconTemplate;
   data: any;
   resizeEmitter: EventEmitter<Size>;
   clickEmitter: EventEmitter<any>;
