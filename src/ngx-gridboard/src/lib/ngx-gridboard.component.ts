@@ -56,6 +56,7 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   resizeSubscription: Subscription;
   layoutChangeEmitter: EventEmitter<any> = new EventEmitter();
   gridContainerEl: any;
+  gridContainerWidth: number;
   panelHidden: boolean;
   responsiveContentLoaded: boolean;
   _width: number;
@@ -73,6 +74,7 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   set width(w) {
     this._width = w;
+    this.gridContainerWidth = w;
   }
 
   get height() {
@@ -137,6 +139,22 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
     // this.items.forEach((item) => {
     //   this.itemDiffer[item] = this.keyValueDiffer.diff(item);
     // });
+  }
+
+  doReset() {
+    alert("reset");
+   // this.gridContainerEl.width = "200px";
+   let parentWidth = this.gridContainer.nativeElement.offsetParent.clientWidth;
+    this.width = window.innerWidth;
+    this.gridContainerEl.width = this.width+"px";
+    this.currentMq = this.ngxGridboardService.getMqBreakpoint(this.gridContainerWidth);
+    this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
+    this.calculateCellSize();
+    this.currentMq = this.ngxGridboardService.getMqBreakpoint(this.gridContainerWidth);
+    this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
+    this.gridList.resizeGrid(this.options.fixedLanes);
+    this.render();
+    // this.ngOnInit();
   }
 
   ngDoCheck() {
@@ -368,7 +386,8 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   calculateCellSize() {
-    this.ngxGridboardService.options.cellWidth = Math.floor(this.width / this.options.fixedLanes);
+    let w = this.width - (this.gridContainer.nativeElement.offsetWidth - this.gridContainer.nativeElement.clientWidth);
+    this.ngxGridboardService.options.cellWidth = Math.floor(w / this.options.fixedLanes);
     this.ngxGridboardService.options.cellHeight = this.ngxGridboardService.options.cellWidth / this.ngxGridboardService.widthHeightRatio;
     if (this.options.heightToFontSizeRatio) {
       this.ngxGridboardService.fontSize = this.ngxGridboardService.options.cellHeight * this.ngxGridboardService.heightToFontSizeRatio;
