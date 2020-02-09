@@ -6,7 +6,7 @@ import {
 import { Subject, fromEvent } from 'rxjs';
 import { map, throttleTime } from 'rxjs/operators';
 import { NgxGridboardService, vertical } from '../ngx-gridboard.service';
-import { ResizeService } from '../resize.service';
+import { WindowEventService } from '../window-event.service';
 import { PanelItem } from '../panel/panel-item';
 import { PanelDirective } from '../panel/panel.directive';
 import { PanelComponent } from '../panel/panel.component';
@@ -152,7 +152,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     private elementRef: ElementRef,
     public ngxGridboardService: NgxGridboardService,
     private keyValueDiffers: KeyValueDiffers,
-    private resizeService: ResizeService
+    private windowEventService: WindowEventService
   ) {
     this.keyValueDiffer = keyValueDiffers.find({}).create();
   }
@@ -247,7 +247,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
         this.minimizeItem();
       }
     });
-    this.resizeService.onResize$.subscribe(result => {
+    this.windowEventService.onResize$.subscribe(result => {
       if (this.maximized) {
         this.setMaximizedSize();
         this.emitResize();

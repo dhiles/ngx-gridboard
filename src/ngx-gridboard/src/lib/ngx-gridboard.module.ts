@@ -7,7 +7,7 @@ import { FlexLayoutModule, BREAKPOINT } from '@angular/flex-layout';
 import { NgxGridboardComponent } from './ngx-gridboard.component';
 import { NgxGridboardRoutingModule } from './ngx-gridboard-routing.module';
 import { ResizeDirective } from './resize.directive';
-import { ResizeService } from './resize.service';
+import { WindowEventService } from './window-event.service';
 import { Class } from './class.directive';
 import { NgxGridboardItemContainerComponent } from './itemContainer/ngx-gridboard-item-container.component';
 import { HeaderIconsComponent } from './itemContainer/headerIcons.component';
@@ -96,7 +96,7 @@ const CUSTOM_BREAKPOINTS = [
     Class
   ],
   providers: [
-    ResizeService,
+    WindowEventService,
     NgxGridboardService,
     {
       provide: HAMMER_GESTURE_CONFIG,

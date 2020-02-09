@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
+import { EventManager } from '@angular/platform-browser';
 import { Observable, Subject, fromEvent, of, Subscription } from 'rxjs';
 import { map, filter, catchError, mergeMap, throttleTime } from 'rxjs/operators';
 // import { containsTree } from '@angular/router/src/url_tree';
@@ -17,6 +18,7 @@ import { PanelDirective } from './panel/panel.directive';
 import { PanelComponent } from './panel/panel.component';
 import { GridList, GridListHelper } from './gridList/gridList';
 import { NgxGridboardService, vertical } from './ngx-gridboard.service';
+import { WindowEventService } from './window-event.service';
 import { NgxGridboardItemContainerComponent } from './itemContainer/ngx-gridboard-item-container.component'
 import { Class } from './class.directive';
 
@@ -56,17 +58,11 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   resizeSubscription: Subscription;
   layoutChangeEmitter: EventEmitter<any> = new EventEmitter();
   gridContainerEl: any;
-  gridContainerWidth: number;
   panelHidden: boolean;
   responsiveContentLoaded: boolean;
   _width: number;
   _height: number;
   mouseMoves$: Subject<any> = new Subject<any>();
-  resizeStream: Subject<any> = new Subject<any>();
-  resizeStreamSubscription: Observable<any>;
-  scrollWidth = 0;
-  scrollTop = 0;
-  offsetWidth = 0;
 
   get width() {
     return this._width;
@@ -74,7 +70,6 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   set width(w) {
     this._width = w;
-    this.gridContainerWidth = w;
   }
 
   get height() {
@@ -109,6 +104,7 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   @HostListener('panend', ['$event'])
   onPanEnd(e: any) {
+    // alert("pan end");
     if (this.ngxGridboardService.activeItem) {
       this.itemMouseUp({ pos: { x: e.center.x, y: e.center.y }, item: this.ngxGridboardService.activeItem });
     }
@@ -119,16 +115,13 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
     // console.log('panstart');
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.resizeStream.next(event);
-  }
-
   constructor(
+    private eventManager: EventManager,
     public elementRef: ElementRef,
     public renderer: Renderer2,
     public media: MediaObserver,
     public ngxGridboardService: NgxGridboardService,
+    private windowEventService: WindowEventService,
     private keyValueDiffers: KeyValueDiffers,
     private iterableDiffers: IterableDiffers,
     private changeDetector: ChangeDetectorRef
@@ -139,22 +132,7 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
     // this.items.forEach((item) => {
     //   this.itemDiffer[item] = this.keyValueDiffer.diff(item);
     // });
-  }
-
-  doReset() {
-    alert("reset");
-   // this.gridContainerEl.width = "200px";
-   let parentWidth = this.gridContainer.nativeElement.offsetParent.clientWidth;
-    this.width = window.innerWidth;
-    this.gridContainerEl.width = this.width+"px";
-    this.currentMq = this.ngxGridboardService.getMqBreakpoint(this.gridContainerWidth);
-    this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
-    this.calculateCellSize();
-    this.currentMq = this.ngxGridboardService.getMqBreakpoint(this.gridContainerWidth);
-    this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
-    this.gridList.resizeGrid(this.options.fixedLanes);
-    this.render();
-    // this.ngOnInit();
+    windowEventService.onResizeEnd$.subscribe(e => this.sizeColumns());
   }
 
   ngDoCheck() {
@@ -197,22 +175,30 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   setContainerSize() {
-    this.width = (this.options.gridContainer && this.options.gridContainer.width) ? this.options.gridContainer.width : this.gridContainer.nativeElement.scrollWidth;
-    this.height = (this.options.gridContainer && this.options.gridContainer.height) ? this.options.gridContainer.height : this.gridContainer.nativeElement.scrollHeight;
+    this.width = this.gridContainer.nativeElement.clientWidth;
+    this.height = this.gridContainer.nativeElement.clientHeight;
+  }
+
+  sizeColumns() {
+    this.setContainerSize();
+    this.currentMq = this.ngxGridboardService.getMqBreakpoint(this.width);
+    this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
+    if (!this.gridList) {
+      this.gridList = new GridList(this.items, {
+        lanes: this.options.fixedLanes,
+        direction: this.options.direction
+      });
+    }
+    this.calculateCellSize();
+    this.gridList.resizeGrid(this.options.fixedLanes);
+    this.render();
   }
 
   ngOnInit() {
-    this.setContainerSize();
     this.ngxGridboardService.options = this.options;
     this.ngxGridboardService.gridboard = this;
-    this.currentMq = this.ngxGridboardService.getMqBreakpoint(this.width);
-    this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
-    this.gridList = new GridList(this.items, {
-      lanes: this.options.fixedLanes,
-      direction: this.options.direction
-    });
-    this.gridList.resizeGrid(this.options.fixedLanes);
-
+    this.sizeColumns();
+    this.sizeColumns();
     if (this.itemUpdateEmitter) {
       this.itemUpdateEmitter.subscribe((request: any) => {
         if (request.operation === 'add') {
@@ -240,28 +226,13 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
           this.render();
         }
       });
+      
     }
 
     this.moveSubscription = this.mouseMoves$.asObservable().pipe(throttleTime(100))
       .subscribe((e: any) => {
         console.log("gridboard mouseMoves$ item panmove" + " x=" + e.center.x + " y=" + e.center.y);
         this.itemMouseMove({ pos: { x: e.center.x, y: e.center.y }, item: this.ngxGridboardService.activeItem });
-      });
-
-    this.resizeSubscription = this.resizeStream.asObservable().pipe(throttleTime(100))
-      .subscribe((e: any) => {
-        this.scrollWidth = this.gridContainer.nativeElement.scrollWidth;
-        this.scrollTop = this.gridContainer.nativeElement.scrollTop;
-        this.offsetWidth = this.gridContainer.nativeElement.offsetWidth;
-
-        if (this.gridContainer) {
-          if (this.ngxGridboardService.maximizedItemContainerComponent) {
-            this.width = (this.options.gridContainer && this.options.gridContainer.width) ? this.options.gridContainer.width : this.gridContainer.nativeElement.offsetWidth;
-          } else {
-            this.setContainerSize();
-            this.calcLanes();
-          }
-        }
       });
   }
 
@@ -280,7 +251,7 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.currentMq = this.ngxGridboardService.getMqBreakpoint(width);
         this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
       }
-    }    
+    }
   }
 
   ngAfterViewInit() {
@@ -386,8 +357,7 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   calculateCellSize() {
-    let w = this.width - (this.gridContainer.nativeElement.offsetWidth - this.gridContainer.nativeElement.clientWidth);
-    this.ngxGridboardService.options.cellWidth = Math.floor(w / this.options.fixedLanes);
+    this.ngxGridboardService.options.cellWidth = Math.floor(this.width / this.options.fixedLanes);
     this.ngxGridboardService.options.cellHeight = this.ngxGridboardService.options.cellWidth / this.ngxGridboardService.widthHeightRatio;
     if (this.options.heightToFontSizeRatio) {
       this.ngxGridboardService.fontSize = this.ngxGridboardService.options.cellHeight * this.ngxGridboardService.heightToFontSizeRatio;
