@@ -62,6 +62,7 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   responsiveContentLoaded: boolean;
   _width: number;
   _height: number;
+
   mouseMoves$: Subject<any> = new Subject<any>();
 
   get width() {
@@ -80,17 +81,21 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
     this._height = h;
   }
 
-  get visibleHeight() {
-    return window.innerHeight - this.gridContainer.nativeElement.offsetTop +
-      (window.scrollY === undefined ? window.pageYOffset : window.scrollY);
+  get gridContainerOffsetTop() {
+    return this.gridContainer.nativeElement.offsetTop;   
+  }
+  
+  get gridOffsetTop() {
+    return this.grid.nativeElement.offsetTop;   
   }
 
-  @Input() items: any;
+   @Input() items: any;
   @Input() options: any;
   @Input() itemUpdateEmitter: EventEmitter<any>;
   @Output() laneChange: EventEmitter<LaneChange> = new EventEmitter();
   @Output() itemChange: EventEmitter<ItemChange> = new EventEmitter();
   @ViewChild('gridContainer', { static: true }) gridContainer: ElementRef;
+  @ViewChild('grid', { static: true }) grid: ElementRef;
   @ViewChild('positionHighlightItem', { static: true }) positionHighlight: ElementRef;
   @ViewChild('highlightItem', { static: true }) dragElement: ElementRef;
   @ViewChildren(Class, { read: ElementRef }) classes: QueryList<ElementRef>;

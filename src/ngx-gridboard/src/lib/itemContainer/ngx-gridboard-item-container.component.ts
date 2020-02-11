@@ -273,7 +273,9 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
       this.height = this.ngxGridboardService.gridboard.height;
       this.width = this.ngxGridboardService.gridboard.width;
     } else {
-      this.height = this.ngxGridboardService.gridboard.visibleHeight;
+      var offsetTop = this.ngxGridboardService.gridboard.grid.nativeElement.offsetTop;
+      this.height = window.innerHeight-(this.ngxGridboardService.gridboard.gridContainerOffsetTop+this.ngxGridboardService.gridboard.gridOffsetTop)+
+        (window.scrollY === undefined ? window.pageYOffset : window.scrollY);
       this.width = this.ngxGridboardService.gridboard.width;
     }
   }

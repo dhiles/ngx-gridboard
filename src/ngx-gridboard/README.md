@@ -126,10 +126,6 @@ when "lanePosition" is "last", and the direction is vertical, the newly added pa
       sm: 500,
       xs: 200
     },
-    gridContainer: {
-      width: 2000,
-      height: 500
-    },
     direction: 'vertical',
     highlightColor: 'black',
     marginPx: 10,
@@ -337,9 +333,13 @@ npm run demo
 - fix npm security violation by setting querystringify to version 2.1.1
 - add responsiveBreakpoints and gridContainer width and height options
 
-### 1.1.14
+### 1.1.15
 - upgrade to angular 8
 
+### 1.1.16
+- remove options.gridContainer (width and height). Set static width and height on gridContainer parent using css if non-resizing container required.
+- resize columns and fill cells on resize end. 
+- on maximize include grid and gridContainer offset height so maximized height fits in visible window.
 
 ## Author
 
