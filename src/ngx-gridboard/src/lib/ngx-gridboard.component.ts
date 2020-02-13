@@ -89,7 +89,7 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
     return this.grid.nativeElement.offsetTop;   
   }
 
-   @Input() items: any;
+  @Input() items: any;
   @Input() options: any;
   @Input() itemUpdateEmitter: EventEmitter<any>;
   @Output() laneChange: EventEmitter<LaneChange> = new EventEmitter();
