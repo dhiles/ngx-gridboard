@@ -298,7 +298,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     this.top = this.topVal;
     this.width = this.widthVal;
     this.height = this.heightVal;
-    this.ngxGridboardService.gridboard.calcLanes();
+    this.ngxGridboardService.gridboard.sizeColumns();
     this.emitResize();
   }
 

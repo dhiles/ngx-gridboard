@@ -187,6 +187,7 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   sizeColumns() {
     this.setContainerSize();
     this.currentMq = this.ngxGridboardService.getMqBreakpoint(this.width);
+    var prevFixedLanes = this.options.fixedLanes;
     this.options.fixedLanes = this.options.mediaQueryLanes[this.currentMq];
     if (!this.gridList) {
       this.gridList = new GridList(this.items, {
@@ -195,7 +196,9 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
       });
     }
     this.calculateCellSize();
-    this.gridList.resizeGrid(this.options.fixedLanes);
+    if (prevFixedLanes != this.options.fixedLanes) {
+      this.gridList.resizeGrid(this.options.fixedLanes);
+    }
     this.render();
   }
 
