@@ -340,6 +340,7 @@ npm run demo
 - remove options.gridContainer (width and height). Set static width and height on gridContainer parent using css if non-resizing container required.
 - resize columns and fill cells on resize end. 
 - on maximize include grid and gridContainer offset height so maximized height fits in visible window.
+- on minimize ensure previous minimized cell layout is presented unless fixedColumns changes. 
 
 ## Author
 
