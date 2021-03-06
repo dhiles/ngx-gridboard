@@ -1,22 +1,23 @@
 import {
-  Component, Input, Output, OnInit, ViewChild, ViewChildren, ComponentFactoryResolver,
-  EventEmitter, HostListener, ElementRef, Renderer2,
+  Component, Input, Output, OnInit, ViewChild, ViewChildren, ViewEncapsulation, ComponentFactoryResolver,
+  EventEmitter, HostListener, HostBinding, ElementRef, Renderer2,
   QueryList, AfterViewInit, ContentChildren, AfterContentInit, forwardRef, KeyValueDiffers
 } from '@angular/core';
-import { Subject, fromEvent } from 'rxjs';
+import { Subject, ReplaySubject, fromEvent } from 'rxjs';
 import { map, throttleTime } from 'rxjs/operators';
 import { NgxGridboardService, vertical } from '../ngx-gridboard.service';
 import { WindowEventService } from '../window-event.service';
 import { PanelItem } from '../panel/panel-item';
 import { PanelDirective } from '../panel/panel.directive';
 import { PanelComponent } from '../panel/panel.component';
-import { Item, ItemState, ItemSelection, ItemMouseEvent, Coords, Size, Dimensions } from '../item';
-import { Class } from '../class.directive';
+import { Item, ItemState, ItemSelection, ItemMouseEvent, Coords, Size, Dimensions, Layout } from '../item';
+import { MyClassElement } from '../class.directive';
 
 const topZIndex = 1000;
 const bottomZIndex = 0;
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'gb-item-container',
   templateUrl: './ngx-gridboard-item-container.component.html',
   styleUrls: ['./ngx-gridboard-item-container.component.css']
@@ -45,16 +46,13 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
   pressStart: Coords = { x: 0, y: 0 };
   pressNormalizedLeftOffset = 0;
   pressNormalizedTopOffset = 0;
-  zIndex = bottomZIndex;
   keyValueDiffer: any;
   changeCount = 0;
   scale = 0;
+  indent: number
 
-  top: number;
-  left: number;
-  width: number;
-  height: number;
   resizeEmitter: EventEmitter<Size> = new EventEmitter<Size>();
+  layout$ = new ReplaySubject<Layout>()
   clickEmitter: EventEmitter<Size> = new EventEmitter<Size>();
   absPos: any;
   maximized: boolean;
@@ -146,6 +144,61 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     }
   }
 
+  @HostBinding('style.left.px') leftPx
+  @HostBinding('style.top.px') topPx
+  @HostBinding('style.width.px') widthPx
+  @HostBinding('style.height.px') heightPx
+  @HostBinding('style.z-index') zIndexPx
+
+  _zIndex: number = bottomZIndex
+  get zIndex():number {
+    return this._zIndex
+  }
+  set zIndex(val:number) {
+    this._zIndex = val
+  }
+
+  _top: number;
+  get top():number {
+    return this._top
+  }
+  set top(val:number) {
+    this._top = val
+    this.topPx = this.top
+    this.layout$.next({top: this.top, left: this.top,width: this.width, height: this.height, indent: this.ngxGridboardService.indentPx})    
+  }
+
+  _left: number;
+  get left():number {
+    return this._left
+  }
+  set left(val:number) {
+    this._left = val
+    this.leftPx = this.left
+    this.layout$.next({top: this.top, left: this.top,width: this.width, height: this.height, indent: this.ngxGridboardService.indentPx})    
+  }
+
+  _width: number;
+  get width():number {
+    return this._width
+  }
+  set width(val:number) {
+    this._width = val
+    this.widthPx = this.width
+    this.layout$.next({top: this.top, left: this.top,width: this.width, height: this.height, indent: this.ngxGridboardService.indentPx})    
+  }
+
+  _height: number;
+  get height():number {
+    return this._height
+  }
+  set height(val:number) {
+    this._height = val
+    this.heightPx = this.height
+    this.layout$.next({top: this.top, left: this.top,width: this.width, height: this.height, indent: this.ngxGridboardService.indentPx})    
+  }
+
+
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
     private renderer: Renderer2,
@@ -219,6 +272,12 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
 
   ngOnInit() {
     this.loadComponent();
+    this.leftPx = this.item.containerComponent.left
+    this.topPx = this.item.containerComponent.top
+    this.widthPx = this.item.containerComponent.width
+    this.heightPx = this.item.containerComponent.height
+    this.zIndex = this.item.containerComponent.zIndex
+
     this.item.state = ItemState.Stopped;
     this.item.elementRef = this.elementRef;
     this.mouseMoves$.asObservable().pipe(throttleTime(100))
@@ -255,6 +314,25 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     });
 
   }
+
+  loadComponent() {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.item.panelItem.component);
+
+    const viewContainerRef = this.panelHost.viewContainerRef;
+    viewContainerRef.clear();
+
+    const componentRef = viewContainerRef.createComponent(componentFactory);
+    this.panelComponent = <PanelComponent>componentRef.instance;
+    (<PanelComponent>componentRef.instance).data = this.item.panelItem.data;
+    (<PanelComponent>componentRef.instance).resizeEmitter = this.resizeEmitter;
+    (<PanelComponent>componentRef.instance).layout$ = this.layout$;
+    (<PanelComponent>componentRef.instance).clickEmitter = this.clickEmitter;
+    (<PanelComponent>componentRef.instance).item = this.item;
+
+    this.item.containerComponent = this;
+  }
+
+
 
   handleIf(itemSelection: ItemSelection) {
     let result = true;
@@ -337,22 +415,6 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
     }
   }
 
-  loadComponent() {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.item.panelItem.component);
-
-    const viewContainerRef = this.panelHost.viewContainerRef;
-    viewContainerRef.clear();
-
-    const componentRef = viewContainerRef.createComponent(componentFactory);
-    this.panelComponent = <PanelComponent>componentRef.instance;
-    (<PanelComponent>componentRef.instance).data = this.item.panelItem.data;
-    (<PanelComponent>componentRef.instance).resizeEmitter = this.resizeEmitter;
-    (<PanelComponent>componentRef.instance).clickEmitter = this.clickEmitter;
-    (<PanelComponent>componentRef.instance).item = this.item;
-
-    this.item.containerComponent = this;
-  }
-
   handlePanStartEvent(pos: Coords) {
     this.handleMouseDown(pos);
   }
@@ -412,8 +474,7 @@ export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit
 
   emitResize() {
     if (this.width && this.height) {
-      const indentSize = ((this.ngxGridboardService.options.marginPx + this.ngxGridboardService.options.borderPx + 3) * 2);
-      this.resizeEmitter.emit({ w: this.width - indentSize, h: this.height - indentSize - this.ngxGridboardService.options.headerPx });
+      this.resizeEmitter.emit({ w: this.width - this.ngxGridboardService.indentPx, h: this.height - this.ngxGridboardService.indentPx - this.ngxGridboardService.options.headerPx });
     }
   }
 

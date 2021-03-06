@@ -35,11 +35,13 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [ "hammerjs"] ,
             "outputPath": "dist/ngx-gridboard-demo",
             "index": "demo/src/index.html",
             "main": "demo/src/main.ts",
             "polyfills": "demo/src/polyfills.ts",
             "tsConfig": "demo/src/tsconfig.app.json",
+            "aot": true,
             "assets": [
               "demo/src/favicon.ico",
               "demo/src/assets"
@@ -61,9 +63,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": true,
-              "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true
@@ -184,7 +184,7 @@
           }
         }
       }
-    },
+    }
 
   },
   "defaultProject": "ngx-gridboard-demo"

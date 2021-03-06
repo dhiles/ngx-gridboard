@@ -1,5 +1,5 @@
 
-import { NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule, BREAKPOINT } from '@angular/flex-layout';
 
@@ -8,15 +8,16 @@ import { NgxGridboardComponent } from './ngx-gridboard.component';
 import { NgxGridboardRoutingModule } from './ngx-gridboard-routing.module';
 import { ResizeDirective } from './resize.directive';
 import { WindowEventService } from './window-event.service';
-import { Class } from './class.directive';
+import { MyClassElement } from './class.directive';
 import { NgxGridboardItemContainerComponent } from './itemContainer/ngx-gridboard-item-container.component';
 import { HeaderIconsComponent } from './itemContainer/headerIcons.component';
 import { NgxGridboardService } from './ngx-gridboard.service';
 import { PanelModule } from './panel/panel.module';
 import { PanelComponent } from './panel/panel.component';
 import * as Hammer from 'hammerjs';
-import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { HammerModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 
+@Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
   overrides = <any>{
     // override hammerjs default configuration
@@ -85,7 +86,8 @@ const CUSTOM_BREAKPOINTS = [
   imports: [NgxGridboardRoutingModule,
     CommonModule,
     PanelModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    HammerModule
   ],
   declarations: [
     NgxGridboardComponent,
@@ -93,7 +95,7 @@ const CUSTOM_BREAKPOINTS = [
     HeaderIconsComponent,
     ResizeDirective,
     NgxGridboardItemContainerComponent,
-    Class
+    MyClassElement
   ],
   providers: [
     WindowEventService,

@@ -13,7 +13,14 @@ const responsiveBreakpoints = {
 
 @Injectable()
 export class NgxGridboardService {
-    options: any;
+    _options: any;
+    get options() {
+        return this._options
+    }
+    set options(val) {
+        this._options = val
+        this.indentPx = ((this._options.marginPx + this._options.borderPx + 3) * 2);
+    }
     cellWidth: number;
     cellHeight: number;
     fontSize: number;
@@ -26,9 +33,11 @@ export class NgxGridboardService {
     borderPx: number;
     renderer: Renderer2;
     maximizedItemContainerComponent: NgxGridboardItemContainerComponent;
+    indentPx: number
 
     constructor(private rendererFactory: RendererFactory2) {
         this.renderer = rendererFactory.createRenderer(null, null)
+
     }
 
     deleteItem(item) {
@@ -41,7 +50,7 @@ export class NgxGridboardService {
             if (this.options.styles[styleName][elementStyles]) {
                 for (var style in elementStyle) {
                     var el = classes.find((aClass) => {
-                        return aClass.nativeElement.className === elementStyles
+                        return aClass.nativeElement.className.indexOf(elementStyles)
                     });
                     this.renderer.setStyle(el.nativeElement, style, elementStyle[style]);
                 }

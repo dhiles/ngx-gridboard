@@ -100,7 +100,22 @@ item updater and emitting an item to add as follows:
     });
 ```    
 
-when "lanePosition" is "last", and the direction is vertical, the newly added panel is positioned immediately to the right of the last panel on the specified 'x' row and for horizontal the newly added panel is positioned below the last panel on the specified 'y' column' If "lanePosition' is undefined or not "last" the default behavior is to attempt to position the newly added panel at the specified x,y position.  
+###### 
+operation: "add"
+when "lanePosition" is "last", and the direction is vertical, the newly added panel is positioned below the last cell on the furthest right column and for the horizontal direction, the added panel it added to the right of the bottom row
+
+###### 
+operation: "remove"
+
+```javascript
+
+    this.itemUpdateEmitter.emit({ 
+      operation: "remove",
+      position: {x:0,y:0},
+      item: item 
+    });
+```    
+when operation is "remove", position specifies the x and y coords of the item to be removed
 
 #### options example
 
@@ -342,10 +357,16 @@ npm run demo
 - on maximize include grid and gridContainer offset height so maximized height fits in visible window.
 - on minimize ensure previous minimized cell layout is presented unless fixedColumns changes. 
 
+### 1.1.17
+  - upgrade to angular 11
+  - set styles in NgxGridboardItemContainerComponent using HostBinding
+  - provide layout$ observable in PanelComponent
+  - only trigger window resize event when lane direction vertical
+  - add "remove" option to itemUpdateEmitter handling 
+
 ## Author
 
   
-
 *  **Douglas Hiles**
 
   

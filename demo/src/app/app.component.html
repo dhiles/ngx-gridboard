@@ -6,8 +6,13 @@
   <div>{{ options.direction }} lanes={{ options.fixedLanes }}</div>
   <button *ngIf="!options.mediaQueryLanes" class="my-button" (click)="decrementLanes()">decrement lanes</button>
   <button *ngIf="!options.mediaQueryLanes" class="my-button" (click)="incrementLanes()">increment lanes</button>
-  <button class="my-button" (click)="addItem()">add item</button>
-  <button class="my-button" (click)="removeFirstItem()">remove first item</button>  
+  <button class="my-button" (click)="addLastItem()">add item to last {{ laneArrangement }} </button>
+  <button class="my-button" (click)="removeItem()">remove item at x,y</button>
+  <button class="my-button" (click)="addItem()">add item at x,y</button> 
+  <div>
+    x=<input [style.width.px]="60" type="number" [(ngModel)]="xPos">
+    y=<input [style.width.px]="60" type="number" [(ngModel)]="yPos">
+  </div>   
 </div>
 <div class="demo-gridboard-container">
   <gb-gridboard #gridboard [items]="items" [options]="options" (laneChange)="onLaneChange($event)" [itemUpdateEmitter]="itemUpdateEmitter"></gb-gridboard>

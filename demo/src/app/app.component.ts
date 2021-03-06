@@ -1,5 +1,5 @@
 import { Component, EventEmitter } from '@angular/core';
-import { PanelItem, LaneChange, NgxGridboardService, ItemSelection } from 'ngx-gridboard';
+import { PanelItem, LaneChange, NgxGridboardService, ItemSelection, ItemUpdateEvent } from 'ngx-gridboard';
 import { HeroProfileComponent } from './components/hero-profile.component';
 import { HeroJobAdComponent } from './components/hero-job-ad.component';
 import { ChartComponent } from './components/chart.component';
@@ -12,10 +12,16 @@ import { Observable, Subject, fromEvent, of } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'the ngx-gridboard 1.1.16 demo app';
+  xPos: number = 0
+  yPos: number = 0
+  title = 'the ngx-gridboard 1.1.17 demo app';
   activeItem: any;
   laneChanges: Subject<LaneChange> = new Subject();
-  itemUpdateEmitter: EventEmitter<any> = new EventEmitter<any>();
+  itemUpdateEmitter: EventEmitter<ItemUpdateEvent> = new EventEmitter<ItemUpdateEvent>();
+
+  get laneArrangement() {
+    return this.options.direction === 'vertical' ? 'column' : 'row' 
+  }
 
   options = {
     fixedLanes: 0,
@@ -74,7 +80,6 @@ export class AppComponent {
       }
     }
   };
-
 
   items = [
     {
@@ -173,7 +178,7 @@ export class AppComponent {
     this.laneChanges.next(event);
   }
 
-  addItem() {
+  addLastItem() {
     const item = {
       id: 0, title: 'Job Ad1',
       toolbarItems: [
@@ -198,10 +203,39 @@ export class AppComponent {
 
   }
 
-  removeFirstItem() {
-    if (this.items.length) {
-      //this.items[0].panelItem.gridboardItem.deleteItem();
-    }
+  addItem() {
+    const item = {
+      id: 0, title: 'Job Ad2',
+      toolbarItems: [
+        {
+          title: 'close',
+          ariaLabel: 'close',
+          itemSelection: ItemSelection.Close,
+          iconClass: 'close'
+        }
+      ],
+      w: 1, h: 1, x: 0, y: 0, panelItem: new PanelItem(HeroJobAdComponent, {
+        headline: 'adding',
+        body: 'New Item at position ('+this.xPos+','+this.yPos+')!'
+      })
+    };
+    // this.items.push(item);
+    this.itemUpdateEmitter.emit({
+      operation: "add",
+      position: { x: this.xPos, y: this.yPos },
+      item: item
+    });
+
+  }
+
+
+
+  removeItem() {
+    this.itemUpdateEmitter.emit({
+      operation: "remove",
+      position: { x: this.xPos, y: this.yPos },
+    });
+
   }
 
 }

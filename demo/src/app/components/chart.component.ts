@@ -12,7 +12,7 @@ import { PanelComponent } from 'ngx-gridboard';
       [title]="title"
       [type]="type"
       [data]="chartData"
-      [columnNames]="columnNames"
+      [columns]="columnNames"
       [options]="options"
       [width]="resizeWidth"
       [height]="resizeHeight"

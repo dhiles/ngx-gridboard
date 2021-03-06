@@ -1,6 +1,6 @@
 
 import {
-  Component, Directive, HostListener,
+  Component, Directive, HostListener, ViewEncapsulation,
   Input, Output, Query, EventEmitter, AfterContentInit,
   AfterViewInit, ViewChild, ContentChildren, ViewChildren,
   QueryList, forwardRef, Inject, ElementRef, Renderer2, ChangeDetectorRef,
@@ -12,7 +12,7 @@ import { EventManager } from '@angular/platform-browser';
 import { Observable, Subject, fromEvent, of, Subscription } from 'rxjs';
 import { map, filter, catchError, mergeMap, throttleTime } from 'rxjs/operators';
 // import { containsTree } from '@angular/router/src/url_tree';
-import { Item, ItemState, ItemMouseEvent, Coords } from './item';
+import { Item, ItemState, ItemMouseEvent, Coords, ItemUpdateEvent } from './item';
 import { PanelItem } from './panel/panel-item';
 import { PanelDirective } from './panel/panel.directive';
 import { PanelComponent } from './panel/panel.component';
@@ -20,7 +20,7 @@ import { GridList, GridListHelper } from './gridList/gridList';
 import { NgxGridboardService, vertical } from './ngx-gridboard.service';
 import { WindowEventService } from './window-event.service';
 import { NgxGridboardItemContainerComponent } from './itemContainer/ngx-gridboard-item-container.component'
-import { Class } from './class.directive';
+import { MyClassElement } from './class.directive';
 
 export class LaneChange {
   mq: string;
@@ -32,6 +32,7 @@ export class ItemChange {
 }
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'gb-gridboard',
   templateUrl: './ngx-gridboard.component.html',
   styleUrls: ['ngx-gridboard.component.css']
@@ -82,23 +83,23 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   get gridContainerOffsetTop() {
-    return this.gridContainer.nativeElement.offsetTop;   
+    return this.gridContainer.nativeElement.offsetTop;
   }
-  
+
   get gridOffsetTop() {
-    return this.grid.nativeElement.offsetTop;   
+    return this.grid.nativeElement.offsetTop;
   }
 
   @Input() items: any;
   @Input() options: any;
-  @Input() itemUpdateEmitter: EventEmitter<any>;
+  @Input() itemUpdateEmitter: EventEmitter<ItemUpdateEvent>;
   @Output() laneChange: EventEmitter<LaneChange> = new EventEmitter();
   @Output() itemChange: EventEmitter<ItemChange> = new EventEmitter();
   @ViewChild('gridContainer', { static: true }) gridContainer: ElementRef;
   @ViewChild('grid', { static: true }) grid: ElementRef;
   @ViewChild('positionHighlightItem', { static: true }) positionHighlight: ElementRef;
   @ViewChild('highlightItem', { static: true }) dragElement: ElementRef;
-  @ViewChildren(Class, { read: ElementRef }) classes: QueryList<ElementRef>;
+  @ViewChildren(MyClassElement, { read: ElementRef }) classes: QueryList<ElementRef>;
 
   @HostListener('panmove', ['$event'])
   onPanMove(e) {
@@ -137,7 +138,13 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
     // this.items.forEach((item) => {
     //   this.itemDiffer[item] = this.keyValueDiffer.diff(item);
     // });
-    windowEventService.onResizeEnd$.subscribe(e => this.sizeColumns());
+
+    this.resizeSubscription = windowEventService.onResizeEnd$.subscribe(e => {
+      if (this.options.direction === 'vertical') {
+        this.sizeColumns()
+      }
+    });
+
   }
 
   ngDoCheck() {
@@ -154,7 +161,8 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
     if (changes) {
       changes.forEachChangedItem(r => {
         if (r.key === 'fixedLanes') {
-          this.resizeGrid(this.options.fixedLanes);
+          this.gridList.resizeGrid(this.options.fixedLanes);
+          this.sizeColumns();
         }
       });
     }
@@ -208,33 +216,42 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.sizeColumns();
     this.sizeColumns();
     if (this.itemUpdateEmitter) {
-      this.itemUpdateEmitter.subscribe((request: any) => {
+      this.itemUpdateEmitter.subscribe((request: ItemUpdateEvent) => {
+        let x = 0;
+        let y = 0;
         if (request.operation === 'add') {
-          let x = request.item.x;
-          let y = request.item.y;
+          this.items.push(request.item)
           if (request.lanePosition === 'last') {
-            if (this.options.direction === vertical) {
-              x = 0;
-              for (let i = 0; i < this.items.length; i++) {
-                if (this.items[i].y === y && this.items[i].x + this.items[i].w > x) {
-                  x = this.items[i].x + this.items[i].w;
-                }
-              }
-            } else {
-              y = 0;
-              for (let i = 0; i < this.items.length; i++) {
-                if (this.items[i].x === x && this.items[i].y + this.items[i].h > y) {
-                  y = this.items[i].y + this.items[i].h;
-                }
+            if (this.items.length) {
+              this.items.forEach(item => {
+                x = item.x > x ? item.x : x
+                y = item.y > y ? item.y : y
+              })
+              if (this.options.direction === vertical) {
+                y += 1
+              } else {
+                x += 1
               }
             }
+          } else {
+            if (request.position) {
+              x = request.position.x
+              y = request.position.y
+            }
           }
-          this.items.push(request.item);
           this.gridList.moveItemToPosition(request.item, [x, y]);
           this.render();
+        } else if (request.operation === 'remove') {
+          this.items.every((item: any, index: number) => {
+            const matched = (item.x === request.position.x && item.y === request.position.y)
+            if (matched) {
+              this.deleteItem(item)
+            }
+            return !matched
+          })
         }
       });
-      
+
     }
 
     this.moveSubscription = this.mouseMoves$.asObservable().pipe(throttleTime(100))
@@ -326,8 +343,8 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
     return maxHeight;
   }
 
-  resizeGrid(lanes: number) {
-    this.gridList.resizeGrid(lanes);
+  resizeGrid(lanes: number, direction?: string) {
+    this.gridList.resizeGrid(lanes, direction);
     this.render();
   }
 

@@ -1,9 +1,11 @@
-import { Component, EventEmitter, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
-import { Size, ItemSelection, Item } from '../item';
+import { Component, EventEmitter, ViewChild, AfterViewInit, ElementRef, ViewEncapsulation } from '@angular/core';
+import { ReplaySubject } from 'rxjs'
+import { Size, ItemSelection, Item, Layout } from '../item';
 
 declare type deleteHandler = () => void;
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'gb-panel',
   template: ''
 })
@@ -11,6 +13,7 @@ export class PanelComponent implements AfterViewInit {
   @ViewChild('iconTemplate', { static: true }) iconTemplate;
   data: any;
   resizeEmitter: EventEmitter<Size>;
+  layout$: ReplaySubject<Layout>
   clickEmitter: EventEmitter<any>;
   item: Item;
   toolbarItem: any;

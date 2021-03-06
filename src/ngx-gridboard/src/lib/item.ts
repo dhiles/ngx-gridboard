@@ -20,11 +20,26 @@ export interface Dimensions {
   h: number;
 }
 
+export interface Layout {
+  top: number
+  left: number
+  width: number
+  height: number
+  indent: number
+}
+
 export enum ItemState {
   Stopped,
   Move,
   Resize,
   Maximize
+}
+
+export interface ItemUpdateEvent {
+  operation: string
+  lanePosition?: "last" | "first"
+  position?: Coords
+  item?: any
 }
 
 export interface Item {

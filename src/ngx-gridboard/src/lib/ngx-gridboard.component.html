@@ -1,15 +1,13 @@
-<div #gridContainer class="grid-container">
-	<div #grid class="grid">
-		<div #positionHighlightItem class="position-highlight">
+<div #gridContainer class="grid-container myClass">
+	<div #grid class="grid myClass">
+		<div #positionHighlightItem class="position-highlight myClass">
 		</div>
 		<div *ngFor="let item of items; let i = index">
 			<gb-item-container
 				[hidden]="ngxGridboardService.maximizedItemContainerComponent && item !== ngxGridboardService.maximizedItemContainerComponent.item"
-				[layoutChangeEmitter]="layoutChangeEmitter" [style.left.px]="item.containerComponent.left"
-				[style.top.px]="item.containerComponent.top" [style.width.px]="item.containerComponent.width"
-				[style.height.px]="item.containerComponent.height" [style.z-index]="item.containerComponent.zIndex"
+				[layoutChangeEmitter]="layoutChangeEmitter" 
 				#dragItem (mouseDownEmitter)="itemMouseDown($event)" (mouseMoveEmitter)="itemMouseMove($event)"
-				(mouseUpEmitter)="itemMouseUp($event)" [item]="item" class="ui-draggable myitem">
+				(mouseUpEmitter)="itemMouseUp($event)" [item]="item" class="ui-draggable myitem myClass">
 			</gb-item-container>
 		</div>
 	</div>
