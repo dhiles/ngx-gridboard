@@ -33,7 +33,7 @@
     "node-gyp": "^7.1.2",
     "querystringify": "^2.2.0",
     "rxjs": "^6.6.6",
-    "tar": "^6.1.0",
+    "tar": "^6.1.2",
     "typescript": "4.0.7",
     "zone.js": "^0.11.4"
   },
