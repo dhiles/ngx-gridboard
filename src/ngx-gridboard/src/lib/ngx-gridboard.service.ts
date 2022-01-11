@@ -1,7 +1,9 @@
 import { Injectable, Renderer2, RendererFactory2, ElementRef } from "@angular/core";
 import { Item, ItemMouseEvent } from './item';
-import { NgxGridboardComponent } from './ngx-gridboard.component';
-import { NgxGridboardItemContainerComponent } from './itemContainer/ngx-gridboard-item-container.component';
+import { GridboardItemContainer } from './itemContainer/gridboard-item-container.interface';
+import { Gridboard } from './gridboard.interface';
+
+// import { NgxGridboardItemContainerComponent } from './itemContainer/ngx-gridboard-item-container.component';
 
 export const vertical = 'vertical';
 const responsiveBreakpoints = {
@@ -27,12 +29,13 @@ export class NgxGridboardService {
     widthHeightRatio = 1;
     heightToFontSizeRatio;
     activeItem: Item;
-    gridboard: NgxGridboardComponent;
+    // gridboard: NgxGridboardComponent;
+    gridboard: Gridboard;
     gridContainer: ElementRef;
     marginPx: number;
     borderPx: number;
     renderer: Renderer2;
-    maximizedItemContainerComponent: NgxGridboardItemContainerComponent;
+    maximizedItemContainerComponent: GridboardItemContainer;
     indentPx: number
 
     constructor(private rendererFactory: RendererFactory2) {
@@ -44,15 +47,23 @@ export class NgxGridboardService {
         this.gridboard.deleteItem(item);
     }
 
+    setAllStyles(classes: any) {
+        for (let styleName in this.options.styles) {
+            this.setStyles(styleName,classes)
+        }
+    }
+
     setStyles(styleName: string, classes: any) {
         for (let elementStyles in this.options.styles[styleName]) {
             let elementStyle = this.options.styles[styleName][elementStyles];
             if (this.options.styles[styleName][elementStyles]) {
                 for (var style in elementStyle) {
                     var el = classes.find((aClass) => {
-                        return aClass.nativeElement.className.indexOf(elementStyles)
+                        return (aClass.nativeElement.className.indexOf(elementStyles) !== -1)
                     });
-                    this.renderer.setStyle(el.nativeElement, style, elementStyle[style]);
+                    if (el) {
+                        this.renderer.setStyle(el.nativeElement, style, elementStyle[style]);
+                    }
                 }
             }
         }

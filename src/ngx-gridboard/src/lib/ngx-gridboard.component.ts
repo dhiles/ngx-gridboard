@@ -19,8 +19,9 @@ import { PanelComponent } from './panel/panel.component';
 import { GridList, GridListHelper } from './gridList/gridList';
 import { NgxGridboardService, vertical } from './ngx-gridboard.service';
 import { WindowEventService } from './window-event.service';
-import { NgxGridboardItemContainerComponent } from './itemContainer/ngx-gridboard-item-container.component'
+// import { NgxGridboardItemContainerComponent } from './itemContainer/ngx-gridboard-item-container.component'
 import { MyClassElement } from './class.directive';
+import { Gridboard } from './gridboard.interface';
 
 export class LaneChange {
   mq: string;
@@ -37,7 +38,7 @@ export class ItemChange {
   templateUrl: './ngx-gridboard.component.html',
   styleUrls: ['ngx-gridboard.component.css']
 })
-export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, DoCheck {
+export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, DoCheck, Gridboard {
   currentMq: any;
   pos: Coords = { x: 0, y: 0 };
   name: string;
@@ -97,7 +98,7 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   @Output() itemChange: EventEmitter<ItemChange> = new EventEmitter();
   @ViewChild('gridContainer', { static: true }) gridContainer: ElementRef;
   @ViewChild('grid', { static: true }) grid: ElementRef;
-  @ViewChild('positionHighlightItem', { static: true }) positionHighlight: ElementRef;
+  @ViewChild('positionHighlight', { static: true }) positionHighlight: ElementRef;
   @ViewChild('highlightItem', { static: true }) dragElement: ElementRef;
   @ViewChildren(MyClassElement, { read: ElementRef }) classes: QueryList<ElementRef>;
 
@@ -289,7 +290,8 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   doAfterViewInit() {
-    this.ngxGridboardService.setStyles('gridContainer', this.classes);
+    this.ngxGridboardService.setAllStyles(this.classes);
+
     this.removePositionHighlight();
     this.calculateCellSize();
     this.render();
@@ -366,10 +368,11 @@ export class NgxGridboardComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   highlightPositionForItem(item: Item) {
-    this.renderer.setStyle(this.positionHighlight.nativeElement, 'width', item.w * this.ngxGridboardService.options.cellWidth + 'px');
-    this.renderer.setStyle(this.positionHighlight.nativeElement, 'height', item.h * this.ngxGridboardService.options.cellHeight + 'px');
-    this.renderer.setStyle(this.positionHighlight.nativeElement, 'left', item.x * this.ngxGridboardService.options.cellWidth + 'px');
-    this.renderer.setStyle(this.positionHighlight.nativeElement, 'top', item.y * this.ngxGridboardService.options.cellHeight + 'px');
+    this.renderer.setStyle(this.positionHighlight.nativeElement, 'width', 
+      (item.w * this.ngxGridboardService.options.cellWidth)-((this.ngxGridboardService.options.marginPx+this.ngxGridboardService.options.borderPx)*2) + 'px');
+    this.renderer.setStyle(this.positionHighlight.nativeElement, 'height', (item.h * this.ngxGridboardService.options.cellHeight)-((this.ngxGridboardService.options.marginPx+this.ngxGridboardService.options.borderPx)*2) + 'px');
+    this.renderer.setStyle(this.positionHighlight.nativeElement, 'left', (item.x * this.ngxGridboardService.options.cellWidth)+this.ngxGridboardService.options.marginPx + 'px');
+    this.renderer.setStyle(this.positionHighlight.nativeElement, 'top', (item.y * this.ngxGridboardService.options.cellHeight)+this.ngxGridboardService.options.marginPx + 'px');
     this.renderer.setStyle(this.positionHighlight.nativeElement, 'display', 'inline');
 
     if (this.options.heightToFontSizeRatio) {

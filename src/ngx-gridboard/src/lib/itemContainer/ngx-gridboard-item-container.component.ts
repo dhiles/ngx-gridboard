@@ -12,6 +12,7 @@ import { PanelDirective } from '../panel/panel.directive';
 import { PanelComponent } from '../panel/panel.component';
 import { Item, ItemState, ItemSelection, ItemMouseEvent, Coords, Size, Dimensions, Layout } from '../item';
 import { MyClassElement } from '../class.directive';
+import { GridboardItemContainer } from './gridboard-item-container.interface';
 
 const topZIndex = 1000;
 const bottomZIndex = 0;
@@ -22,7 +23,7 @@ const bottomZIndex = 0;
   templateUrl: './ngx-gridboard-item-container.component.html',
   styleUrls: ['./ngx-gridboard-item-container.component.css']
 })
-export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit {
+export class NgxGridboardItemContainerComponent implements OnInit, AfterViewInit, GridboardItemContainer {
   @Input() item: Item;
   @Input() layoutChangeEmitter: EventEmitter<any>;
   @Output() mouseDownEmitter: EventEmitter<ItemMouseEvent> = new EventEmitter<any>();

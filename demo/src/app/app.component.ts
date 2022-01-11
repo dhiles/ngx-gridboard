@@ -2,7 +2,6 @@ import { Component, EventEmitter } from '@angular/core';
 import { PanelItem, LaneChange, NgxGridboardService, ItemSelection, ItemUpdateEvent } from 'ngx-gridboard';
 import { HeroProfileComponent } from './components/hero-profile.component';
 import { HeroJobAdComponent } from './components/hero-job-ad.component';
-import { ChartComponent } from './components/chart.component';
 import { Observable, Subject, fromEvent, of } from 'rxjs';
 
 
@@ -14,7 +13,7 @@ import { Observable, Subject, fromEvent, of } from 'rxjs';
 export class AppComponent {
   xPos: number = 0
   yPos: number = 0
-  title = 'the ngx-gridboard 1.1.17 demo app';
+  title = 'the ngx-gridboard 1.1.19 demo app';
   activeItem: any;
   laneChanges: Subject<LaneChange> = new Subject();
   itemUpdateEmitter: EventEmitter<ItemUpdateEvent> = new EventEmitter<ItemUpdateEvent>();
@@ -37,8 +36,8 @@ export class AppComponent {
       xs: 1
     },
     direction: 'vertical',
-    highlightColor: 'black',
-    marginPx: 10,
+    highlightColor: 'pink',
+    marginPx: 5,
     borderPx: 2,
     headerPx: 40,
     mutexMinMaxIcons: true,
@@ -47,8 +46,11 @@ export class AppComponent {
         'grid-container': {
           'background-color': 'rgb(171, 171, 196)'
         },
+      },
+      positionHighlight: {
         'position-highlight': {
-          color: 'blue'
+          color: 'blue',
+          'border-style': 'dotted'
         }
       },
       gridItemContainer: {
@@ -82,33 +84,6 @@ export class AppComponent {
   };
 
   items = [
-    {
-      id: 0,
-      title: 'Pizza Chart',
-      description: 'types of pizza eaten',
-      toolbarItems: [
-        {
-          title: 'maximize',
-          ariaLabel: 'maximize',
-          itemSelection: ItemSelection.Maximize,
-          iconClass: 'maximize'
-        },
-        {
-          title: 'minimize',
-          ariaLabel: 'minimize',
-          itemSelection: ItemSelection.Minimize,
-          iconClass: 'minimize'
-        },
-        {
-          title: 'close',
-          ariaLabel: 'close',
-          itemSelection: ItemSelection.Close,
-          iconClass: 'close'
-        }
-      ],
-      w: 1, h: 1, x: 3, y: 0, panelItem: new PanelItem(ChartComponent, {
-      })
-    },
     {
       id: 1,
       title: 'Hero Profile',

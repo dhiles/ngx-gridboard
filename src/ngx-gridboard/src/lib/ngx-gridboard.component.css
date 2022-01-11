@@ -49,10 +49,6 @@
     transition: none;
     position: absolute;
     background: transparent;
-    top: 0px;
-    left: 0px;
-    width: 100px;
-    height: 100px;
     pointer-events: none;
     border-style: dashed;
     color: black;

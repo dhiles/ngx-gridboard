@@ -1,7 +1,6 @@
 import { ElementRef } from '@angular/core';
 import { PanelItem } from './panel/panel-item';
-import { NgxGridboardItemContainerComponent } from './itemContainer/ngx-gridboard-item-container.component';
-
+import { GridboardItemContainer } from './itemContainer/gridboard-item-container.interface';
 
 export interface Coords {
   x: number;
@@ -54,7 +53,7 @@ export interface Item {
     element: ElementRef;
     elementRef: ElementRef;
     panelItem: PanelItem;
-    containerComponent: NgxGridboardItemContainerComponent;
+    containerComponent: GridboardItemContainer;
     resizeType?: string;
     state: ItemState;
     gridContainerCoords?: Coords;

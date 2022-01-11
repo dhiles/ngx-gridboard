@@ -19,6 +19,7 @@ npm install ngx-gridboard --save
   
 
 ### Default usage
+(see NGX-GRIDBOARD/demo/src/app/app.component.html)
 
   
 
@@ -26,166 +27,16 @@ npm install ngx-gridboard --save
 
   
 
-### Which expects a setup like the following:
+## Which expects parameters to be setup like the following:
+(see NGX-GRIDBOARD/demo/src/app/app.component.ts)
 
-  
+### items 
 
-#### options: fields for mediaQuery lanes are optional. When defined, lanes will be set to the current media query size. If mediaQueryLanes is undefined, the value for fixedLanes is used.
+PanelItems are defined by the items parameter. PanelItem Components are included in the entryComponents section of the application module (see NGX-GRIDBOARD/demo/src/app/app.module.ts)
 
-##### responsiveBreakpoints: media query defaults to xs: 600, sm: 960, md: 1280, lg: 1920. Breakpoint values can be optionally set to custom values by defining the responsiveBreakpoints options as folloows as shown in the options example section. You may define one or more of the breakpoints.
-
-##### gridContainer: the gridContainer can optionally be set to a static width and height by setting pixel values as shown in the options example section. If one or both of these optional values are not defined the default gridContainer sizing is to add an extra row width to the bottom of the gridContainer to facilitate panel dragging when the direction option is set to vertical. For horizontal direction an extra column width is added to the right if an optional gridContainer width is not defined.
-
-### items: PanelItems are created with a component and a data parameter. PanelItem Components are added to the entryComponents section of the calling module (see the demo code for an example).
-
-#### header: each panel item has a header. A header contains a title and icons.  The height of headers is set in options.headerPx. Styling for headers are set in options.gridItemContainer.header,  options.gridItemContainer.title, and options.gridItemContainer.headerIcons.  The title displayed in each panel item comes from the item title defined in the items array,
-
-#### toolbarItems: an array of definitions of icons displayed in the header of a panel item. In each component html a ng-template with a #iconTemplate template reference variable can be included i.e.
-
-
-```javascript
-
-<ng-template #iconTemplate let-toolbarItem='toolbarItem'>
-
-<i class="material-icons" [ngStyle]="toolbarItem.iconStyle" (click)="handleClick(toolbarItem)" title="{{toolbarItem.title}}">{{ toolbarItem.iconClass }}</i>
-
-</ng-template>
-```
-
-  
-
-The html contained in the ng-template tag is projected into the header for each toolbarItem. In the above example, inside the <i> tag the material-icons class refers to the styles loaded by adding a link in the demo to <link  href="https://fonts.googleapis.com/icon?family=Material+Icons"
-
-rel="stylesheet"> which is included in index.html. You can customize this projected content to load a font-awesome icons or svg icons, etc. As well you can add your own properties to toolbarItems in options and refer to them in the html and use your own global css classes defined in styles.css (see header-icon).
-
-  
-
-##### toolbarItem properties
-
-###### title: tooltip title string
-
-###### ariaLabel: area label string
-
-###### clickFunction: [myClickFunction(toolbarItem:any): void] name of a custom function defined in the component to be classed on click of the icon.
-
-###### itemSelection:  parameter of type ItemSelection. Currently the enum constant supported are ItemSelection.Close, ItemSelection.Minimize, and ItemSelection.Maximize. When itemSelection is defined, a click event on the toolbarItem icon will trigger a panel close, minimize or maximize. If a clickFunction is already defined for the icon, the itemSelection will not be triggered. 
-
-
-
-###### ifFunction: [myIfFunction(toolbarItem:any): boolean] name of a custom function defined in the component to be tested. When this function returns false, the icon is hidden. If a function is named but not defined for the component, the default result is true.
-
-###### iconClass: icon class name string
-
-###### iconStyle: icon style definitions i.e. { 'color': 'pink' }. These styles are applied to the specific toolbarItem and override styles applied to all toolbar icons defined in options.gridItemContainer.headerIcons.  
-  
-#### add new panels 
-new panels can be added either by pushing a new item to the items array or defining an
-item updater and emitting an item to add as follows:
-```javascript
-     itemUpdateEmitter: EventEmitter<any> = new EventEmitter<any>(); 
-
-    this.itemUpdateEmitter.emit({ 
-      operation: "add",
-      item: item 
-    });
-``` 
-##### in the last lane position
-
-```javascript
-
-    this.itemUpdateEmitter.emit({ 
-      operation: "add",
-      lanePosition: "last",
-      item: item 
-    });
-```    
-
-###### 
-operation: "add"
-when "lanePosition" is "last", and the direction is vertical, the newly added panel is positioned below the last cell on the furthest right column and for the horizontal direction, the added panel it added to the right of the bottom row
-
-###### 
-operation: "remove"
-
-```javascript
-
-    this.itemUpdateEmitter.emit({ 
-      operation: "remove",
-      position: {x:0,y:0},
-      item: item 
-    });
-```    
-when operation is "remove", position specifies the x and y coords of the item to be removed
-
-#### options example
-
+#### items example
 ```javascript
  
-  options = {
-    fixedLanes: 0,
-    mediaQueryLanes: {
-      xl: 5,
-      'lt-xl': 5,
-      lg: 4,
-      'lt-lg': 4,
-      md: 3,
-      'lt-md': 3,
-      sm: 2,
-      'lt-sm': 2,
-      xs: 1
-    },
-    responsiveBreakpoints: {
-      xl,1111
-      lg: 960,
-      md: 700,
-      sm: 500,
-      xs: 200
-    },
-    direction: 'vertical',
-    highlightColor: 'black',
-    marginPx: 10,
-    borderPx: 2,
-    headerPx: 40,
-    mutexMinMaxIcons: true,
-    styles: {
-      gridContainer: {
-        'grid-container': {
-          'background-color': 'rgb(171, 171, 196)'
-        },
-        'position-highlight': {
-          color: 'blue'
-        }
-      },
-      gridItemContainer: {
-        header: {
-          display: 'flex',
-          'justify-content': 'center',
-          'align-items': 'center',
-          'background': '#fff',
-          'border-bottom': '1px solid #bbb',
-          top: '0px',
-          left: '0px',
-          right: '0px',
-          'z-index': 1,
-          cursor: 'move'
-        },
-        title: {
-          color: 'green',
-          flex: 1
-        },
-        'headerIcons': {
-          color: 'black',
-          flex: 1,
-          display: 'flex',
-          'justify-content': 'center',
-          'align-items': 'center',
-          cursor: 'pointer',
-          'margin-right': '10px'
-        }
-      }
-    }
-  };
-
 items = [
     {
       id: 0, 
@@ -274,6 +125,224 @@ items = [
 ```
 
 
+
+  
+### options
+#### options example
+
+```javascript
+ 
+  options = {
+    fixedLanes: 0,
+    mediaQueryLanes: {
+      xl: 5,
+      'lt-xl': 5,
+      lg: 4,
+      'lt-lg': 4,
+      md: 3,
+      'lt-md': 3,
+      sm: 2,
+      'lt-sm': 2,
+      xs: 1
+    },
+    direction: 'vertical',
+    highlightColor: 'pink',
+    marginPx: 5,
+    borderPx: 2,
+    headerPx: 40,
+    mutexMinMaxIcons: true,
+    styles: {
+      gridContainer: {
+        'grid-container': {
+          'background-color': 'rgb(171, 171, 196)'
+        },
+      },
+      positionHighlight: {
+        'position-highlight': {
+          color: 'blue',
+          'border-style': 'dotted'
+        }
+      },
+      gridItemContainer: {
+        header: {
+          display: 'flex',
+          'justify-content': 'center',
+          'align-items': 'center',
+          'background': '#fff',
+          'border-bottom': '1px solid #bbb',
+          top: '0px',
+          left: '0px',
+          right: '0px',
+          'z-index': 1,
+          cursor: 'move'
+        },
+        title: {
+          color: 'green',
+          flex: 1
+        },
+        'headerIcons': {
+          color: 'black',
+          flex: 1,
+          display: 'flex',
+          'justify-content': 'center',
+          'align-items': 'center',
+          cursor: 'pointer',
+          'margin-right': '10px'
+        }
+      }
+    }
+  };
+
+
+
+```
+
+### mediaQuery lanes
+
+fields for mediaQuery lanes are optional. When defined, lanes will be set to the current media query size. If mediaQueryLanes is undefined, the value for fixedLanes is used.
+
+### responsiveBreakpoints 
+
+media query defaults to xs: 600, sm: 960, md: 1280, lg: 1920. Breakpoint values can be optionally set to custom values by defining the responsiveBreakpoints options as in the following example:  
+```javascript
+ 
+  options = {
+    responsiveBreakpoints: {
+      xl: 1111
+      lg: 960,
+      md: 700,
+      sm: 500,
+      xs: 200
+    }
+  };
+
+```
+
+
+### gridContainer 
+the gridContainer can optionally be set to a static width and height by setting pixel values as shown in this options example:
+
+```javascript
+ 
+  options = {
+    gridContainer: {
+        width: 500,
+        height: 800
+    }
+  };
+
+```
+
+If one or both of these optional values are not defined the default gridContainer sizing is to add an extra row width to the bottom of the gridContainer to facilitate panel dragging when the direction option is set to vertical. For horizontal direction an extra column width is added to the right if an optional gridContainer width is not defined.
+
+#### header
+each panel item has a header. A header contains a title and icons.  The height of headers is set in options.headerPx. 
+
+#### styles
+##### gridContainer
+these are css definitions for the grid that contains all the panels. These properties are defined in a 'grid-container' block.
+
+##### positionHighlight
+this is the rectangle that is displayed over the target location when dragging a panel.  css properties are defined in a 'grid-container' block.
+
+##### gridItemContainer
+this is css definitions for each panel. Styling for headers are set in options.gridItemContainer.header,  options.gridItemContainer.title, and options.gridItemContainer.headerIcons.
+
+
+### itemUpdateEmitter
+```javascript
+     itemUpdateEmitter: EventEmitter<any> = new EventEmitter<any>(); 
+
+``` 
+#### add new panels 
+new panels can be added either by pushing a new item to the items array or defining an
+item updater and emitting an item to add as follows:
+```javascript
+     itemUpdateEmitter: EventEmitter<any> = new EventEmitter<any>(); 
+
+    this.itemUpdateEmitter.emit({ 
+      operation: "add",
+      item: item 
+    });
+``` 
+##### in the last lane position
+
+```javascript
+
+    this.itemUpdateEmitter.emit({ 
+      operation: "add",
+      lanePosition: "last",
+      item: item 
+    });
+```    
+
+###### 
+operation: "add"
+when "lanePosition" is "last", and the direction is vertical, the newly added panel is positioned below the last cell on the furthest right column and for the horizontal direction, the added panel it added to the right of the bottom row
+
+###### 
+operation: "remove"
+
+```javascript
+
+    this.itemUpdateEmitter.emit({ 
+      operation: "remove",
+      position: {x:0,y:0},
+      item: item 
+    });
+```    
+when operation is "remove", position specifies the x and y coords of the item to be removed
+
+
+
+
+### ToolbarItems
+an array of definitions of icons displayed in the header of a panel item. In each component html a ng-template with a #iconTemplate template reference variable can be included. (see NGX-GRIDBOARD/demo/src/app/components/)
+
+
+```javascript
+
+<ng-template #iconTemplate let-toolbarItem='toolbarItem'>
+
+<i class="material-icons" [ngStyle]="toolbarItem.iconStyle" (click)="handleClick(toolbarItem)" title="{{toolbarItem.title}}">{{ toolbarItem.iconClass }}</i>
+
+</ng-template>
+```
+
+  
+
+The html contained in the ng-template tag is projected into the header for each toolbarItem. In the above example, inside the 
+
+```javascript
+<i>
+```
+tag the material-icons class refers to the styles loaded by adding a link in the demo to <link  href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> which is included in index.html. You can customize this projected content to load a font-awesome icons or svg icons, etc. As well you can add your own properties to toolbarItems in options and refer to them in the html and use your own global css classes defined in styles.css (see header-icon).
+
+### toolbarItem properties
+
+#### title
+tooltip title string
+
+#### ariaLabel
+aria label string
+
+#### clickFunction
+[myClickFunction(toolbarItem:any): void] name of a custom function defined in the component to be classed on click of the icon.
+
+#### itemSelection
+parameter of type ItemSelection. Currently the enum constant supported are ItemSelection.Close, ItemSelection.Minimize, and ItemSelection.Maximize. When itemSelection is defined, a click event on the toolbarItem icon will trigger a panel close, minimize or maximize. If a clickFunction is already defined for the icon, the itemSelection will not be triggered. 
+
+
+
+#### ifFunction
+[myIfFunction(toolbarItem:any): boolean] name of a custom function defined in the component to be tested. When this function returns false, the icon is hidden. If a function is named but not defined for the component, the default result is true.
+
+#### iconClass
+icon class name string
+
+#### iconStyle
+icon style definitions i.e. { 'color': 'pink' }. These styles are applied to the specific toolbarItem and override styles applied to all toolbar icons defined in options.gridItemContainer.headerIcons.  
+  
 ## Online Demo
 
 http://seatoskysoft.com/ngx-gridboard-demo/
@@ -363,6 +432,13 @@ npm run demo
   - provide layout$ observable in PanelComponent
   - only trigger window resize event when lane direction vertical
   - add "remove" option to itemUpdateEmitter handling 
+
+### 1.1.18
+  - upgrade to angular 13
+  
+### 1.1.19
+  - fix css positionHighlight styles setting from options
+
 
 ## Author
 
