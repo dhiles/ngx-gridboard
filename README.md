@@ -1,11 +1,9 @@
 # ngx-gridboard-project
 
 # publish ngx-gridboard to npm
-npm run package  
-npm publish dist/ngx-gridboard 
-
-
-
+npm run package 
+cd dist/ngx-gridboard 
+npm publish 
 
 ## Author
 

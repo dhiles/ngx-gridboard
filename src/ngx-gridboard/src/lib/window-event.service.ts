@@ -13,7 +13,7 @@ export class WindowEventService {
   private subject: Subject<any> = new Subject<any>();
 
   constructor(eventManager: EventManager) {
-    eventManager.addGlobalEventListener('window', 'resize',
+    eventManager.addEventListener(window.document.documentElement, 'resize',
       e => {
         this.onResize$.emit({
           width: e.target.innerWidth,

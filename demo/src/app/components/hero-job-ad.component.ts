@@ -16,7 +16,7 @@ import { PanelComponent } from 'ngx-gridboard';
   `
 })
 export class HeroJobAdComponent extends PanelComponent {
-  handleClick(event: any,toolbarItem: any) {
+  override handleClick(event: any,toolbarItem: any) {
     alert('clicked');
     super.handleClick(event,toolbarItem);
   }

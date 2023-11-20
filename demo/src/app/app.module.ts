@@ -21,10 +21,10 @@ import { HeroJobAdComponent } from './components/hero-job-ad.component';
     HeroJobAdComponent, HeroProfileComponent
   ],
   providers: [],
-  entryComponents: [
-    HeroJobAdComponent,
-    HeroProfileComponent,
-  ],
+//  entryComponents: [
+//    HeroJobAdComponent,
+//    HeroProfileComponent,
+//  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

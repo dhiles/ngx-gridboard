@@ -13,7 +13,7 @@ import { Observable, Subject, fromEvent, of } from 'rxjs';
 export class AppComponent {
   xPos: number = 0
   yPos: number = 0
-  title = 'the ngx-gridboard 1.1.19 demo app';
+  title = 'the ngx-gridboard 1.1.20 demo app';
   activeItem: any;
   laneChanges: Subject<LaneChange> = new Subject();
   itemUpdateEmitter: EventEmitter<ItemUpdateEvent> = new EventEmitter<ItemUpdateEvent>();
@@ -23,7 +23,7 @@ export class AppComponent {
   }
 
   options = {
-    fixedLanes: 0,
+    fixedLanes: 2,
     mediaQueryLanes: {
       xl: 5,
       'lt-xl': 5,

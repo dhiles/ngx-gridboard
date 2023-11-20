@@ -133,7 +133,7 @@ items = [
 ```javascript
  
   options = {
-    fixedLanes: 0,
+    fixedLanes: 2,
     mediaQueryLanes: {
       xl: 5,
       'lt-xl': 5,
@@ -345,7 +345,7 @@ icon style definitions i.e. { 'color': 'pink' }. These styles are applied to the
   
 ## Online Demo
 
-http://seatoskysoft.com/ngx-gridboard-demo/
+https://s2s-58i.pages.dev/ngx-gridboard-demo/
 
   
 
@@ -439,7 +439,12 @@ npm run demo
 ### 1.1.19
   - fix css positionHighlight styles setting from options
 
-
+### 1.1.20
+  - upgrade to angular 17
+  
+### 1.1.21
+  - upgrade to angular 17
+  
 ## Author
 
   
