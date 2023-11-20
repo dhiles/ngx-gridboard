@@ -443,7 +443,7 @@ npm run demo
   - upgrade to angular 17
   
 ### 1.1.21
-  - upgrade to angular 17
+  - (no change except to version #) upgrade to angular 17
   
 ## Author
 
